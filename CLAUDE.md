@@ -51,21 +51,37 @@ wasm-bindgen = "0.2"
 ### Module structure
 ```
 src/
-├── lib.rs          — declares modules (scanner, triggers, secret_scanner)
-├── triggers.rs     — Trigger enum + CLIENT_TRIGGERS + SERVER_TRIGGERS constants
-├── scanner.rs      — CapabilityScanner: SWC Visitor for client trigger detection
-└── secret_scanner.rs — (Task 2.2) SWC Visitor for server trigger detection
+├── lib.rs              — declares all modules
+├── triggers.rs         — Trigger enum + CLIENT/SERVER_TRIGGERS constants
+├── scanner.rs          — CapabilityScanner: detects browser globals
+├── secret_scanner.rs   — SecretScanner: detects process.env + DB imports
+└── slicer/
+    ├── mod.rs          — re-exports Classifier, Transformer, SliceResult
+    ├── classifier.rs   — two-pass AST classifier (5 DeclKinds)
+    └── transformer.rs  — produces server/client JS via swc_ecma_codegen
 ```
+
+### Slicer design decisions
+- `DeclKind` has 5 variants: ServerOnly, ClientOnly, Shared, BoundaryCrossing, Mixed
+- Classifier runs two passes: (1) direct trigger scan per declaration, (2) cross-boundary call graph analysis
+- BoundaryCrossing = server fn called from client context → gets RPC stub in client bundle
+- Mixed = same fn uses both browser APIs and server secrets → flagged as error
+- `Str.value` in swc v59 is `Wtf8Atom` — use `.into()` for `String → Wtf8Atom` conversion (works via From impl)
+- `Ident::new(sym, span, ctxt)` constructor takes 3 args in swc v59
+- `BlockStmt` has a `ctxt: SyntaxContext` field in swc v59 — use `Default::default()`
+- Transformer uses `module.body.retain()` for filtering, `VisitMut` for RPC stub injection
 
 ## Completed Tasks
 - [x] Task 1.1 — Monorepo initialized (pnpm + Turborepo)
 - [x] Task 1.2 — Rust compiler crate created (packages/compiler)
 - [x] Task 1.3 — Cargo.toml configured with swc_core, serde, wasm-bindgen
 - [x] Task 1.4 — Dev pipeline configured (turbo dev with dependsOn + Vite config)
-- [x] Task 2.1 — CapabilityScanner built (detects window, document, localStorage)
+- [x] Task 2.1 — CapabilityScanner: detects window, document, localStorage
+- [x] Task 2.2 — SecretScanner: detects process.env + DB imports (ESM + require + node: protocol)
+- [x] Task 2.3 — Slicer: Classifier (5 DeclKinds + BoundaryCrossing detection) + Transformer (server/client JS output + RPC stubs)
 
 ## In Progress
-- [ ] Task 2.2 — Secret Scanner (process.env + database import detection)
+- [ ] Task 2.4 — Vite Plugin: intercept .nexus files and route through Rust Slicer
 
 ## Turborepo Pipeline Logic
 - `build` depends on `^build` — upstream packages build first

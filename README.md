@@ -87,12 +87,19 @@ pnpm dev
 
 ## Build Status
 
-| Phase | Status |
-|---|---|
-| Phase 1: Compiler Foundations | 🔨 In Progress |
-| Phase 2: Semantic UI | ⏳ Planned |
-| Phase 3: Zero-Fetch Sync | ⏳ Planned |
-| Phase 4: Error Resilience & Inspector | ⏳ Planned |
+| Task | Description | Status |
+|---|---|---|
+| 1.1 | Monorepo setup (pnpm + Turborepo) | ✅ Done |
+| 1.2 | Rust compiler crate | ✅ Done |
+| 1.3 | Cargo.toml (swc_core, serde, wasm-bindgen) | ✅ Done |
+| 1.4 | Dev pipeline (turbo dev + Vite) | ✅ Done |
+| 2.1 | CapabilityScanner (window, document, localStorage) | ✅ Done |
+| 2.2 | SecretScanner (process.env, DB imports) | ✅ Done |
+| 2.3 | Slicer — Classifier + Transformer + RPC stubs | ✅ Done |
+| 2.4 | Vite Plugin | 🔨 Next |
+| 3.x | Semantic UI primitives | ⏳ Planned |
+| 4.x | Zero-Fetch Sync (CRDT + WebSocket) | ⏳ Planned |
+| 5.x | Error Resilience & Nexus Inspector | ⏳ Planned |
 
 ## Contributing
 
