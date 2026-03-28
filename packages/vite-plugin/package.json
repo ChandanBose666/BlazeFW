@@ -1,0 +1,15 @@
+{
+  "name": "@nexus/vite-plugin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "dev": "tsc --noEmit --watch"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "typescript": "^5.4.0"
+  }
+}
