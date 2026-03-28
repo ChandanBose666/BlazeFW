@@ -8,7 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@nexus/compiler": "workspace:*"
+    "@nexus/compiler": "workspace:*",
+    "@nexus/vite-plugin": "workspace:*"
   },
   "devDependencies": {
     "vite": "^5.0.0",

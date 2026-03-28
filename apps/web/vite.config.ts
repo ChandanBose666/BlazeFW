@@ -1,13 +1,12 @@
 import { defineConfig } from "vite";
-
-// TODO: Import and wire up the Nexus compiler plugin once built
-// import { nexusPlugin } from "@nexus/compiler";
+import { nexusPlugin } from "@nexus/vite-plugin";
 
 export default defineConfig({
   plugins: [
-    // nexusPlugin() will be added here in Phase 2 (Task 2.4)
-    // It will intercept .nexus component files and route them
-    // through the Rust Slicer instead of Vite's default loader.
+    // Intercepts *.nexus.tsx / *.nexus.ts files and routes them through
+    // the Rust Slicer. Server builds receive module.server.js output;
+    // client builds receive module.client.js output with RPC stubs.
+    nexusPlugin(),
   ],
   build: {
     outDir: "dist",

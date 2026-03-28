@@ -61,6 +61,15 @@ src/
     └── transformer.rs  — produces server/client JS via swc_ecma_codegen
 ```
 
+### Vite plugin design decisions
+- Nexus files use `.nexus.tsx` / `.nexus.ts` extension to opt into slicing
+- The plugin calls the Rust binary as a subprocess via `spawnSync` (stdin → stdout JSON)
+- Binary resolution order: `NEXUS_COMPILER_BIN` env var → release build → debug build
+- Results cached per file ID — cleared on HMR hot update
+- SSR detection via `options?.ssr` (Vite 5 transform hook second arg)
+- Source maps not yet emitted — pending swc codegen source map support (future task)
+- `packages/vite-plugin` is a separate workspace package (`@nexus/vite-plugin`)
+
 ### Slicer design decisions
 - `DeclKind` has 5 variants: ServerOnly, ClientOnly, Shared, BoundaryCrossing, Mixed
 - Classifier runs two passes: (1) direct trigger scan per declaration, (2) cross-boundary call graph analysis
@@ -80,8 +89,10 @@ src/
 - [x] Task 2.2 — SecretScanner: detects process.env + DB imports (ESM + require + node: protocol)
 - [x] Task 2.3 — Slicer: Classifier (5 DeclKinds + BoundaryCrossing detection) + Transformer (server/client JS output + RPC stubs)
 
+- [x] Task 2.4 — Vite Plugin + Rust CLI binary (`nexus-compiler`) with stdin/stdout JSON bridge
+
 ## In Progress
-- [ ] Task 2.4 — Vite Plugin: intercept .nexus files and route through Rust Slicer
+- [ ] Task 3.1 — Define Core Interface: TypeScript types for `<Stack>`, `<Text>`, `<Action>`, `<Input>`
 
 ## Turborepo Pipeline Logic
 - `build` depends on `^build` — upstream packages build first
