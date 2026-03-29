@@ -8,7 +8,7 @@
 
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import * as Automerge from "@automerge/automerge";
-import { NexusSyncServer } from "../sync-server.js";
+import { NexusSyncServer, REJECTION_FRAME } from "../sync-server.js";
 
 // Node.js 22+ ships a native WHATWG-compatible WebSocket global.
 const NativeWS = globalThis.WebSocket as typeof WebSocket;
@@ -235,6 +235,55 @@ describe("NexusSyncServer", () => {
 
     clientB.close();
     await waitForClose(clientB);
+  });
+
+  // -------------------------------------------------------------------------
+  // Rejection frame (optimistic rollback protocol)
+  // -------------------------------------------------------------------------
+
+  it("sends a rejection frame (0xFF) when a client sends invalid bytes", async () => {
+    const ws = await connect(`${baseUrl}/sync/todos/reject-test`);
+    await nextMessage(ws); // consume snapshot
+
+    // Send garbage bytes that are not a valid Automerge document
+    ws.send(new Uint8Array([0x00, 0x01, 0x02, 0x03]));
+
+    const response = await nextMessage(ws);
+    expect(response).toBeInstanceOf(Uint8Array);
+    expect(response.length).toBe(1);
+    expect(response[0]).toBe(REJECTION_FRAME[0]);
+
+    ws.close();
+    await waitForClose(ws);
+  });
+
+  it("does not broadcast after a failed merge", async () => {
+    const url = `${baseUrl}/sync/todos/no-broadcast-on-reject`;
+
+    const clientA = await connect(url);
+    await nextMessage(clientA);
+
+    const clientB = await connect(url);
+    await nextMessage(clientB);
+
+    // Client A sends garbage
+    clientA.send(new Uint8Array([0xba, 0xad]));
+
+    // Client A should get the rejection frame
+    const rejection = await nextMessage(clientA);
+    expect(rejection.length).toBe(1);
+    expect(rejection[0]).toBe(0xff);
+
+    // Client B should NOT receive anything
+    await tick(80);
+    let clientBReceived = false;
+    clientB.addEventListener("message", () => { clientBReceived = true; }, { once: true });
+    await tick(60);
+    expect(clientBReceived).toBe(false);
+
+    clientA.close();
+    clientB.close();
+    await Promise.all([waitForClose(clientA), waitForClose(clientB)]);
   });
 
   // -------------------------------------------------------------------------

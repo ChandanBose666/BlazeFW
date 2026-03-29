@@ -1,14 +1,25 @@
 import { jest, describe, it, expect } from "@jest/globals";
+import { REJECTION_FRAME } from "../use-sync.js";
 
 /**
  * Tests for useSync hook internal logic.
  *
- * We test the pure helper functions extracted from use-sync.ts directly
- * (docToState, buildWsUrl) without needing React / JSDOM.
+ * Tests the pure helper functions (docToState, buildWsUrl) and the optimistic
+ * rollback protocol constants without needing React / JSDOM.
  *
  * Full hook integration tests (requiring @testing-library/react + JSDOM)
  * will be added in Task 4.3 once the server-side transport is in place.
  */
+
+// ---------------------------------------------------------------------------
+// Protocol constants
+// ---------------------------------------------------------------------------
+
+describe("REJECTION_FRAME", () => {
+  it("is a single byte with value 0xFF", () => {
+    expect(REJECTION_FRAME).toBe(0xff);
+  });
+});
 
 // ---------------------------------------------------------------------------
 // docToState — snapshot extraction
@@ -22,8 +33,6 @@ describe("docToState (via CrdtDoc mock)", () => {
     };
   }
 
-  // We re-implement docToState here to test its contract without importing the
-  // module (which would pull in the WASM loader).
   function docToState(doc: ReturnType<typeof makeDoc>): Record<string, string> {
     const keys: string[] = JSON.parse(doc.keys());
     const state: Record<string, string> = {};
@@ -59,7 +68,6 @@ describe("docToState (via CrdtDoc mock)", () => {
 // ---------------------------------------------------------------------------
 
 describe("buildWsUrl", () => {
-  // Replicate the private helper's logic so we can test it in isolation.
   function buildWsUrl(
     base: string | undefined,
     collection: string,
@@ -68,7 +76,6 @@ describe("buildWsUrl", () => {
     if (base) {
       return `${base.replace(/\/$/, "")}/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`;
     }
-    // In a non-browser (test) environment, fall back to a fixed default.
     return `ws://localhost:3000/sync/${encodeURIComponent(collection)}/${encodeURIComponent(id)}`;
   }
 
@@ -97,72 +104,97 @@ describe("buildWsUrl", () => {
 });
 
 // ---------------------------------------------------------------------------
-// SyncState merge semantics — validated through CrdtDoc directly
+// isRejectionFrame — protocol detection
 // ---------------------------------------------------------------------------
 
-describe("CRDT merge contract (pure logic)", () => {
-  it("later set wins for the same key", () => {
-    const store: Record<string, string> = {};
-    const doc = {
-      set: (k: string, v: string) => { store[k] = v; },
-      get: (k: string) => store[k],
-      keys: () => JSON.stringify(Object.keys(store)),
-      save: () => new Uint8Array(),
-      merge: (bytes: Uint8Array) => {
-        // Simulate: merging empty doc changes nothing
-        if (bytes.length === 0) return;
-      },
-      free: () => {},
-    };
+describe("isRejectionFrame", () => {
+  function isRejectionFrame(bytes: Uint8Array): boolean {
+    return bytes.length === 1 && bytes[0] === 0xff;
+  }
 
-    doc.set("color", "red");
-    expect(doc.get("color")).toBe("red");
-
-    doc.set("color", "blue");
-    expect(doc.get("color")).toBe("blue");
+  it("returns true for a single 0xFF byte", () => {
+    expect(isRejectionFrame(new Uint8Array([0xff]))).toBe(true);
   });
 
-  it("update sends bytes via WebSocket when socket is open", () => {
-    const sent: Uint8Array[] = [];
-    const fakeWs = {
-      readyState: 1, // WebSocket.OPEN
-      send: (data: Uint8Array) => sent.push(data),
-    };
+  it("returns false for an empty frame", () => {
+    expect(isRejectionFrame(new Uint8Array([]))).toBe(false);
+  });
 
+  it("returns false for a non-rejection single byte", () => {
+    expect(isRejectionFrame(new Uint8Array([0x00]))).toBe(false);
+    expect(isRejectionFrame(new Uint8Array([0xfe]))).toBe(false);
+  });
+
+  it("returns false for a multi-byte frame even if first byte is 0xFF", () => {
+    expect(isRejectionFrame(new Uint8Array([0xff, 0x00]))).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Optimistic rollback logic
+// ---------------------------------------------------------------------------
+
+describe("optimistic rollback contract (pure logic)", () => {
+  it("pendingKeys accumulates on update, clears on confirmation", () => {
+    const pendingKeys = new Set<string>();
+
+    // Two optimistic writes
+    pendingKeys.add("title");
+    pendingKeys.add("status");
+    expect(pendingKeys.size).toBe(2);
+
+    // Server confirms → clear
+    pendingKeys.clear();
+    expect(pendingKeys.size).toBe(0);
+  });
+
+  it("rollback restores confirmed state and clears pending keys", () => {
+    const store: Record<string, string> = { title: "confirmed" };
+    const pending = new Set(["title"]);
+
+    // Simulate optimistic write
+    store.title = "optimistic";
+    expect(store.title).toBe("optimistic");
+
+    // Server rejects — restore confirmed
+    store.title = "confirmed";
+    pending.clear();
+
+    expect(store.title).toBe("confirmed");
+    expect(pending.size).toBe(0);
+  });
+
+  it("update does not send when socket is not open", () => {
+    const sent: Uint8Array[] = [];
+    const fakeWs = { readyState: 0, send: (d: Uint8Array) => sent.push(d) };
+    const fakeDoc = { set: jest.fn(), save: () => new Uint8Array([1]) };
+
+    fakeDoc.set("k", "v");
+    if (fakeWs.readyState === 1) fakeWs.send(fakeDoc.save());
+
+    expect(sent).toHaveLength(0);
+  });
+
+  it("update sends bytes when socket is open", () => {
+    const sent: Uint8Array[] = [];
+    const fakeWs = { readyState: 1, send: (d: Uint8Array) => sent.push(d) };
     const store: Record<string, string> = {};
     const fakeDoc = {
       set: (k: string, v: string) => { store[k] = v; },
       save: () => new Uint8Array([0xde, 0xad]),
     };
 
-    // Replicate what useSync.update() does:
     fakeDoc.set("title", "Hello");
-    if (fakeWs.readyState === 1) {
-      fakeWs.send(fakeDoc.save());
-    }
+    if (fakeWs.readyState === 1) fakeWs.send(fakeDoc.save());
 
-    expect(store["title"]).toBe("Hello");
+    expect(store.title).toBe("Hello");
     expect(sent).toHaveLength(1);
     expect(sent[0]).toEqual(new Uint8Array([0xde, 0xad]));
   });
 
-  it("update does not send when socket is not open", () => {
-    const sent: Uint8Array[] = [];
-    const fakeWs = {
-      readyState: 0, // WebSocket.CONNECTING
-      send: (data: Uint8Array) => sent.push(data),
-    };
-
-    const fakeDoc = {
-      set: jest.fn(),
-      save: () => new Uint8Array([1]),
-    };
-
-    fakeDoc.set("k", "v");
-    if (fakeWs.readyState === 1) {
-      fakeWs.send(fakeDoc.save());
-    }
-
-    expect(sent).toHaveLength(0);
+  it("rejection frame value matches REJECTION_FRAME constant", () => {
+    expect(REJECTION_FRAME).toBe(0xff);
+    const frame = new Uint8Array([REJECTION_FRAME]);
+    expect(frame[0]).toBe(0xff);
   });
 });

@@ -16,6 +16,13 @@ import { IncomingMessage, Server as HttpServer, createServer } from "http";
 import { WebSocket, WebSocketServer } from "ws";
 import { DocumentStore } from "./document-store.js";
 
+/**
+ * Rejection frame — a single byte 0xFF sent back to the originating client
+ * when the server cannot merge its delta (malformed bytes, version conflict, etc.).
+ * The client's useSync hook rolls back all pending optimistic writes on receipt.
+ */
+export const REJECTION_FRAME = new Uint8Array([0xff]);
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -146,6 +153,10 @@ export class NexusSyncServer {
       updatedBytes = this.store.merge(collection, id, bytes);
     } catch (err) {
       this.onError?.(err as Error, collection, id);
+      // Tell the sender its delta was rejected so it can roll back
+      if (sender.readyState === WebSocket.OPEN) {
+        sender.send(REJECTION_FRAME);
+      }
       return;
     }
 

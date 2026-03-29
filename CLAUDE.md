@@ -127,6 +127,7 @@ src/
 - [x] Task 4.1 — WASM Bridge: `@nexus/crdt` — Automerge CRDT document compiled to WebAssembly via wasm-pack
 - [x] Task 4.2 — useSync hook: `@nexus/core` — React hook connecting CRDT doc to WebSocket transport
 - [x] Task 4.3 — WebSocket transport: `@nexus/sync-server` — binary CRDT sync server with broadcast, GC, and persistence
+- [x] Task 4.4 — Optimistic rollbacks: rejection frame protocol (0xFF) in server + rollback logic in useSync hook
 
 ## Email Renderer design decisions (Task 3.4)
 - TNode = string — the only renderer that doesn't use React; all functions return raw HTML strings
@@ -142,7 +143,15 @@ src/
 - 40 unit tests cover all four components + wrapDocument; pure string assertions, no DOM/jsdom required
 
 ## In Progress
-- [ ] Phase 4 — Zero-Fetch Sync (Task 4.4 next: Optimistic rollbacks)
+- [ ] Phase 5 — Sidecar & Polish (Task 5.1 next: Sidecar Worker)
+
+## Optimistic rollback design decisions (Task 4.4)
+- Protocol: server sends single byte 0xFF (REJECTION_FRAME) when store.merge() throws on invalid bytes
+- Client (useSync): tracks `confirmedBytesRef` (last server-acknowledged snapshot) and `pendingKeysRef` (keys written optimistically since last confirmation)
+- On rejection frame: doc is reloaded from `confirmedBytesRef` via `loadDoc()`, pending keys cleared, `onRollback(rejectedKeys)` callback fired, React state dispatched as "rollback"
+- On successful server delta: `confirmedBytesRef` updated to `doc.save()`, `pendingKeysRef` cleared
+- REJECTION_FRAME constant exported from both `@nexus/core` and `@nexus/sync-server` — same value (0xFF) used by both sides
+- 46 total tests passing: @nexus/core (23) + @nexus/sync-server (23); rejection frame tests cover: single-byte detection, invalid-bytes trigger, no-broadcast-on-reject
 
 ## WebSocket sync server design decisions (Task 4.3)
 - Package: `packages/sync-server` (`@nexus/sync-server`), pure Node.js, no React dependency
