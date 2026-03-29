@@ -23,6 +23,7 @@ UltimateJs eliminates entire categories of boilerplate by making the infrastruct
 - [Pillar 5 — Nexus Inspector](#pillar-5--nexus-inspector-phase-52-complete)
 - [Pillar 6 — Snapshot Boundary](#pillar-6--snapshot-boundary-phase-53-complete)
 - [Phase 6 — Accessibility Layer](#phase-6--accessibility-layer-complete)
+- [create-ultimatejs CLI](#create-ultimatejs-cli)
 - [Monorepo Structure](#monorepo-structure)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
@@ -688,6 +689,79 @@ The CLI injects axe-core into a JSDOM sandbox — no browser required. The WCAG 
 
 ---
 
+## create-ultimatejs CLI
+
+`create-ultimatejs` is the official scaffolding CLI for UltimateJs. It sets up a new project interactively — picking your renderer and pillars — so you only install the packages you actually need.
+
+> **Status:** The CLI is built and ready. It will be available via `npx` once the `@ultimatejs` packages are published to npm. Until then, see [Getting Started](#getting-started) for the local development path.
+
+### `npx create-ultimatejs my-app` *(coming soon)*
+
+```bash
+npx create-ultimatejs my-app
+```
+
+```
+┌  create-ultimatejs
+│
+◇  What is your project named?
+│  my-app
+│
+◇  Which renderer do you need?
+│  ● Web (React)          — renders to HTML with inline styles
+│  ○ Native (React Native) — renders to RN View/Text/Pressable
+│  ○ Email (HTML strings)  — renders MSO-safe email HTML
+│
+◇  Which pillars do you want to include?  (space to select)
+│  ◼ Zero-Fetch Sync      @ultimatejs/core + CRDT + WebSocket sync server
+│  ◼ Sidecar Worker       @ultimatejs/sidecar — offloads 3rd-party scripts
+│  ◼ Nexus Inspector      @ultimatejs/inspector — dev overlay (Alt+I)
+│  ◼ Snapshot Boundary    @ultimatejs/snapshot — time-travel error recovery
+│  ◼ Accessibility Layer  @ultimatejs/a11y + nexus-a11y compliance CLI
+│
+◇  Package manager
+│  ● pnpm  ○ npm  ○ yarn
+│
+◇  Project files created.
+◇  Dependencies installed.
+│
+◆  Next steps
+│
+│  cd my-app
+│  pnpm run dev
+│
+│  # Optional: faster builds with the Rust compiler
+│  # Install Rust at https://rustup.rs, then:
+│  #   cargo build --release -p ultimate-compiler
+└
+```
+
+The generated project includes:
+
+- `vite.config.ts` wired to `@ultimatejs/vite-plugin`
+- `src/App.ultimate.tsx` — a Dashboard component using semantic primitives, showing a live counter and cards for each active pillar
+- Per-feature template files (`sync-server.ts`, `sidecar-init.ts`, `SnapshotWrapper.tsx`, `a11y-setup.tsx`, etc.)
+- A `package.json` with exactly the deps needed for the chosen features — nothing extra
+
+### Adding a pillar later
+
+If you skip a pillar at creation time, add it any time with:
+
+```bash
+# Add a single pillar
+npx ultimatejs add sync
+
+# Add multiple at once
+npx ultimatejs add snapshot a11y
+
+# Or let it prompt you interactively
+npx ultimatejs add
+```
+
+The `add` command auto-detects your package manager (pnpm → yarn → npm), copies the feature's template files into your project, merges the new deps into `package.json`, and runs install — without touching any existing files.
+
+---
+
 ## Monorepo Structure
 
 ```
@@ -707,7 +781,8 @@ UltimateJs/
 │   ├── sidecar/               @ultimatejs/sidecar — Web Worker script offloader
 │   ├── inspector/             @ultimatejs/inspector — DevTools overlay (server/client map)
 │   ├── snapshot/              @ultimatejs/snapshot — Error Boundary with time-travel restore
-│   └── a11y/                  @ultimatejs/a11y — Accessibility utilities, test helpers, nexus-a11y CLI
+│   ├── a11y/                  @ultimatejs/a11y — Accessibility utilities, test helpers, nexus-a11y CLI
+│   └── create-ultimatejs/     create-ultimatejs — interactive project scaffolding CLI
 ├── docs/
 │   ├── action-plan.md         Task-by-task build plan
 │   └── implementation-plan.md
@@ -740,28 +815,51 @@ UltimateJs/
 
 - [Node.js](https://nodejs.org) 20+
 - [pnpm](https://pnpm.io) — `npm install -g pnpm`
-- [Rust](https://rustup.rs) — required to build the compiler core
+- [Rust](https://rustup.rs) — required for the fastest builds (optional — a WASM fallback runs without it)
 
 ## Getting Started
 
+### Option 1 — CLI *(once published to npm)*
+
 ```bash
-# 1. Clone and install JS dependencies
+npx create-ultimatejs my-app
+cd my-app
+pnpm dev
+```
+
+That's it. The CLI prompts you for a renderer and which pillars to include, installs only what you need, and opens a working Dashboard. See [create-ultimatejs CLI](#create-ultimatejs-cli) for the full walkthrough.
+
+---
+
+### Option 2 — Clone the monorepo *(available now)*
+
+Use this path while the packages are pending npm publication, or if you want to contribute to the framework itself.
+
+```bash
+# 1. Clone and install
 git clone https://github.com/ChandanBose666/UltimateJs.git
 cd UltimateJs
 pnpm install
 
-# 2. Build the Rust compiler (required before first use)
-cd packages/compiler
-cargo build --release
-cd ../..
+# 2. Build the Rust compiler (optional — improves build speed)
+cd packages/compiler && cargo build --release && cd ../..
 
-# 3. Run tests
-cd packages/compiler && cargo test    # Rust unit tests (39 tests)
-cd packages/email   && npx jest       # Email renderer tests (40 tests)
-cd packages/a11y    && npx jest       # Accessibility tests (124 tests)
+# 3. Run all tests
+pnpm test
 
-# 4. Start the dev server
+# 4. Start the Vite dev app
 pnpm dev
+```
+
+**Run tests for individual packages:**
+
+```bash
+cd packages/compiler  && cargo test   # Rust unit tests       (39 tests)
+cd packages/email     && pnpm test    # Email renderer        (40 tests)
+cd packages/sidecar   && pnpm test    # Sidecar Worker        (49 tests)
+cd packages/inspector && pnpm test    # Nexus Inspector       (59 tests)
+cd packages/snapshot  && pnpm test    # Snapshot Boundary     (39 tests)
+cd packages/a11y      && pnpm test    # Accessibility Layer   (124 tests)
 ```
 
 > **Windows note:** `cargo` is not on Git Bash's PATH by default. Either run Rust commands in Windows CMD, or add `export PATH="/c/Users/$USER/.cargo/bin:$PATH"` to your `~/.bashrc`.
