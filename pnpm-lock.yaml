@@ -20,10 +20,10 @@ importers:
 
   apps/web:
     dependencies:
-      '@nexus/compiler':
+      '@ultimatejs/compiler':
         specifier: workspace:*
         version: link:../../packages/compiler
-      '@nexus/vite-plugin':
+      '@ultimatejs/vite-plugin':
         specifier: workspace:*
         version: link:../../packages/vite-plugin
     devDependencies:
@@ -38,7 +38,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@nexus/crdt':
+      '@ultimatejs/crdt':
         specifier: workspace:*
         version: link:../crdt
       react:
@@ -71,7 +71,7 @@ importers:
 
   packages/email:
     dependencies:
-      '@nexus/primitives':
+      '@ultimatejs/primitives':
         specifier: workspace:*
         version: link:../primitives
     devDependencies:
@@ -90,7 +90,7 @@ importers:
 
   packages/native:
     dependencies:
-      '@nexus/primitives':
+      '@ultimatejs/primitives':
         specifier: workspace:*
         version: link:../primitives
       react:
@@ -152,7 +152,7 @@ importers:
 
   packages/web:
     dependencies:
-      '@nexus/primitives':
+      '@ultimatejs/primitives':
         specifier: workspace:*
         version: link:../primitives
       react:

@@ -62,20 +62,20 @@ export interface StackProps extends BaseProps {
   /** Flex grow — allows a Stack inside another Stack to fill available space. */
   flex?: number;
 
-  children?: NexusNode;
+  children?: UltimateNode;
 }
 
-/** Anything that can appear as a child of a Nexus primitive. */
-export type NexusNode =
-  | NexusElement
+/** Anything that can appear as a child of a UltimateJs primitive. */
+export type UltimateNode =
+  | UltimateElement
   | string
   | number
   | boolean
   | null
   | undefined
-  | NexusNode[];
+  | UltimateNode[];
 
-/** A rendered Nexus element (opaque at the type layer). */
-export interface NexusElement {
-  readonly __nexus: true;
+/** a rendered UltimateJs element (opaque at the type layer). */
+export interface UltimateElement {
+  readonly __ultimate: true;
 }

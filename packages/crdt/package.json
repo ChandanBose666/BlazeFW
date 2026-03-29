@@ -1,20 +1,20 @@
 {
-  "name": "@nexus/crdt",
+  "name": "@ultimatejs/crdt",
   "version": "0.1.0",
   "type": "module",
-  "description": "Automerge CRDT document compiled to WebAssembly — Zero-Fetch Sync engine for Nexus.js",
-  "main": "./pkg/nexus_crdt.js",
-  "types": "./pkg/nexus_crdt.d.ts",
+  "description": "Automerge CRDT document compiled to WebAssembly — Zero-Fetch Sync engine for UltimateJs",
+  "main": "./pkg/ultimate_crdt.js",
+  "types": "./pkg/ultimate_crdt.d.ts",
   "files": [
-    "pkg/nexus_crdt_bg.wasm",
-    "pkg/nexus_crdt.js",
-    "pkg/nexus_crdt.d.ts",
-    "pkg/nexus_crdt_bg.wasm.d.ts"
+    "pkg/ultimate_crdt_bg.wasm",
+    "pkg/ultimate_crdt.js",
+    "pkg/ultimate_crdt.d.ts",
+    "pkg/ultimate_crdt_bg.wasm.d.ts"
   ],
   "exports": {
     ".": {
-      "import": "./pkg/nexus_crdt.js",
-      "types": "./pkg/nexus_crdt.d.ts"
+      "import": "./pkg/ultimate_crdt.js",
+      "types": "./pkg/ultimate_crdt.d.ts"
     }
   },
   "scripts": {

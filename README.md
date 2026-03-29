@@ -1,8 +1,8 @@
-# Nexus.js
+# UltimateJs
 
 > A high-performance JavaScript framework with a Rust compiler core — write once, render everywhere.
 
-Nexus.js eliminates entire categories of boilerplate by making the infrastructure invisible. Three pillars drive the design:
+UltimateJs eliminates entire categories of boilerplate by making the infrastructure invisible. Three pillars drive the design:
 
 | Pillar | Problem it solves |
 |---|---|
@@ -14,7 +14,7 @@ Nexus.js eliminates entire categories of boilerplate by making the infrastructur
 
 ## Table of Contents
 
-- [Why Nexus.js?](#why-nexusjs)
+- [Why UltimateJs?](#why-nexusjs)
 - [Architecture Overview](#architecture-overview)
 - [Pillar 1 — Fluid Execution](#pillar-1--fluid-execution-phase-2-complete)
 - [Pillar 2 — Semantic UI](#pillar-2--semantic-ui-phase-3-complete)
@@ -26,7 +26,7 @@ Nexus.js eliminates entire categories of boilerplate by making the infrastructur
 
 ---
 
-## Why Nexus.js?
+## Why UltimateJs?
 
 Modern web development forces developers to make the same decisions repeatedly:
 
@@ -34,37 +34,37 @@ Modern web development forces developers to make the same decisions repeatedly:
 - "Should I `fetch()` this data or use a state manager?"
 - "How do I reuse this UI in my mobile app? In my transactional email?"
 
-Nexus.js answers all three questions at the framework level — once — so you never have to again.
+UltimateJs answers all three questions at the framework level — once — so you never have to again.
 
 ---
 
 ## Architecture Overview
 
 ```
-NexusJs/
+UltimateJs/
 ├── packages/
 │   ├── compiler/      ← Rust + SWC: parses your code, detects server/client boundaries
-│   ├── vite-plugin/   ← Calls the Rust binary at build time, routes .nexus.tsx files
+│   ├── vite-plugin/   ← Calls the Rust binary at build time, routes .ultimate.tsx files
 │   ├── primitives/    ← TypeScript type contracts for all four UI primitives
 │   ├── web/           ← Renders primitives as React/HTML (inline styles + CSS vars)
 │   ├── native/        ← Renders primitives as React Native View/Text/Pressable/TextInput
 │   └── email/         ← Renders primitives as MSO-safe HTML strings
 └── apps/
-    └── web/           ← Vite demo/dev app (wired to @nexus/vite-plugin)
+    └── web/           ← Vite demo/dev app (wired to @ultimatejs/vite-plugin)
 ```
 
 ---
 
 ## Pillar 1 — Fluid Execution *(Phase 2, complete)*
 
-The Rust compiler analyses every `.nexus.tsx` file at build time using [SWC](https://swc.rs) and automatically produces two bundles — no annotations required.
+The Rust compiler analyses every `.ultimate.tsx` file at build time using [SWC](https://swc.rs) and automatically produces two bundles — no annotations required.
 
 ### How It Works
 
 Given a single mixed file:
 
 ```tsx
-// components/UserDashboard.nexus.tsx
+// components/UserDashboard.ultimate.tsx
 
 import { db } from './db';                    // ← server trigger (DB import)
 
@@ -116,11 +116,11 @@ The Rust `Classifier` runs two passes over every declaration in the file:
 
 ### Vite Plugin
 
-`@nexus/vite-plugin` intercepts every `.nexus.tsx` / `.nexus.ts` file and routes it through the Rust binary via a `stdin → stdout` JSON bridge. Results are cached per file ID and cleared on HMR update.
+`@ultimatejs/vite-plugin` intercepts every `.ultimate.tsx` / `.ultimate.tsx` file and routes it through the Rust binary via a `stdin → stdout` JSON bridge. Results are cached per file ID and cleared on HMR update.
 
 ```ts
 // vite.config.ts
-import { nexus } from '@nexus/vite-plugin';
+import { nexus } from '@ultimatejs/vite-plugin';
 
 export default {
   plugins: [nexus()],
@@ -131,7 +131,7 @@ export default {
 
 ## Pillar 2 — Semantic UI *(Phase 3, complete)*
 
-Four semantic primitives — `Stack`, `Text`, `Action`, `Input` — describe *what* a UI element is, not *how* to render it. Each render target (`@nexus/web`, `@nexus/native`, `@nexus/email`) maps them to its own native elements.
+Four semantic primitives — `Stack`, `Text`, `Action`, `Input` — describe *what* a UI element is, not *how* to render it. Each render target (`@ultimatejs/web`, `@ultimatejs/native`, `@ultimatejs/email`) maps them to its own native elements.
 
 ### The Four Primitives
 
@@ -258,12 +258,12 @@ interface NexusRenderer<TNode> {
 }
 ```
 
-#### `@nexus/web` — `TNode = ReactElement`
+#### `@ultimatejs/web` — `TNode = ReactElement`
 
 React components with inline CSS styles. No Tailwind dependency — works in any React app out of the box. Colors use CSS custom properties so the theme is overridable at the `:root` level.
 
 ```tsx
-import { Stack, Text, Action, Input } from '@nexus/web';
+import { Stack, Text, Action, Input } from '@ultimatejs/web';
 
 function LoginForm() {
   return (
@@ -277,12 +277,12 @@ function LoginForm() {
 }
 ```
 
-#### `@nexus/native` — `TNode = ReactElement`
+#### `@ultimatejs/native` — `TNode = ReactElement`
 
 React Native components. `SpaceValue` resolves to dp numbers, `ColorToken` resolves against `DEFAULT_THEME`. The `as` prop (HTML element override) is silently ignored. `href` opens via `Linking.openURL`. Loading states use `ActivityIndicator`.
 
 ```tsx
-import { Stack, Text, Action, Input } from '@nexus/native';
+import { Stack, Text, Action, Input } from '@ultimatejs/native';
 
 // Same primitives — identical props — renders natively on iOS/Android
 function LoginForm() {
@@ -296,12 +296,12 @@ function LoginForm() {
 }
 ```
 
-#### `@nexus/email` — `TNode = string`
+#### `@ultimatejs/email` — `TNode = string`
 
 Pure HTML string output — no React. Layout uses `<table>` elements (Outlook-safe). All styles are inline. Interactive props (`onPress`, `onChange`) are silently ignored. Includes a `wrapDocument()` utility for full MSO-safe email documents.
 
 ```ts
-import { Stack, Text, Action, wrapDocument } from '@nexus/email';
+import { Stack, Text, Action, wrapDocument } from '@ultimatejs/email';
 
 const body = Stack({
   padding: 6,
@@ -347,17 +347,17 @@ const { user, update } = useSync('users', userId);
 ## Monorepo Structure
 
 ```
-NexusJs/
+UltimateJs/
 ├── apps/
 │   └── web/                   Vite dev / demo app
 ├── packages/
 │   ├── compiler/              Rust crate — SWC AST analysis + nexus-compiler CLI binary
-│   ├── vite-plugin/           @nexus/vite-plugin — Vite integration
-│   ├── primitives/            @nexus/primitives — TypeScript type contracts
-│   ├── web/                   @nexus/web — Web renderer (React + inline styles)
-│   ├── native/                @nexus/native — Native renderer (React Native)
-│   ├── email/                 @nexus/email — Email renderer (HTML strings)
-│   └── core/                  @nexus/core — Runtime (upcoming)
+│   ├── vite-plugin/           @ultimatejs/vite-plugin — Vite integration
+│   ├── primitives/            @ultimatejs/primitives — TypeScript type contracts
+│   ├── web/                   @ultimatejs/web — Web renderer (React + inline styles)
+│   ├── native/                @ultimatejs/native — Native renderer (React Native)
+│   ├── email/                 @ultimatejs/email — Email renderer (HTML strings)
+│   └── core/                  @ultimatejs/core — Runtime (upcoming)
 ├── docs/
 │   ├── action-plan.md         Task-by-task build plan
 │   └── implementation-plan.md
@@ -395,8 +395,8 @@ NexusJs/
 
 ```bash
 # 1. Clone and install JS dependencies
-git clone https://github.com/ChandanBose666/NexusJs.git
-cd NexusJs
+git clone https://github.com/ChandanBose666/UltimateJs.git
+cd UltimateJs
 pnpm install
 
 # 2. Build the Rust compiler (required before first use)
@@ -434,16 +434,16 @@ pnpm dev
 | 2.1 | `CapabilityScanner` — detects `window`, `document`, `localStorage` |
 | 2.2 | `SecretScanner` — detects `process.env`, DB imports, `node:` protocol |
 | 2.3 | `Slicer` — Classifier (5 DeclKinds) + Transformer + RPC stub injection |
-| 2.4 | `@nexus/vite-plugin` + `nexus-compiler` CLI binary |
+| 2.4 | `@ultimatejs/vite-plugin` + `nexus-compiler` CLI binary |
 
 ### Phase 3 — Semantic UI ✅
 
 | Task | Description |
 |---|---|
-| 3.1 | `@nexus/primitives` — TypeScript type contracts for all four primitives |
-| 3.2 | `@nexus/web` — Web renderer (React, inline styles, CSS custom properties) |
-| 3.3 | `@nexus/native` — Native renderer (React Native, dp units, DEFAULT_THEME) |
-| 3.4 | `@nexus/email` — Email renderer (HTML strings, MSO-safe, 40 tests) |
+| 3.1 | `@ultimatejs/primitives` — TypeScript type contracts for all four primitives |
+| 3.2 | `@ultimatejs/web` — Web renderer (React, inline styles, CSS custom properties) |
+| 3.3 | `@ultimatejs/native` — Native renderer (React Native, dp units, DEFAULT_THEME) |
+| 3.4 | `@ultimatejs/email` — Email renderer (HTML strings, MSO-safe, 40 tests) |
 
 ### Phase 4 — Zero-Fetch Sync 🔨
 

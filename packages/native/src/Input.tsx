@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { View, Text as RNText, TextInput, KeyboardTypeOptions } from "react-native";
-import type { InputProps, InputType, InputVariant } from "@nexus/primitives";
+import type { InputProps, InputType, InputVariant } from "@ultimatejs/primitives";
 import { resolveSpace, resolveColor, FONT_SIZE_DP, DEFAULT_THEME } from "./lib/tokens.js";
 
 // ---------------------------------------------------------------------------

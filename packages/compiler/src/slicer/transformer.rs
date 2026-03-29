@@ -52,12 +52,12 @@ impl VisitMut for RpcStubber {
 /// Builds:
 /// ```js
 /// {
-///   throw new Error("__nexus_rpc: 'name' is a server function. Initialize the Nexus runtime.");
+///   throw new Error("__ultimate_rpc: 'name' is a server function. Initialize the UltimateJs runtime.");
 /// }
 /// ```
 fn build_rpc_stub_body(name: &str) -> BlockStmt {
     let msg = format!(
-        "__nexus_rpc: '{}' is a server function. Initialize the Nexus runtime.",
+        "__ultimate_rpc: '{}' is a server function. Initialize the UltimateJs runtime.",
         name
     );
 
@@ -150,7 +150,7 @@ impl Transformer {
                 .map(|n| !client_only_names.contains(n.as_str()))
                 .unwrap_or(true)
         });
-        let server_header = "// [nexus:server] Auto-generated server bundle.\n";
+        let server_header = "// [ultimatejs:server] Auto-generated server bundle.\n";
         let server_js = format!("{}{}", server_header, emit_module(&server_module, cm.clone()));
 
         // --- Client module ---
@@ -166,7 +166,7 @@ impl Transformer {
         let mut stubber = RpcStubber { boundary_names };
         client_module.visit_mut_with(&mut stubber);
 
-        let client_header = "// [nexus:client] Auto-generated client bundle.\n";
+        let client_header = "// [ultimatejs:client] Auto-generated client bundle.\n";
         let client_js = format!("{}{}", client_header, emit_module(&client_module, cm));
 
         SliceResult { server_js, client_js }
@@ -222,7 +222,7 @@ export function UserCard() {
         let result = Transformer::transform(MIXED_SOURCE);
         // getUser is BoundaryCrossing — client bundle should have the RPC stub, not process.env
         assert!(
-            result.client_js.contains("__nexus_rpc"),
+            result.client_js.contains("__ultimate_rpc"),
             "client bundle must contain RPC stub marker"
         );
         assert!(
@@ -234,7 +234,7 @@ export function UserCard() {
     #[test]
     fn server_bundle_header_present() {
         let result = Transformer::transform(MIXED_SOURCE);
-        assert!(result.server_js.starts_with("// [nexus:server]"));
-        assert!(result.client_js.starts_with("// [nexus:client]"));
+        assert!(result.server_js.starts_with("// [ultimatejs:server]"));
+        assert!(result.client_js.starts_with("// [ultimatejs:client]"));
     }
 }

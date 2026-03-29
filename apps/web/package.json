@@ -1,5 +1,5 @@
 {
-  "name": "@nexus/web",
+  "name": "@ultimatejs/web",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@nexus/compiler": "workspace:*",
-    "@nexus/vite-plugin": "workspace:*"
+    "@ultimatejs/compiler": "workspace:*",
+    "@ultimatejs/vite-plugin": "workspace:*"
   },
   "devDependencies": {
     "vite": "^5.0.0",

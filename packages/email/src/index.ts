@@ -1,5 +1,5 @@
 /**
- * @nexus/email — Email renderer for Nexus.js semantic UI primitives.
+ * @ultimatejs/email — Email renderer for UltimateJs semantic UI primitives.
  *
  * All functions return plain HTML strings (no React). Compose them by
  * passing pre-rendered strings as children, then wrap the result with
@@ -7,13 +7,13 @@
  *
  * @example
  * ```ts
- * import { Stack, Text, Action, wrapDocument } from "@nexus/email";
+ * import { Stack, Text, Action, wrapDocument } from "@ultimatejs/email";
  *
  * const body = Stack({
  *   padding: 4,
  *   children: [
  *     Text({ variant: "heading", children: "Hello!" }),
- *     Text({ variant: "body",    children: "Welcome to Nexus." }),
+ *     Text({ variant: "body",    children: "Welcome to UltimateJs." }),
  *     Action({ href: "https://example.com", children: "Get started" }),
  *   ],
  * });

@@ -16,11 +16,11 @@ Step 2.1: Define Semantic Primitives: Create strictly typed TS interfaces for <S
 
 Step 2.2: Build Target Adapters:
 
-@nexus/web: Maps Primitives to HTML/Tailwind.
+@ultimatejs/web: Maps Primitives to HTML/Tailwind.
 
-@nexus/native: Maps Primitives to React Native views.
+@ultimatejs/native: Maps Primitives to React Native views.
 
-@nexus/email: Maps Primitives to MJML/Tables.
+@ultimatejs/email: Maps Primitives to MJML/Tables.
 
 Step 2.3: Universal Theming: Create a central JSON theme system that injects variables into all three targets simultaneously.
 

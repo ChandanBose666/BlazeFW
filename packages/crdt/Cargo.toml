@@ -1,9 +1,9 @@
 [package]
-name = "nexus-crdt"
+name = "ultimate-crdt"
 version = "0.1.0"
 edition = "2021"
-description = "Automerge CRDT document compiled to WebAssembly — the Zero-Fetch Sync engine for Nexus.js"
-repository = "https://github.com/ChandanBose666/NexusJs"
+description = "Automerge CRDT document compiled to WebAssembly — the Zero-Fetch Sync engine for UltimateJs"
+repository = "https://github.com/ChandanBose666/UltimateJs"
 license = "MIT"
 
 [lib]

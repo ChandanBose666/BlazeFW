@@ -1,5 +1,5 @@
 import type { ReactElement, CSSProperties, ChangeEvent, KeyboardEvent } from "react";
-import type { InputProps, InputVariant } from "@nexus/primitives";
+import type { InputProps, InputVariant } from "@ultimatejs/primitives";
 import { resolveSpace, resolveColor, FONT_SIZE } from "./lib/tokens.js";
 
 // ---------------------------------------------------------------------------
@@ -12,7 +12,7 @@ const LABEL_STYLE: CSSProperties = {
   fontWeight: 500,
   lineHeight: 1,
   marginBottom: "6px",
-  color:      "var(--nexus-muted-fg)",
+  color:      "var(--ultimate-muted-fg)",
 };
 
 const WRAPPER_STYLE: CSSProperties = {
@@ -39,20 +39,20 @@ const BASE_INPUT_STYLE: CSSProperties = {
 
 const VARIANT_STYLES: Record<InputVariant, CSSProperties> = {
   outline:   {
-    border:          "1px solid var(--nexus-border)",
+    border:          "1px solid var(--ultimate-border)",
     borderRadius:    "6px",
     backgroundColor: "transparent",
   },
   filled:    {
     border:          "1px solid transparent",
     borderRadius:    "6px",
-    backgroundColor: "var(--nexus-surface)",
+    backgroundColor: "var(--ultimate-surface)",
   },
   underline: {
     borderTop:       "none",
     borderLeft:      "none",
     borderRight:     "none",
-    borderBottom:    "1px solid var(--nexus-border)",
+    borderBottom:    "1px solid var(--ultimate-border)",
     borderRadius:    "0",
     backgroundColor: "transparent",
     paddingLeft:     "0",
@@ -61,7 +61,7 @@ const VARIANT_STYLES: Record<InputVariant, CSSProperties> = {
 };
 
 const ERROR_INPUT_STYLE: CSSProperties = {
-  borderColor: "var(--nexus-danger)",
+  borderColor: "var(--ultimate-danger)",
 };
 
 const DISABLED_INPUT_STYLE: CSSProperties = {
@@ -78,12 +78,12 @@ const HELPER_STYLE: CSSProperties = {
 
 const ERROR_HELPER_STYLE: CSSProperties = {
   ...HELPER_STYLE,
-  color: "var(--nexus-danger)",
+  color: "var(--ultimate-danger)",
 };
 
 const HINT_HELPER_STYLE: CSSProperties = {
   ...HELPER_STYLE,
-  color: "var(--nexus-muted-fg)",
+  color: "var(--ultimate-muted-fg)",
 };
 
 const ICON_STYLE: CSSProperties = {
@@ -91,7 +91,7 @@ const ICON_STYLE: CSSProperties = {
   display:    "flex",
   alignItems: "center",
   pointerEvents: "none",
-  color:      "var(--nexus-muted-fg)",
+  color:      "var(--ultimate-muted-fg)",
   fontSize:   "1rem",
 };
 
@@ -171,7 +171,7 @@ export function Input({
     ...paddingOverride,
   };
 
-  // Bridge Nexus onChange (value: string) → React onChange (event)
+  // Bridge UltimateJs onChange (value: string) → React onChange (event)
   const handleChange = onChange !== undefined
     ? (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(e.target.value)
     : undefined;
@@ -208,7 +208,7 @@ export function Input({
         <label style={LABEL_STYLE}>
           {fieldLabel}
           {required ? (
-            <span aria-hidden="true" style={{ color: "var(--nexus-danger)", marginLeft: "2px" }}>
+            <span aria-hidden="true" style={{ color: "var(--ultimate-danger)", marginLeft: "2px" }}>
               *
             </span>
           ) : null}

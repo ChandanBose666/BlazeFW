@@ -1,5 +1,5 @@
 import type { BaseProps, ColorValue, SpaceValue } from "./common.js";
-import type { NexusNode } from "./stack.js";
+import type { UltimateNode } from "./stack.js";
 
 /**
  * <Action> — the universal interactive primitive.
@@ -11,7 +11,7 @@ import type { NexusNode } from "./stack.js";
  *
  * Design intent: a single primitive covers every interactive affordance.
  * The render target decides the correct native element — the developer
- * never writes `<button>` or `<a>` directly in Nexus UI code.
+ * never writes `<button>` or `<a>` directly in UltimateJs UI code.
  */
 
 export type ActionVariant =
@@ -69,5 +69,5 @@ export interface ActionProps extends BaseProps {
   /** Full-width stretch. */
   fullWidth?: boolean;
 
-  children?: NexusNode;
+  children?: UltimateNode;
 }

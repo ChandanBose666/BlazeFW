@@ -1,4 +1,4 @@
-import type { InputProps } from "@nexus/primitives";
+import type { InputProps } from "@ultimatejs/primitives";
 import { DEFAULT_THEME } from "./lib/tokens.js";
 import { escapeHtml } from "./lib/html.js";
 

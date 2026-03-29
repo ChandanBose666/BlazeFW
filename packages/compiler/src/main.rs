@@ -1,7 +1,7 @@
 use std::io::{self, Read};
 use compiler::slicer::transformer::Transformer;
 
-/// CLI entry point for the Nexus compiler.
+/// CLI entry point for the UltimateJs compiler.
 ///
 /// Reads JavaScript/TypeScript source from stdin, runs the Slicer,
 /// and writes a JSON object to stdout:
@@ -16,7 +16,7 @@ fn main() {
     let mut source = String::new();
     io::stdin()
         .read_to_string(&mut source)
-        .expect("nexus-compiler: failed to read stdin");
+        .expect("ultimate-compiler: failed to read stdin");
 
     let result = Transformer::transform(&source);
 

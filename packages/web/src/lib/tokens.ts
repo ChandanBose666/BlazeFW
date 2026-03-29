@@ -6,7 +6,7 @@
  * Named scales → CSS string maps
  */
 
-import type { SpaceValue, ColorValue, ColorToken, FontSize, FontWeight, TextAlign } from "@nexus/primitives";
+import type { SpaceValue, ColorValue, ColorToken, FontSize, FontWeight, TextAlign } from "@ultimatejs/primitives";
 
 // ---------------------------------------------------------------------------
 // Spacing
@@ -46,23 +46,23 @@ export function resolveSpace(v: SpaceValue | undefined): string | undefined {
 
 /** Maps ColorToken names to CSS custom property references. */
 const COLOR_TOKEN_VARS: Record<ColorToken, string> = {
-  background:     "var(--nexus-background)",
-  surface:        "var(--nexus-surface)",
-  border:         "var(--nexus-border)",
-  primary:        "var(--nexus-primary)",
-  "primary-fg":   "var(--nexus-primary-fg)",
-  secondary:      "var(--nexus-secondary)",
-  "secondary-fg": "var(--nexus-secondary-fg)",
-  success:        "var(--nexus-success)",
-  warning:        "var(--nexus-warning)",
-  danger:         "var(--nexus-danger)",
-  muted:          "var(--nexus-muted)",
-  "muted-fg":     "var(--nexus-muted-fg)",
+  background:     "var(--ultimate-background)",
+  surface:        "var(--ultimate-surface)",
+  border:         "var(--ultimate-border)",
+  primary:        "var(--ultimate-primary)",
+  "primary-fg":   "var(--ultimate-primary-fg)",
+  secondary:      "var(--ultimate-secondary)",
+  "secondary-fg": "var(--ultimate-secondary-fg)",
+  success:        "var(--ultimate-success)",
+  warning:        "var(--ultimate-warning)",
+  danger:         "var(--ultimate-danger)",
+  muted:          "var(--ultimate-muted)",
+  "muted-fg":     "var(--ultimate-muted-fg)",
 };
 
 /**
  * Resolves a ColorValue to a CSS color string.
- * - ColorToken: expanded to a --nexus-* CSS variable.
+ * - ColorToken: expanded to a --ultimate-* CSS variable.
  * - Literal (#hex, rgb(), hsl()): passed through unchanged.
  */
 export function resolveColor(v: ColorValue | undefined): string | undefined {

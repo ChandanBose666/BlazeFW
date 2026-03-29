@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode, CSSProperties } from "react";
-import type { ActionProps, ActionVariant, ActionSize } from "@nexus/primitives";
+import type { ActionProps, ActionVariant, ActionSize } from "@ultimatejs/primitives";
 import { resolveSpace, resolveColor, RADIUS } from "./lib/tokens.js";
 
 // ---------------------------------------------------------------------------
@@ -22,25 +22,25 @@ const BASE_STYLE: CSSProperties = {
 
 const VARIANT_STYLES: Record<ActionVariant, CSSProperties> = {
   primary:   {
-    backgroundColor: "var(--nexus-primary)",
-    color:           "var(--nexus-primary-fg)",
+    backgroundColor: "var(--ultimate-primary)",
+    color:           "var(--ultimate-primary-fg)",
   },
   secondary: {
     backgroundColor: "transparent",
-    color:           "var(--nexus-primary)",
-    border:          "1px solid var(--nexus-border)",
+    color:           "var(--ultimate-primary)",
+    border:          "1px solid var(--ultimate-border)",
   },
   ghost:     {
     backgroundColor: "transparent",
-    color:           "var(--nexus-primary)",
+    color:           "var(--ultimate-primary)",
   },
   danger:    {
-    backgroundColor: "var(--nexus-danger)",
-    color:           "var(--nexus-danger-fg, #fff)",
+    backgroundColor: "var(--ultimate-danger)",
+    color:           "var(--ultimate-danger-fg, #fff)",
   },
   link:      {
     backgroundColor: "transparent",
-    color:           "var(--nexus-primary)",
+    color:           "var(--ultimate-primary)",
     textDecoration:  "underline",
     padding:         "0",
   },
@@ -72,7 +72,7 @@ function Spinner(): ReactElement {
       fill="none"
       aria-hidden="true"
       style={{
-        animation: "nexus-spin 0.75s linear infinite",
+        animation: "ultimate-spin 0.75s linear infinite",
         marginRight: "0.4em",
         flexShrink: 0,
       }}

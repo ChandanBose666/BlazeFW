@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { View } from "react-native";
-import type { StackProps, StackDirection, StackAlign, StackJustify } from "@nexus/primitives";
+import type { StackProps, StackDirection, StackAlign, StackJustify } from "@ultimatejs/primitives";
 import { resolveSpace, resolveColor, RADIUS_DP } from "./lib/tokens.js";
 
 // ---------------------------------------------------------------------------

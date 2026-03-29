@@ -1,4 +1,4 @@
-# Nexus.js — Project Context for Claude
+# UltimateJs — Project Context for Claude
 
 ## What This Project Is
 A high-performance JavaScript framework with a Rust compiler core. It aims to:
@@ -9,12 +9,12 @@ A high-performance JavaScript framework with a Rust compiler core. It aims to:
 
 ## Monorepo Structure
 ```
-NexusJs/
+UltimateJs/
 ├── apps/
 │   └── web/                  # Vite dev app (future: demo/docs site)
 ├── packages/
 │   ├── compiler/             # Rust crate — SWC-based AST analysis + WASM output
-│   ├── crdt/                 # Rust crate — Automerge CRDT compiled to WASM (@nexus/crdt)
+│   ├── crdt/                 # Rust crate — Automerge CRDT compiled to WASM (@ultimatejs/crdt)
 │   ├── core/                 # (upcoming) TS runtime core
 │   ├── primitives/           # TS types: Stack/Text/Action/Input + NexusRenderer<TNode>
 │   ├── web/                  # Web renderer: maps primitives → HTML + inline styles
@@ -66,13 +66,13 @@ src/
 ```
 
 ### Vite plugin design decisions
-- Nexus files use `.nexus.tsx` / `.nexus.ts` extension to opt into slicing
+- Nexus files use `.ultimate.tsx` / `.ultimate.tsx` extension to opt into slicing
 - The plugin calls the Rust binary as a subprocess via `spawnSync` (stdin → stdout JSON)
-- Binary resolution order: `NEXUS_COMPILER_BIN` env var → release build → debug build
+- Binary resolution order: `ULTIMATE_COMPILER_BIN` env var → release build → debug build
 - Results cached per file ID — cleared on HMR hot update
 - SSR detection via `options?.ssr` (Vite 5 transform hook second arg)
 - Source maps not yet emitted — pending swc codegen source map support (future task)
-- `packages/vite-plugin` is a separate workspace package (`@nexus/vite-plugin`)
+- `packages/vite-plugin` is a separate workspace package (`@ultimatejs/vite-plugin`)
 
 ### Slicer design decisions
 - `DeclKind` has 5 variants: ServerOnly, ClientOnly, Shared, BoundaryCrossing, Mixed
@@ -96,10 +96,10 @@ src/
 - [x] Task 2.4 — Vite Plugin + Rust CLI binary (`nexus-compiler`) with stdin/stdout JSON bridge
 
 - [x] Task 3.1 — Core Interface: TypeScript types for `<Stack>`, `<Text>`, `<Action>`, `<Input>` + `NexusRenderer<TNode>` contract
-- [x] Task 3.2 — Web Renderer: `@nexus/web` package — maps all four primitives to React/HTML using inline styles + CSS variables
+- [x] Task 3.2 — Web Renderer: `@ultimatejs/web` package — maps all four primitives to React/HTML using inline styles + CSS variables
 
 ## Web Renderer design decisions (Task 3.2)
-- Package: `packages/web` (`@nexus/web`), peer depends on React ^18 || ^19
+- Package: `packages/web` (`@ultimatejs/web`), peer depends on React ^18 || ^19
 - Styling strategy: inline styles for everything (colors, spacing, layout) so the renderer is self-contained — no Tailwind config required
 - Colors: all `ColorToken` values resolve to `--nexus-*` CSS custom properties; theme is injected at app root
 - Spacing: `SpaceScale` integers map to Tailwind's 4px-unit convention (1→4px, 2→8px, etc.); `"Npx"` and `"N%"` strings pass through unchanged
@@ -109,10 +109,10 @@ src/
 - Input bridges `onChange(value: string)` and `onSubmit(value: string)` to the native React event API
 - Action renders `<a>` when `href` is set, `<button type="button">` otherwise; `link` variant skips size padding
 
-- [x] Task 3.3 — Native Renderer: `@nexus/native` — maps all four primitives to React Native components
+- [x] Task 3.3 — Native Renderer: `@ultimatejs/native` — maps all four primitives to React Native components
 
 ## Native Renderer design decisions (Task 3.3)
-- Package: `packages/native` (`@nexus/native`), peer depends on React ^18||^19 + react-native >=0.72
+- Package: `packages/native` (`@ultimatejs/native`), peer depends on React ^18||^19 + react-native >=0.72
 - `@types/react-native` is deprecated — modern RN ships its own types; use `@types/react@^19`
 - SpaceValue → dp numbers (unitless, 4dp-per-unit convention matching web renderer)
 - ColorToken → resolved against DEFAULT_THEME (hex strings); exported so apps can read the palette
@@ -123,10 +123,10 @@ src/
 - Input uses `aria-required` / `aria-invalid` (new-arch RN accessibility API, not deprecated `accessibilityRequired`)
 - Icon slots render the raw icon string — intended to be swapped for an icon library in user code
 
-- [x] Task 3.4 — Email Renderer: `@nexus/email` — maps all four primitives to MSO-safe HTML strings
-- [x] Task 4.1 — WASM Bridge: `@nexus/crdt` — Automerge CRDT document compiled to WebAssembly via wasm-pack
-- [x] Task 4.2 — useSync hook: `@nexus/core` — React hook connecting CRDT doc to WebSocket transport
-- [x] Task 4.3 — WebSocket transport: `@nexus/sync-server` — binary CRDT sync server with broadcast, GC, and persistence
+- [x] Task 3.4 — Email Renderer: `@ultimatejs/email` — maps all four primitives to MSO-safe HTML strings
+- [x] Task 4.1 — WASM Bridge: `@ultimatejs/crdt` — Automerge CRDT document compiled to WebAssembly via wasm-pack
+- [x] Task 4.2 — useSync hook: `@ultimatejs/core` — React hook connecting CRDT doc to WebSocket transport
+- [x] Task 4.3 — WebSocket transport: `@ultimatejs/sync-server` — binary CRDT sync server with broadcast, GC, and persistence
 - [x] Task 4.4 — Optimistic rollbacks: rejection frame protocol (0xFF) in server + rollback logic in useSync hook
 
 ## Email Renderer design decisions (Task 3.4)
@@ -150,11 +150,11 @@ src/
 - Client (useSync): tracks `confirmedBytesRef` (last server-acknowledged snapshot) and `pendingKeysRef` (keys written optimistically since last confirmation)
 - On rejection frame: doc is reloaded from `confirmedBytesRef` via `loadDoc()`, pending keys cleared, `onRollback(rejectedKeys)` callback fired, React state dispatched as "rollback"
 - On successful server delta: `confirmedBytesRef` updated to `doc.save()`, `pendingKeysRef` cleared
-- REJECTION_FRAME constant exported from both `@nexus/core` and `@nexus/sync-server` — same value (0xFF) used by both sides
-- 46 total tests passing: @nexus/core (23) + @nexus/sync-server (23); rejection frame tests cover: single-byte detection, invalid-bytes trigger, no-broadcast-on-reject
+- REJECTION_FRAME constant exported from both `@ultimatejs/core` and `@ultimatejs/sync-server` — same value (0xFF) used by both sides
+- 46 total tests passing: @ultimatejs/core (23) + @ultimatejs/sync-server (23); rejection frame tests cover: single-byte detection, invalid-bytes trigger, no-broadcast-on-reject
 
 ## WebSocket sync server design decisions (Task 4.3)
-- Package: `packages/sync-server` (`@nexus/sync-server`), pure Node.js, no React dependency
+- Package: `packages/sync-server` (`@ultimatejs/sync-server`), pure Node.js, no React dependency
 - Uses `ws` WebSocketServer + `@automerge/automerge` v3 (JS, not WASM — runs in Node without a browser)
 - Protocol: connect → server sends full snapshot; subsequent binary frames = CRDT delta → merge + broadcast
 - `DocumentStore`: in-memory Map keyed by `collection/id` → Automerge document; `getBytes()`, `merge()`, `delete()`, `has()`, `size`
@@ -168,7 +168,7 @@ src/
 - 21 tests: document-store (11) + integration server tests (10) including broadcast, no-echo, room isolation, persistence, GC, URL validation
 
 ## useSync hook design decisions (Task 4.2)
-- Package: `packages/core` (`@nexus/core`), TypeScript ESM, peer depends on React ^18||^19
+- Package: `packages/core` (`@ultimatejs/core`), TypeScript ESM, peer depends on React ^18||^19
 - `crdt-loader.ts` — singleton async loader for the WASM module; init runs exactly once even with concurrent hook mounts; uses a module-level promise to dedup concurrent calls
 - `use-sync.ts` — `useSync(collection, id, options?)` returns `[state, update]`
   - `state`: `Record<string, string>` — snapshot of all root CRDT keys, updated on every incoming frame
@@ -178,18 +178,18 @@ src/
 - Empty binary frame (0 bytes) = server signals empty doc → hooks dispatches ready with empty state
 - WASM memory is freed (`doc.free()`) on hook unmount via `useEffect` cleanup
 - `ws.binaryType = "arraybuffer"` — frames arrive as `ArrayBuffer`, converted to `Uint8Array` before CRDT calls
-- Manual Jest mock at `__mocks__/@nexus/crdt.js` + `moduleNameMapper` in jest.config.js — WASM cannot run in Node; mock provides the full API surface as no-ops; never affects runtime builds
+- Manual Jest mock at `__mocks__/@ultimatejs/crdt.js` + `moduleNameMapper` in jest.config.js — WASM cannot run in Node; mock provides the full API surface as no-ops; never affects runtime builds
 - 16 unit tests: singleton loader, API surface, docToState, buildWsUrl (encoding, fallback), send/no-send based on WS ready state
 
 ## WASM Bridge design decisions (Task 4.1)
-- Package: `packages/crdt` (`@nexus/crdt`), Rust crate with `crate-type = ["cdylib", "rlib"]`
+- Package: `packages/crdt` (`@ultimatejs/crdt`), Rust crate with `crate-type = ["cdylib", "rlib"]`
 - Uses `automerge 0.8` with `features = ["wasm"]` — ships its own `js-sys`/`web-sys`/`wasm-bindgen` via feature flag
 - `CrdtDoc` is a flat key-value document (root Automerge Map) — sufficient for component state sync
 - API: `new()`, `get()`, `get_json()`, `set()`, `set_number()`, `set_bool()`, `delete()`, `save()`, `load()`, `merge()`, `keys()`
 - `save()` → `Vec<u8>` / `Uint8Array` (Automerge binary format); `load()` and `merge()` both accept raw bytes
 - `merge()` is CRDT-safe: concurrent writes resolve deterministically, no data lost
 - Built with `wasm-pack build --target web --out-dir pkg` → outputs to `packages/crdt/pkg/`
-- Workspace `package.json` at crate root wraps the `pkg/` output as `@nexus/crdt`; `pnpm-workspace.yaml` picks it up via `packages/*`
+- Workspace `package.json` at crate root wraps the `pkg/` output as `@ultimatejs/crdt`; `pnpm-workspace.yaml` picks it up via `packages/*`
 - `turbo.json` already has `outputs: ["pkg/**"]` — WASM build artifacts are cached correctly
 - automerge 0.8 API notes: range iterators yield `MapRangeItem`/`ListRangeItem` structs (not tuples); map values are `ValueRef<'_>` / `ScalarValueRef<'_>` (not `Value`/`ScalarValue`)
 - 12 unit tests: new/empty, set+get string/number/bool, delete, missing key, save+load roundtrip, merge independent docs, concurrent merge, keys listing, get_json
@@ -198,7 +198,7 @@ src/
 - `build` depends on `^build` — upstream packages build first
 - `dev` depends on `^build` + persistent/uncached — compiler builds before Vite starts
 - `outputs: ["dist/**", "pkg/**"]` — caches both TS and WASM build artifacts
-- `apps/web` declares `@nexus/compiler: workspace:*` — this is what tells Turbo the dependency edge
+- `apps/web` declares `@ultimatejs/compiler: workspace:*` — this is what tells Turbo the dependency edge
 
 ## Environment Notes
 - User is on Windows 11, uses Git Bash (MINGW64) inside VS Code

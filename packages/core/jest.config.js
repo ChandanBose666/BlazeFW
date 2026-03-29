@@ -4,8 +4,8 @@ export default {
   testEnvironment: "node",
   extensionsToTreatAsEsm: [".ts"],
   moduleNameMapper: {
-    // Resolve @nexus/crdt to the manual mock (WASM can't run in Node)
-    "^@nexus/crdt$": "<rootDir>/__mocks__/@nexus/crdt.js",
+    // Resolve @ultimatejs/crdt to the manual mock (WASM can't run in Node)
+    "^@ultimatejs/crdt$": "<rootDir>/__mocks__/@ultimatejs/crdt.mjs",
     // Strip .js extensions so ts-jest can resolve .ts sources
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },

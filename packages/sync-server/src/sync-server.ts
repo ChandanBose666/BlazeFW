@@ -1,5 +1,5 @@
 /**
- * NexusSyncServer — WebSocket binary transport for Zero-Fetch Sync.
+ * UltimateSyncServer — WebSocket binary transport for Zero-Fetch Sync.
  *
  * Protocol:
  *  - Clients connect to  ws://<host>:<port>/sync/<collection>/<id>
@@ -27,7 +27,7 @@ export const REJECTION_FRAME = new Uint8Array([0xff]);
 // Types
 // ---------------------------------------------------------------------------
 
-export interface NexusSyncServerOptions {
+export interface UltimateSyncServerOptions {
   /** TCP port to listen on. Default: 3001 */
   port?: number;
   /**
@@ -56,13 +56,13 @@ interface PeerInfo {
 // Server
 // ---------------------------------------------------------------------------
 
-export class NexusSyncServer {
+export class UltimateSyncServer {
   private wss: WebSocketServer;
   private store: DocumentStore;
   /** Map from WebSocket instance → its (collection, id) */
   private peers = new Map<WebSocket, PeerInfo>();
   private pathPrefix: string;
-  private onError?: NexusSyncServerOptions["onError"];
+  private onError?: UltimateSyncServerOptions["onError"];
 
   /**
    * Resolves once the underlying WebSocketServer is bound and listening.
@@ -70,7 +70,7 @@ export class NexusSyncServer {
    */
   readonly ready: Promise<void>;
 
-  constructor(options: NexusSyncServerOptions = {}) {
+  constructor(options: UltimateSyncServerOptions = {}) {
     const { port = 3001, server, pathPrefix = "/sync", onError } = options;
 
     this.store = new DocumentStore();
@@ -268,20 +268,20 @@ export class NexusSyncServer {
 // ---------------------------------------------------------------------------
 
 /**
- * Create and start a standalone NexusSyncServer.
+ * Create and start a standalone UltimateSyncServer.
  *
  * @example
  * const server = createSyncServer({ port: 3001 });
  * // Clients connect to ws://localhost:3001/sync/<collection>/<id>
  */
 export function createSyncServer(
-  options?: NexusSyncServerOptions
-): NexusSyncServer {
-  return new NexusSyncServer(options);
+  options?: UltimateSyncServerOptions
+): UltimateSyncServer {
+  return new UltimateSyncServer(options);
 }
 
 /**
- * Attach a NexusSyncServer to an existing Node.js HTTP server.
+ * Attach a UltimateSyncServer to an existing Node.js HTTP server.
  * Useful when the sync server shares a port with an Express/Fastify app.
  *
  * @example
@@ -291,7 +291,7 @@ export function createSyncServer(
  */
 export function attachSyncServer(
   server: HttpServer,
-  options?: Omit<NexusSyncServerOptions, "port" | "server">
-): NexusSyncServer {
-  return new NexusSyncServer({ ...options, server });
+  options?: Omit<UltimateSyncServerOptions, "port" | "server">
+): UltimateSyncServer {
+  return new UltimateSyncServer({ ...options, server });
 }

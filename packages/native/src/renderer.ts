@@ -1,13 +1,13 @@
 import type { ReactElement } from "react";
-import type { NexusRenderer } from "@nexus/primitives";
+import type { UltimateRenderer } from "@ultimatejs/primitives";
 import { Stack }  from "./Stack.js";
 import { Text }   from "./Text.js";
 import { Action } from "./Action.js";
 import { Input }  from "./Input.js";
 
-export const nativeRenderer: NexusRenderer<ReactElement> = {
-  Stack:  Stack  as NexusRenderer<ReactElement>["Stack"],
-  Text:   Text   as NexusRenderer<ReactElement>["Text"],
-  Action: Action as NexusRenderer<ReactElement>["Action"],
-  Input:  Input  as NexusRenderer<ReactElement>["Input"],
+export const nativeRenderer: UltimateRenderer<ReactElement> = {
+  Stack:  Stack  as UltimateRenderer<ReactElement>["Stack"],
+  Text:   Text   as UltimateRenderer<ReactElement>["Text"],
+  Action: Action as UltimateRenderer<ReactElement>["Action"],
+  Input:  Input  as UltimateRenderer<ReactElement>["Input"],
 };

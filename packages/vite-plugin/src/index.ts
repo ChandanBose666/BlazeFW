@@ -1,18 +1,18 @@
 import type { Plugin } from "vite";
 import { sliceSource } from "./bridge.js";
 
-export interface NexusPluginOptions {
+export interface UltimatePluginOptions {
   /**
-   * Glob pattern for files the Nexus slicer should process.
-   * Defaults to any file whose path includes `.nexus.ts` or `.nexus.tsx`.
+   * Glob pattern for files the UltimateJs slicer should process.
+   * Defaults to any file whose path includes `.ultimate.tsx` or `.ultimate.tsx`.
    */
   include?: RegExp;
 }
 
-const DEFAULT_PATTERN = /\.nexus\.tsx?$/;
+const DEFAULT_PATTERN = /.ultimate.tsx?$/;
 
 /**
- * Vite plugin that intercepts Nexus component files and routes them
+ * Vite plugin that intercepts UltimateJs component files and routes them
  * through the Rust Slicer instead of Vite's default TypeScript loader.
  *
  * For server builds  → returns the server bundle (no browser APIs).
@@ -20,16 +20,16 @@ const DEFAULT_PATTERN = /\.nexus\.tsx?$/;
  *
  * @example
  * // vite.config.ts
- * import { nexusPlugin } from '@nexus/vite-plugin';
- * export default defineConfig({ plugins: [nexusPlugin()] });
+ * import { ultimatePlugin } from '@ultimatejs/vite-plugin';
+ * export default defineConfig({ plugins: [ultimatePlugin()] });
  */
-export function nexusPlugin(options: NexusPluginOptions = {}): Plugin {
+export function ultimatePlugin(options: UltimatePluginOptions = {}): Plugin {
   const pattern = options.include ?? DEFAULT_PATTERN;
   // Cache keyed by file id → sliced result, cleared on each hot-reload.
   const cache = new Map<string, { server_js: string; client_js: string }>();
 
   return {
-    name: "nexus-compiler",
+    name: "ultimate-compiler",
 
     // Tell Vite this plugin handles its own HMR invalidation.
     handleHotUpdate({ file, server }) {

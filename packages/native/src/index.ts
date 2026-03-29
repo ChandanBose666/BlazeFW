@@ -1,13 +1,13 @@
 /**
- * @nexus/native — Native renderer for Nexus.js semantic UI primitives.
+ * @ultimatejs/native — Native renderer for UltimateJs semantic UI primitives.
  *
  * Exports four React Native components (Stack, Text, Action, Input) that
- * implement the NexusRenderer<ReactElement> contract from @nexus/primitives.
+ * implement the UltimateRenderer<ReactElement> contract from @ultimatejs/primitives.
  *
  * Usage:
- *   import { Stack, Text, Action, Input } from "@nexus/native";
+ *   import { Stack, Text, Action, Input } from "@ultimatejs/native";
  *   // or import the renderer object:
- *   import { nativeRenderer } from "@nexus/native";
+ *   import { nativeRenderer } from "@ultimatejs/native";
  */
 
 export { Stack }          from "./Stack.js";

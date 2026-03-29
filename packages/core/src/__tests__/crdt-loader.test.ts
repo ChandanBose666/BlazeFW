@@ -1,7 +1,7 @@
 /**
  * Tests for crdt-loader.ts
  *
- * @nexus/crdt is mapped to the manual stub in jest.config.js — WASM cannot
+ * @ultimatejs/crdt is mapped to the manual stub in jest.config.js — WASM cannot
  * run in Node. These tests verify the *behaviour* of the loader wrapper:
  *   1. loadCrdtModule() returns a module with CrdtDoc
  *   2. Repeated / concurrent calls return the same module instance (singleton)

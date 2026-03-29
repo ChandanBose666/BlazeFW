@@ -227,12 +227,12 @@ mod tests {
     #[test]
     fn test_save_and_load_roundtrip() {
         let mut doc = CrdtDoc::new();
-        doc.set("title", "Nexus");
+        doc.set("title", "UltimateJs");
         doc.set_number("version", 1.0);
 
         let bytes = doc.save();
         let loaded = CrdtDoc::load(&bytes).expect("load failed");
-        assert_eq!(loaded.get("title"), Some("Nexus".to_string()));
+        assert_eq!(loaded.get("title"), Some("UltimateJs".to_string()));
         assert_eq!(loaded.get("version"), Some("1".to_string()));
     }
 

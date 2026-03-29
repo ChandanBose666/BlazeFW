@@ -6,7 +6,7 @@ import type { InputProps } from "./input.js";
 /**
  * The contract every render target must satisfy.
  *
- * @nexus/web, @nexus/native, and @nexus/email each implement this interface,
+ * @ultimatejs/web, @ultimatejs/native, and @ultimatejs/email each implement this interface,
  * ensuring all four primitives are handled before a target can be used.
  *
  * The generic `TNode` is the target's native node type:
@@ -14,7 +14,7 @@ import type { InputProps } from "./input.js";
  *   - Native → ReactElement (react-native)
  *   - Email  → string (MJML/HTML)
  */
-export interface NexusRenderer<TNode> {
+export interface UltimateRenderer<TNode> {
   Stack: (props: StackProps) => TNode;
   Text: (props: TextProps) => TNode;
   Action: (props: ActionProps) => TNode;
