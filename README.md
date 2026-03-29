@@ -555,6 +555,15 @@ pnpm dev
 | 5.2 | ✅ | `@ultimatejs/inspector` — browser DevTools overlay with color-coded server/client map |
 | 5.3 | ✅ | `@ultimatejs/snapshot` — React Error Boundary with automatic time-travel restore via ring buffer |
 
+### Phase 6 — Accessibility Layer 🔄
+
+| Task | Status | Description |
+|---|---|---|
+| 6.1 | ✅ | `AccessibilityScanner` (Rust) — SWC AST visitor detecting 6 WCAG 2.1 AA rules |
+| 6.2 | ⏳ | Enforced ARIA prop types in `@ultimatejs/primitives` + all three renderers |
+| 6.3 | ⏳ | `@ultimatejs/a11y` runtime utilities — `useFocusTrap`, `useAnnouncer`, `SkipNav`, etc. |
+| 6.4 | ⏳ | Test utilities + `nexus-a11y` compliance reporter CLI |
+
 ---
 
 ## Contributing

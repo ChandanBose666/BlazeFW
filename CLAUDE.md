@@ -189,8 +189,29 @@ src/
 - **jest-dom types**: uses `@testing-library/jest-dom/jest-globals` (ESM-compatible, augments `@jest/expect`) in `setupFilesAfterEnv`; ts-jest `diagnostics: false` avoids a module-augmentation resolution issue with the inline tsconfig — type safety is preserved for source files via the main tsconfig
 - 39 tests: snapshot-buffer (17) + snapshot-boundary (14) + use-snapshot (8); uses `jest-environment-jsdom` + `@testing-library/react`
 
+- [x] Task 6.1 — AccessibilityScanner (Rust): SWC AST visitor detecting 6 WCAG 2.1 AA rules, 20 tests
+
+## AccessibilityScanner design decisions (Task 6.1)
+- Module: `packages/compiler/src/accessibility_scanner.rs`, follows CapabilityScanner / SecretScanner pattern
+- **swc_ecma_ast v21 API differences** from older swc versions:
+  - `JSXAttrValue::Lit` no longer exists — string literal attributes use `JSXAttrValue::Str(Str)` instead
+  - `Wtf8Atom` (the type of `Str.value`) does NOT implement `AsRef<str>` — use `.to_string_lossy()` (via `Deref` to `Wtf8`, which has `to_string_lossy() -> Cow<str>`)
+  - Numeric literals in JSX expressions `{-1}` are `Expr::Unary { op: Minus, arg: Lit::Num }` — need to handle the unary case for negative tabindex
+- **6 rules implemented**:
+  - `missing-alt` (WCAG 1.1.1, Error) — `<img>` without any `alt` attribute; `alt=""` is intentionally valid (decorative images)
+  - `unlabeled-action` (WCAG 4.1.2, Error) — `<Action>` with no text child and no `aria-label`/`aria-labelledby`
+  - `heading-order` (WCAG 1.3.1, Warning) — heading level skips (e.g. h1→h3); decreasing levels (h2→h1) are fine
+  - `missing-input-label` (WCAG 1.3.1, Error) — `<input>` / `<Input>` without `aria-label`, `aria-labelledby`, or `id`
+  - `empty-link` (WCAG 2.4.4, Error) — `<a>` with no text content and no `aria-label`
+  - `positive-tabindex` (WCAG 2.4.3, Warning) — `tabIndex` > 0 disrupts natural focus order
+- `AccessibilityViolation` struct serialises to JSON via `serde::Serialize` (same output format as CLI + WASM consumers)
+- Uses `Syntax::Typescript { tsx: true }` parser in tests (JSX is only valid in TSX/JSX files)
+- `children_have_visible_text()` is a free recursive function (not a method) to avoid `Self` scope issues
+- 20 unit tests: one positive + one negative per rule plus a clean-component integration test
+- All 39 compiler tests pass (20 new + 19 existing)
+
 ## In Progress
-- [ ] Phase 5 — Sidecar & Polish (Task 5.4 next)
+- [ ] Phase 6 — Accessibility Layer (Task 6.2 next)
 
 ## Optimistic rollback design decisions (Task 4.4)
 - Protocol: server sends single byte 0xFF (REJECTION_FRAME) when store.merge() throws on invalid bytes
