@@ -210,8 +210,21 @@ src/
 - 20 unit tests: one positive + one negative per rule plus a clean-component integration test
 - All 39 compiler tests pass (20 new + 19 existing)
 
+- [x] Task 6.3 — Runtime utilities: `@ultimatejs/a11y` — useFocusTrap, useAnnouncer, SkipNav, useReducedMotion, VisuallyHidden, 51 tests
+
+## A11y Runtime design decisions (Task 6.3)
+- Package: `packages/a11y` (`@ultimatejs/a11y`), TypeScript ESM, peer depends on React ^18||^19
+- **`useFocusTrap(ref, { enabled, onEscape })`** — attaches a keydown listener to the container (not document); Tab/Shift+Tab cycle through focusable elements, Escape calls the callback; restores focus to the previously-active element on cleanup; `onEscape` stored in a ref so callback identity changes don't restart the effect
+- Focusable selector excludes `[disabled]` and `[inert]` subtrees; `offsetParent` check omitted — it breaks in jsdom and the inert check covers most visibility needs
+- **`useAnnouncer({ politeness })`** — injects a `data-ultimatejs-announcer` div directly into `document.body` via `useEffect` (not a React-rendered component); DOM node is stable across announcements so screen readers track the same live region; `announce()` clears textContent then sets it after 50ms so repeating the same string still triggers a mutation event
+- **`SkipNavLink` / `SkipNavContent`** — link is absolutely positioned at `top: -100%` until `:focus` moves it to `top: 0` via a one-time injected `<style>` tag (`#ultimatejs-skip-nav-styles`); deduplication check prevents double-injection; `SkipNavContent` uses `tabIndex={-1}` so it can receive programmatic focus without entering the natural tab order
+- **`useReducedMotion()`** — guards against `window.matchMedia` not being a function (jsdom without mock, SSR) with `typeof window.matchMedia !== 'function'` check; returns `false` as safe default; subscribes to `change` events and cleans up on unmount
+- **`VisuallyHidden`** — renders a tag (default `span`) with the classic 1px/clip/overflow hidden pattern; `as` prop is `ElementType` to accept any HTML element without a giant union type
+- jsdom clip normalization: `rect(0, 0, 0, 0)` → `rect(0px, 0px, 0px, 0px)`; test uses `toMatch(/rect\(0/)` instead of exact string equality
+- 51 unit tests: use-focus-trap (10) + use-announcer (8) + skip-nav (16) + use-reduced-motion (7) + visually-hidden (9); all run in jest-environment-jsdom
+
 ## In Progress
-- [ ] Phase 6 — Accessibility Layer (Task 6.2 next)
+- [ ] Phase 6 — Accessibility Layer (Task 6.4 next)
 
 ## Optimistic rollback design decisions (Task 4.4)
 - Protocol: server sends single byte 0xFF (REJECTION_FRAME) when store.merge() throws on invalid bytes
