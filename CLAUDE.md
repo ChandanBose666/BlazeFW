@@ -175,8 +175,22 @@ src/
 - `ALL_KINDS` is `Object.freeze()`'d — runtime immutable, not just TypeScript readonly
 - 59 tests: types (8) + scanner (13) + styles (11) + panel (14) + inspector (13); uses `jest-environment-jsdom` for DOM tests
 
+- [x] Task 5.3 — Snapshot Boundary: `@ultimatejs/snapshot` — React Error Boundary with automatic time-travel restore via ring buffer, 39 tests
+
+## Snapshot Boundary design decisions (Task 5.3)
+- Package: `packages/snapshot` (`@ultimatejs/snapshot`), TypeScript ESM, peer depends on React ^18||^19 + react-dom ^18||^19
+- **`SnapshotBuffer<T>`** — generic fixed-capacity LIFO ring buffer; `push()` evicts oldest when at capacity, `pop()` returns newest (time-travel); `getAll()` returns a non-mutating copy newest-first
+- **`SnapshotBoundary<T>`** — class component (hooks can't catch errors); uses `SnapshotBuffer` to record each successfully-rendered `snapshot` prop; on child throw: `componentDidCatch` pops the newest snapshot, calls `onRestore(data, meta)`, then `setState({ hasError: false })` — React batches these two state updates in one flush so children re-render with restored data without a flash of the fallback
+- **Default fallback** hoisted outside class (`rendering-hoist-jsx`) — `DefaultFallback` function component, not recreated on every render
+- **Conditional render** uses ternary not `&&` (`rendering-conditional-render`) for the error message `<pre>`
+- **`RestoreMeta`** carries `timestamp`, `remaining` (snapshots left after this restore), and `error` — useful for telemetry and retry-limit UI
+- Buffer exhaustion: when `pop()` returns `undefined` (all snapshots tried), `componentDidCatch` skips the `setState` reset → boundary stays in error state and renders `fallback` prop or `DefaultFallback`
+- **`useSnapshot<T>(initial, opts?)`** — convenience hook; returns `{ value, setValue, boundaryProps }`; `setValue` uses functional setState (`rerender-functional-setstate`); `onRestore` wrapped in `useCallback([])` for a permanently stable reference that won't cause `SnapshotBoundary.componentDidUpdate` to re-record snapshots spuriously
+- **jest-dom types**: uses `@testing-library/jest-dom/jest-globals` (ESM-compatible, augments `@jest/expect`) in `setupFilesAfterEnv`; ts-jest `diagnostics: false` avoids a module-augmentation resolution issue with the inline tsconfig — type safety is preserved for source files via the main tsconfig
+- 39 tests: snapshot-buffer (17) + snapshot-boundary (14) + use-snapshot (8); uses `jest-environment-jsdom` + `@testing-library/react`
+
 ## In Progress
-- [ ] Phase 5 — Sidecar & Polish (Task 5.3 next: Snapshot Boundary)
+- [ ] Phase 5 — Sidecar & Polish (Task 5.4 next)
 
 ## Optimistic rollback design decisions (Task 4.4)
 - Protocol: server sends single byte 0xFF (REJECTION_FRAME) when store.merge() throws on invalid bytes

@@ -553,7 +553,7 @@ pnpm dev
 |---|---|---|
 | 5.1 | ✅ | `@ultimatejs/sidecar` — Partytown-style Web Worker offloads 3rd-party tracking scripts |
 | 5.2 | ✅ | `@ultimatejs/inspector` — browser DevTools overlay with color-coded server/client map |
-| 5.3 | ⏳ | Snapshot boundary — time-travel error recovery |
+| 5.3 | ✅ | `@ultimatejs/snapshot` — React Error Boundary with automatic time-travel restore via ring buffer |
 
 ---
 
