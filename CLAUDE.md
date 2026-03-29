@@ -126,6 +126,7 @@ src/
 - [x] Task 3.4 — Email Renderer: `@nexus/email` — maps all four primitives to MSO-safe HTML strings
 - [x] Task 4.1 — WASM Bridge: `@nexus/crdt` — Automerge CRDT document compiled to WebAssembly via wasm-pack
 - [x] Task 4.2 — useSync hook: `@nexus/core` — React hook connecting CRDT doc to WebSocket transport
+- [x] Task 4.3 — WebSocket transport: `@nexus/sync-server` — binary CRDT sync server with broadcast, GC, and persistence
 
 ## Email Renderer design decisions (Task 3.4)
 - TNode = string — the only renderer that doesn't use React; all functions return raw HTML strings
@@ -141,7 +142,21 @@ src/
 - 40 unit tests cover all four components + wrapDocument; pure string assertions, no DOM/jsdom required
 
 ## In Progress
-- [ ] Phase 4 — Zero-Fetch Sync (Task 4.3 next: WebSocket binary transport server)
+- [ ] Phase 4 — Zero-Fetch Sync (Task 4.4 next: Optimistic rollbacks)
+
+## WebSocket sync server design decisions (Task 4.3)
+- Package: `packages/sync-server` (`@nexus/sync-server`), pure Node.js, no React dependency
+- Uses `ws` WebSocketServer + `@automerge/automerge` v3 (JS, not WASM — runs in Node without a browser)
+- Protocol: connect → server sends full snapshot; subsequent binary frames = CRDT delta → merge + broadcast
+- `DocumentStore`: in-memory Map keyed by `collection/id` → Automerge document; `getBytes()`, `merge()`, `delete()`, `has()`, `size`
+- `NexusSyncServer`: wraps WebSocketServer; exposes `ready: Promise<void>` (await before connecting clients); `peerCount`, `documentCount`, `close()`
+- Factory helpers: `createSyncServer(opts)` (standalone) and `attachSyncServer(httpServer, opts)` (shared port with Express/Fastify)
+- GC: when last peer for a (collection, id) disconnects, the document is evicted from the store
+- Broadcast excludes the sender — no echo
+- URL scheme: `ws://<host>:<port>/sync/<collection>/<id>` — decoded with `decodeURIComponent`; invalid URLs close with code 4404
+- `pathPrefix` configurable (default `/sync`)
+- Test clients use `globalThis.WebSocket` (Node.js 22+ native) instead of the `ws` client — avoids ESM compat issues in `--experimental-vm-modules` mode
+- 21 tests: document-store (11) + integration server tests (10) including broadcast, no-echo, room isolation, persistence, GC, URL validation
 
 ## useSync hook design decisions (Task 4.2)
 - Package: `packages/core` (`@nexus/core`), TypeScript ESM, peer depends on React ^18||^19
