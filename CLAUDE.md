@@ -15,11 +15,12 @@ UltimateJs/
 ├── packages/
 │   ├── compiler/             # Rust crate — SWC-based AST analysis + WASM output
 │   ├── crdt/                 # Rust crate — Automerge CRDT compiled to WASM (@ultimatejs/crdt)
-│   ├── core/                 # (upcoming) TS runtime core
+│   ├── core/                 # TS runtime core — useSync hook + CRDT loader
 │   ├── primitives/           # TS types: Stack/Text/Action/Input + NexusRenderer<TNode>
 │   ├── web/                  # Web renderer: maps primitives → HTML + inline styles
 │   ├── native/               # Native renderer: maps primitives → React Native View/Text/Pressable/TextInput
-│   └── email/                # Email renderer: maps primitives → MSO-safe HTML strings (TNode=string)
+│   ├── email/                # Email renderer: maps primitives → MSO-safe HTML strings (TNode=string)
+│   └── sidecar/              # Web Worker sidecar — offloads 3rd-party scripts, DOM proxy
 ├── docs/
 │   └── action-plan.md        # Master task list (5 phases)
 ├── package.json              # Root — turbo dev/build/test scripts
@@ -142,8 +143,23 @@ src/
 - `wrapDocument()` utility produces a full MSO-safe HTML document with preview text, centering shell table, MSO conditional comments
 - 40 unit tests cover all four components + wrapDocument; pure string assertions, no DOM/jsdom required
 
+- [x] Task 5.1 — Sidecar Worker: `@ultimatejs/sidecar` — Partytown-style Web Worker that intercepts `<script type="text/ultimatejs">` tags, proxies DOM access async via postMessage, 49 tests
+
+## Sidecar Worker design decisions (Task 5.1)
+- Package: `packages/sidecar` (`@ultimatejs/sidecar`), TypeScript ESM, no peer dependencies
+- Opt-in via `<script type="text/ultimatejs" src="...">` — browser ignores unknown types, worker loads them
+- **Async proxy** (Promise-based, not SharedArrayBuffer/Atomics) — simpler, no COOP/COEP headers required
+- `buildProxy(path, pending, send)` — recursive Proxy with apply/set/get traps; accumulates path lazily, only sends message on call or set
+- `buildWindowProxy` — window-shaped proxy; native Worker globals (fetch, setTimeout, Math, etc.) return `undefined` so the Worker uses its own implementations
+- `handleProxyRequest(win, msg)` — main-thread executor: navigates path on real `window`, returns value; `set` is fire-and-forget (no reply)
+- `collectSidecarScripts(container, scriptType)` — accepts a `ScriptContainer` interface so it's testable without jsdom
+- Worker entry (`worker-entry.ts`) uses `fetch + new Function('window','document',…, src)` rather than `importScripts` — this is what gives us interception of DOM access (importScripts would run scripts in native worker scope where `window` doesn't exist)
+- `MutationObserver` in `initSidecar` watches for scripts injected after page load (e.g. Google Tag Manager injecting pixels)
+- Protocol: `WorkerToMain` = get/set/call; `MainToWorker` = response/error/load; type guards `isWorkerMessage` / `isMainMessage`
+- 49 unit tests: protocol (15) + worker-proxy (19) + sidecar (15); all run in Node without jsdom
+
 ## In Progress
-- [ ] Phase 5 — Sidecar & Polish (Task 5.1 next: Sidecar Worker)
+- [ ] Phase 5 — Sidecar & Polish (Task 5.2 next: Nexus Inspector)
 
 ## Optimistic rollback design decisions (Task 4.4)
 - Protocol: server sends single byte 0xFF (REJECTION_FRAME) when store.merge() throws on invalid bytes

@@ -18,7 +18,8 @@ UltimateJs eliminates entire categories of boilerplate by making the infrastruct
 - [Architecture Overview](#architecture-overview)
 - [Pillar 1 — Fluid Execution](#pillar-1--fluid-execution-phase-2-complete)
 - [Pillar 2 — Semantic UI](#pillar-2--semantic-ui-phase-3-complete)
-- [Pillar 3 — Zero-Fetch Sync](#pillar-3--zero-fetch-sync-phase-4-planned)
+- [Pillar 3 — Zero-Fetch Sync](#pillar-3--zero-fetch-sync-phase-4-complete)
+- [Pillar 4 — Sidecar Worker](#pillar-4--sidecar-worker-phase-51-complete)
 - [Monorepo Structure](#monorepo-structure)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
@@ -345,6 +346,48 @@ update('name', 'Alice');   // optimistic + synced to all peers instantly
 
 ---
 
+## Pillar 4 — Sidecar Worker *(Phase 5.1, complete)*
+
+Third-party tracking scripts (analytics, tag managers, ad pixels) block the main thread and degrade Core Web Vitals. `@ultimatejs/sidecar` offloads them to a Web Worker — they run off the main thread and access the DOM via an async proxy.
+
+```html
+<!-- Before: blocks your main thread -->
+<script src="https://www.googletagmanager.com/gtag.js"></script>
+
+<!-- After: runs in a Web Worker -->
+<script type="text/ultimatejs" src="https://www.googletagmanager.com/gtag.js"></script>
+```
+
+```ts
+import { initSidecar } from '@ultimatejs/sidecar';
+
+// Call once at app startup — picks up all <script type="text/ultimatejs"> tags
+// and watches for any added dynamically (e.g. by a tag manager)
+const sidecar = initSidecar({ workerUrl: '/sidecar.worker.js' });
+
+// Clean up when done
+sidecar.destroy();
+```
+
+### How It Works
+
+```
+Main thread                          Web Worker
+─────────────────────────────────    ──────────────────────────────────────
+<script type="text/ultimatejs">  ──► fetch(url) → new Function(source)
+                                     runs script with proxy window/document
+                                     ↓
+window.dataLayer.push(…)  ◄──────── { type:'call', path:['dataLayer','push'], args }
+return result  ──────────────────►  Promise resolves → script continues
+```
+
+- The Worker fetches each script's source and runs it via `new Function('window', 'document', …, source)` — our proxy objects are injected as `window` and `document`
+- DOM property reads return sub-proxies lazily; function calls send a `call` message and return a `Promise`
+- A `MutationObserver` catches scripts injected after page load (e.g. GTM auto-injecting pixels)
+- Native Worker globals (`fetch`, `setTimeout`, `Math`, etc.) bypass the proxy — no overhead
+
+---
+
 ## Monorepo Structure
 
 ```
@@ -360,7 +403,8 @@ UltimateJs/
 │   ├── email/                 @ultimatejs/email — Email renderer (HTML strings)
 │   ├── crdt/                  @ultimatejs/crdt — Automerge CRDT compiled to WASM
 │   ├── core/                  @ultimatejs/core — useSync hook + WASM loader
-│   └── sync-server/           @ultimatejs/sync-server — WebSocket binary sync server
+│   ├── sync-server/           @ultimatejs/sync-server — WebSocket binary sync server
+│   └── sidecar/               @ultimatejs/sidecar — Web Worker script offloader
 ├── docs/
 │   ├── action-plan.md         Task-by-task build plan
 │   └── implementation-plan.md
@@ -457,13 +501,13 @@ pnpm dev
 | 4.3 | WebSocket binary transport — delta broadcast server |
 | 4.4 | Optimistic rollbacks — revert local state on rejection |
 
-### Phase 5 — Sidecar & Polish ⏳
+### Phase 5 — Sidecar & Polish 🔄
 
-| Task | Description |
-|---|---|
-| 5.1 | Partytown-style Web Worker for 3rd-party scripts |
-| 5.2 | UltimateJs Inspector — browser overlay showing server/client split |
-| 5.3 | Snapshot boundary — time-travel error recovery |
+| Task | Status | Description |
+|---|---|---|
+| 5.1 | ✅ | `@ultimatejs/sidecar` — Partytown-style Web Worker offloads 3rd-party tracking scripts |
+| 5.2 | ⏳ | UltimateJs Inspector — browser DevTools overlay showing server/client split |
+| 5.3 | ⏳ | Snapshot boundary — time-travel error recovery |
 
 ---
 
