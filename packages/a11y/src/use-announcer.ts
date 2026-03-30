@@ -48,7 +48,7 @@ export function useAnnouncer(options: AnnouncerOptions = {}): AnnouncerReturn {
     const el = document.createElement('div');
     el.setAttribute('aria-live', politeness);
     el.setAttribute('aria-atomic', 'true');
-    el.setAttribute('data-ultimatejs-announcer', '');
+    el.setAttribute('data-blazefw-announcer', '');
     Object.assign(el.style, VISUALLY_HIDDEN);
     document.body.appendChild(el);
     elRef.current = el;

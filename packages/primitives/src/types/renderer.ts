@@ -6,7 +6,7 @@ import type { InputProps } from "./input.js";
 /**
  * The contract every render target must satisfy.
  *
- * @ultimatejs/web, @ultimatejs/native, and @ultimatejs/email each implement this interface,
+ * @blazefw/web, @blazefw/native, and @blazefw/email each implement this interface,
  * ensuring all four primitives are handled before a target can be used.
  *
  * The generic `TNode` is the target's native node type:

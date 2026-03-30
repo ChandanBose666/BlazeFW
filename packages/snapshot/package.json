@@ -1,8 +1,8 @@
 {
-  "name": "@ultimatejs/snapshot",
+  "name": "@blazefw/snapshot",
   "version": "0.1.0",
   "type": "module",
-  "description": "UltimateJs Snapshot Boundary — time-travel error recovery for React components",
+  "description": "Blazefw Snapshot Boundary — time-travel error recovery for React components",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

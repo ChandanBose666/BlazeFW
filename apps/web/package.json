@@ -1,5 +1,5 @@
 {
-  "name": "@ultimatejs/web",
+  "name": "@blazefw/web",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@ultimatejs/compiler": "workspace:*",
-    "@ultimatejs/vite-plugin": "workspace:*"
+    "@blazefw/compiler": "workspace:*",
+    "@blazefw/vite-plugin": "workspace:*"
   },
   "devDependencies": {
     "vite": "^5.0.0",

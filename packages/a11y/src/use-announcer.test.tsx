@@ -3,7 +3,7 @@ import { render, act } from '@testing-library/react';
 import { useAnnouncer } from './use-announcer.js';
 
 function getLiveRegion(): HTMLElement | null {
-  return document.querySelector('[data-ultimatejs-announcer]');
+  return document.querySelector('[data-blazefw-announcer]');
 }
 
 function AnnouncerFixture({

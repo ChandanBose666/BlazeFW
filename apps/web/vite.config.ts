@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import { ultimatePlugin } from "@ultimatejs/vite-plugin";
+import { ultimatePlugin } from "@blazefw/vite-plugin";
 
 export default defineConfig({
   plugins: [

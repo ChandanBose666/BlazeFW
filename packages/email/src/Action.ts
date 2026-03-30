@@ -1,4 +1,4 @@
-import type { ActionProps, ActionVariant, ActionSize } from "@ultimatejs/primitives";
+import type { ActionProps, ActionVariant, ActionSize } from "@blazefw/primitives";
 import { resolveSpace, resolveColor, RADIUS_PX, DEFAULT_THEME } from "./lib/tokens.js";
 import { buildStyle, escapeAttr, stringify } from "./lib/html.js";
 

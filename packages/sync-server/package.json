@@ -1,8 +1,8 @@
 {
-  "name": "@ultimatejs/sync-server",
+  "name": "@blazefw/sync-server",
   "version": "0.1.0",
   "type": "module",
-  "description": "UltimateJs WebSocket sync server — binary CRDT transport for Zero-Fetch Sync",
+  "description": "Blazefw WebSocket sync server — binary CRDT transport for Zero-Fetch Sync",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

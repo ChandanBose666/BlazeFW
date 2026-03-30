@@ -1,5 +1,5 @@
 {
-  "name": "@ultimatejs/native",
+  "name": "@blazefw/native",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -9,7 +9,7 @@
     "dev": "tsc --noEmit --watch"
   },
   "dependencies": {
-    "@ultimatejs/primitives": "workspace:*"
+    "@blazefw/primitives": "workspace:*"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",

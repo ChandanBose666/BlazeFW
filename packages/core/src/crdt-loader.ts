@@ -1,5 +1,5 @@
 /**
- * Lazy singleton loader for the @ultimatejs/crdt WASM module.
+ * Lazy singleton loader for the @blazefw/crdt WASM module.
  *
  * wasm-pack's `--target web` output requires an explicit async `init()`
  * call before any WASM functions can be used. This module ensures the
@@ -7,7 +7,7 @@
  * useSync hooks are mounted concurrently.
  */
 
-import type { CrdtDoc } from "@ultimatejs/crdt";
+import type { CrdtDoc } from "@blazefw/crdt";
 
 // The wasm-pack generated entry point. We import it as a type-only module
 // here and dynamically import at runtime so the WASM binary is only fetched
@@ -30,7 +30,7 @@ export async function loadCrdtModule(): Promise<CrdtModule> {
   if (!initPromise) {
     initPromise = (async () => {
       // Dynamic import keeps the WASM out of the initial bundle.
-      const mod = (await import("@ultimatejs/crdt")) as CrdtModule;
+      const mod = (await import("@blazefw/crdt")) as CrdtModule;
       // Run the wasm-bindgen init (fetches + compiles the .wasm binary).
       await mod.default();
       moduleCache = mod;

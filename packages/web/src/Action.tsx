@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode, CSSProperties } from "react";
-import type { ActionProps, ActionVariant, ActionSize } from "@ultimatejs/primitives";
+import type { ActionProps, ActionVariant, ActionSize } from "@blazefw/primitives";
 import { resolveSpace, resolveColor, RADIUS } from "./lib/tokens.js";
 
 // ---------------------------------------------------------------------------

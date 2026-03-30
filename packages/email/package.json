@@ -1,5 +1,5 @@
 {
-  "name": "@ultimatejs/email",
+  "name": "@blazefw/email",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,7 +10,7 @@
     "test": "node --experimental-vm-modules ../../node_modules/.bin/jest"
   },
   "dependencies": {
-    "@ultimatejs/primitives": "workspace:*"
+    "@blazefw/primitives": "workspace:*"
   },
   "devDependencies": {
     "@types/jest": "^29.0.0",

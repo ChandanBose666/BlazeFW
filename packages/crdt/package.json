@@ -1,8 +1,8 @@
 {
-  "name": "@ultimatejs/crdt",
+  "name": "@blazefw/crdt",
   "version": "0.1.0",
   "type": "module",
-  "description": "Automerge CRDT document compiled to WebAssembly — Zero-Fetch Sync engine for UltimateJs",
+  "description": "Automerge CRDT document compiled to WebAssembly — Zero-Fetch Sync engine for Blazefw",
   "main": "./pkg/ultimate_crdt.js",
   "types": "./pkg/ultimate_crdt.d.ts",
   "files": [

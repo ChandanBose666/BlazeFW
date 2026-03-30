@@ -28,16 +28,16 @@ function syncTemplate(): FeatureTemplate {
   return {
     deps: {
       dependencies: {
-        '@ultimatejs/core': '^0.1.0',
-        '@ultimatejs/crdt': '^0.1.0',
-        '@ultimatejs/sync-server': '^0.1.0',
+        '@blazefw/core': '^0.1.0',
+        '@blazefw/crdt': '^0.1.0',
+        '@blazefw/sync-server': '^0.1.0',
       },
     },
     note: 'Start the sync server in a separate terminal:\n  node src/sync-server.js',
     files: [
       {
         path: 'src/sync-server.ts',
-        content: `import { createSyncServer } from '@ultimatejs/sync-server';
+        content: `import { createSyncServer } from '@blazefw/sync-server';
 
 const server = await createSyncServer({ port: 4000 });
 await server.ready;
@@ -60,22 +60,22 @@ function sidecarTemplate(): FeatureTemplate {
   return {
     deps: {
       dependencies: {
-        '@ultimatejs/sidecar': '^0.1.0',
+        '@blazefw/sidecar': '^0.1.0',
       },
     },
-    note: 'Change <script src="..."> to <script type="text/ultimatejs" src="..."> for any 3rd-party script you want offloaded.',
+    note: 'Change <script src="..."> to <script type="text/blazefw" src="..."> for any 3rd-party script you want offloaded.',
     files: [
       {
         path: 'src/sidecar-init.ts',
-        content: `import { initSidecar } from '@ultimatejs/sidecar';
+        content: `import { initSidecar } from '@blazefw/sidecar';
 
 /**
  * Call this once in your app entry point (main.tsx) to activate the
- * Web Worker sidecar. Any <script type="text/ultimatejs"> tags on the
+ * Web Worker sidecar. Any <script type="text/blazefw"> tags on the
  * page will be picked up and offloaded to the worker automatically.
  *
  * Example in index.html:
- *   <script type="text/ultimatejs" src="https://www.googletagmanager.com/gtag.js"></script>
+ *   <script type="text/blazefw" src="https://www.googletagmanager.com/gtag.js"></script>
  */
 export function startSidecar() {
   return initSidecar({ workerUrl: '/sidecar.worker.js' });
@@ -92,14 +92,14 @@ function inspectorTemplate(): FeatureTemplate {
   return {
     deps: {
       devDependencies: {
-        '@ultimatejs/inspector': '^0.1.0',
+        '@blazefw/inspector': '^0.1.0',
       },
     },
     note: 'Press Alt+I in the browser to toggle the Nexus Inspector overlay.',
     files: [
       {
         path: 'src/inspector-init.ts',
-        content: `import { initInspector } from '@ultimatejs/inspector';
+        content: `import { initInspector } from '@blazefw/inspector';
 
 /**
  * Dev-only inspector overlay. Call from main.tsx inside an
@@ -134,7 +134,7 @@ function snapshotTemplate(): FeatureTemplate {
   return {
     deps: {
       dependencies: {
-        '@ultimatejs/snapshot': '^0.1.0',
+        '@blazefw/snapshot': '^0.1.0',
       },
     },
     note: 'Wrap any stateful component with <SnapshotBoundary> to get automatic time-travel error recovery.',
@@ -142,7 +142,7 @@ function snapshotTemplate(): FeatureTemplate {
       {
         path: 'src/components/SnapshotWrapper.tsx',
         content: `import { type ReactNode } from 'react';
-import { SnapshotBoundary, useSnapshot } from '@ultimatejs/snapshot';
+import { SnapshotBoundary, useSnapshot } from '@blazefw/snapshot';
 
 interface Props<T> {
   initial: T;
@@ -188,7 +188,7 @@ function a11yTemplate(): FeatureTemplate {
   return {
     deps: {
       dependencies: {
-        '@ultimatejs/a11y': '^0.1.0',
+        '@blazefw/a11y': '^0.1.0',
       },
       scripts: {
         'a11y:audit': 'nexus-a11y dist/index.html',
@@ -196,7 +196,7 @@ function a11yTemplate(): FeatureTemplate {
       },
     },
     note: [
-      'Accessibility utilities are ready in @ultimatejs/a11y.',
+      'Accessibility utilities are ready in @blazefw/a11y.',
       'Audit your built HTML with: pnpm a11y:audit',
       'Add to CI with: pnpm a11y:audit:ci (never blocks the build)',
     ].join('\n  '),
@@ -216,12 +216,12 @@ export {
   useAnnouncer,
   useReducedMotion,
   VisuallyHidden,
-} from '@ultimatejs/a11y';
+} from '@blazefw/a11y';
 
-export { SkipNavLink, SkipNavContent } from '@ultimatejs/a11y';
+export { SkipNavLink, SkipNavContent } from '@blazefw/a11y';
 
 import { type ReactNode } from 'react';
-import { SkipNavLink, SkipNavContent } from '@ultimatejs/a11y';
+import { SkipNavLink, SkipNavContent } from '@blazefw/a11y';
 
 /**
  * Wrap your root layout with <A11yLayout> to get:
@@ -262,26 +262,26 @@ export const FEATURE_OPTIONS = [
   {
     value: 'sync' as const,
     label: 'Zero-Fetch Sync',
-    hint: '@ultimatejs/core + CRDT + WebSocket sync server',
+    hint: '@blazefw/core + CRDT + WebSocket sync server',
   },
   {
     value: 'sidecar' as const,
     label: 'Sidecar Worker',
-    hint: '@ultimatejs/sidecar — offloads 3rd-party scripts to a Web Worker',
+    hint: '@blazefw/sidecar — offloads 3rd-party scripts to a Web Worker',
   },
   {
     value: 'inspector' as const,
     label: 'Nexus Inspector',
-    hint: '@ultimatejs/inspector — dev overlay (Alt+I to toggle)',
+    hint: '@blazefw/inspector — dev overlay (Alt+I to toggle)',
   },
   {
     value: 'snapshot' as const,
     label: 'Snapshot Boundary',
-    hint: '@ultimatejs/snapshot — auto time-travel error recovery',
+    hint: '@blazefw/snapshot — auto time-travel error recovery',
   },
   {
     value: 'a11y' as const,
     label: 'Accessibility Layer',
-    hint: '@ultimatejs/a11y + nexus-a11y compliance CLI',
+    hint: '@blazefw/a11y + nexus-a11y compliance CLI',
   },
 ];

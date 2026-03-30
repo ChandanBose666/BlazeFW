@@ -1,4 +1,4 @@
-import type { InputProps } from "@ultimatejs/primitives";
+import type { InputProps } from "@blazefw/primitives";
 import { DEFAULT_THEME } from "./lib/tokens.js";
 import { escapeAttr, escapeHtml } from "./lib/html.js";
 

@@ -3,7 +3,7 @@
  *
  * Usage (dev mode only):
  *
- *   import { initInspector } from '@ultimatejs/inspector';
+ *   import { initInspector } from '@blazefw/inspector';
  *   const inspector = initInspector();
  *
  *   // Toggle with keyboard shortcut

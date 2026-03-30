@@ -6,7 +6,7 @@
  */
 
 import type { ReactElement } from "react";
-import type { UltimateRenderer } from "@ultimatejs/primitives";
+import type { UltimateRenderer } from "@blazefw/primitives";
 import { Stack }  from "./Stack.js";
 import { Text }   from "./Text.js";
 import { Action } from "./Action.js";

@@ -1,5 +1,5 @@
 /**
- * Manual Jest mock for @ultimatejs/crdt
+ * Manual Jest mock for @blazefw/crdt
  *
  * This stub is used by Jest in Node test environments where the real WASM
  * binary cannot run. Individual test files override this with jest.mock()

@@ -1,4 +1,4 @@
-import type { StackProps } from "@ultimatejs/primitives";
+import type { StackProps } from "@blazefw/primitives";
 import { resolveSpace, resolveColor, RADIUS_PX } from "./lib/tokens.js";
 import { buildStyle, escapeAttr, stringify } from "./lib/html.js";
 

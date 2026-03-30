@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from "react";
 import { Pressable, Text as RNText, Linking, ActivityIndicator } from "react-native";
-import type { ActionProps, ActionVariant, ActionSize } from "@ultimatejs/primitives";
+import type { ActionProps, ActionVariant, ActionSize } from "@blazefw/primitives";
 import { resolveSpace, resolveColor, RADIUS_DP, DEFAULT_THEME } from "./lib/tokens.js";
 
 // ---------------------------------------------------------------------------

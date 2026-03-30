@@ -1,5 +1,5 @@
 /**
- * @ultimatejs/email — Email renderer for UltimateJs semantic UI primitives.
+ * @blazefw/email — Email renderer for UltimateJs semantic UI primitives.
  *
  * All functions return plain HTML strings (no React). Compose them by
  * passing pre-rendered strings as children, then wrap the result with
@@ -7,7 +7,7 @@
  *
  * @example
  * ```ts
- * import { Stack, Text, Action, wrapDocument } from "@ultimatejs/email";
+ * import { Stack, Text, Action, wrapDocument } from "@blazefw/email";
  *
  * const body = Stack({
  *   padding: 4,

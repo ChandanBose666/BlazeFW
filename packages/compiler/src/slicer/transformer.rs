@@ -150,7 +150,7 @@ impl Transformer {
                 .map(|n| !client_only_names.contains(n.as_str()))
                 .unwrap_or(true)
         });
-        let server_header = "// [ultimatejs:server] Auto-generated server bundle.\n";
+        let server_header = "// [blazefw:server] Auto-generated server bundle.\n";
         let server_js = format!("{}{}", server_header, emit_module(&server_module, cm.clone()));
 
         // --- Client module ---
@@ -166,7 +166,7 @@ impl Transformer {
         let mut stubber = RpcStubber { boundary_names };
         client_module.visit_mut_with(&mut stubber);
 
-        let client_header = "// [ultimatejs:client] Auto-generated client bundle.\n";
+        let client_header = "// [blazefw:client] Auto-generated client bundle.\n";
         let client_js = format!("{}{}", client_header, emit_module(&client_module, cm));
 
         SliceResult { server_js, client_js }
@@ -234,7 +234,7 @@ export function UserCard() {
     #[test]
     fn server_bundle_header_present() {
         let result = Transformer::transform(MIXED_SOURCE);
-        assert!(result.server_js.starts_with("// [ultimatejs:server]"));
-        assert!(result.client_js.starts_with("// [ultimatejs:client]"));
+        assert!(result.server_js.starts_with("// [blazefw:server]"));
+        assert!(result.client_js.starts_with("// [blazefw:client]"));
     }
 }

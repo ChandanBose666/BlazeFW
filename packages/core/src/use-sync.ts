@@ -4,7 +4,7 @@
  * Connects a React component to a CRDT document that is kept in sync with
  * all peers via a binary WebSocket. The hook:
  *
- *  1. Lazily loads the @ultimatejs/crdt WASM module on first call.
+ *  1. Lazily loads the @blazefw/crdt WASM module on first call.
  *  2. Opens a WebSocket to `ws[s]://<host>/sync/<collection>/<id>`.
  *  3. On connect, the server sends the current document snapshot as a
  *     binary frame — the hook loads it via CrdtDoc.load().
@@ -28,7 +28,7 @@
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { createDoc, loadDoc } from "./crdt-loader.js";
-import type { CrdtDoc } from "@ultimatejs/crdt";
+import type { CrdtDoc } from "@blazefw/crdt";
 
 // ---------------------------------------------------------------------------
 // Protocol constants

@@ -6,7 +6,7 @@
  * Named scales → CSS string maps
  */
 
-import type { SpaceValue, ColorValue, ColorToken, FontSize, FontWeight, TextAlign } from "@ultimatejs/primitives";
+import type { SpaceValue, ColorValue, ColorToken, FontSize, FontWeight, TextAlign } from "@blazefw/primitives";
 
 // ---------------------------------------------------------------------------
 // Spacing

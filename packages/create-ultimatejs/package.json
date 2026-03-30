@@ -1,11 +1,11 @@
 {
-  "name": "create-ultimatejs",
+  "name": "create-blazefw",
   "version": "0.1.0",
   "type": "module",
-  "description": "Create a new UltimateJs application",
+  "description": "Create a new Blazefw application",
   "bin": {
-    "create-ultimatejs": "./bin/create-ultimatejs.mjs",
-    "ultimatejs": "./bin/ultimatejs.mjs"
+    "create-blazefw": "./bin/create-blazefw.mjs",
+    "blazefw": "./bin/blazefw.mjs"
   },
   "scripts": {
     "build": "tsc",

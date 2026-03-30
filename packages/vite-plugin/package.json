@@ -1,5 +1,5 @@
 {
-  "name": "@ultimatejs/vite-plugin",
+  "name": "@blazefw/vite-plugin",
   "version": "0.0.0",
   "private": true,
   "type": "module",

@@ -1,8 +1,8 @@
 {
-  "name": "@ultimatejs/sidecar",
+  "name": "@blazefw/sidecar",
   "version": "0.1.0",
   "type": "module",
-  "description": "UltimateJs sidecar worker — offloads 3rd-party scripts to a Web Worker with DOM proxy",
+  "description": "Blazefw sidecar worker — offloads 3rd-party scripts to a Web Worker with DOM proxy",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

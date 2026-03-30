@@ -1,4 +1,4 @@
-import type { TextProps, TextVariant, TextElement } from "@ultimatejs/primitives";
+import type { TextProps, TextVariant, TextElement } from "@blazefw/primitives";
 import { resolveColor, FONT_SIZE_PX, FONT_WEIGHT_VAL } from "./lib/tokens.js";
 import { buildStyle, escapeAttr, escapeHtml, stringify } from "./lib/html.js";
 

@@ -1,12 +1,12 @@
 /**
  * Token resolution for the email renderer.
  *
- * Identical contract to @ultimatejs/web tokens — SpaceValue → CSS px string,
+ * Identical contract to @blazefw/web tokens — SpaceValue → CSS px string,
  * ColorValue → CSS color string — but ColorToken resolves via DEFAULT_THEME
  * (no CSS custom properties in email clients).
  */
 
-import type { SpaceValue, ColorValue, ColorToken, FontSize, FontWeight } from "@ultimatejs/primitives";
+import type { SpaceValue, ColorValue, ColorToken, FontSize, FontWeight } from "@blazefw/primitives";
 
 // ---------------------------------------------------------------------------
 // Default theme — hex strings (no CSS variables in email clients)

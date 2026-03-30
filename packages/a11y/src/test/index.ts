@@ -1,8 +1,8 @@
 /**
- * @ultimatejs/a11y/test
+ * @blazefw/a11y/test
  *
  * axe-core helpers for jest + jsdom test environments.
- * Import from '@ultimatejs/a11y/test'.
+ * Import from '@blazefw/a11y/test'.
  *
  * Requires: axe-core, @testing-library/react (for renderWithA11y)
  */

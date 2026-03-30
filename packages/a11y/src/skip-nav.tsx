@@ -16,13 +16,13 @@ const LINK_BASE_STYLES: CSSProperties = {
 };
 
 // Injected once: makes the link visible on :focus via a stylesheet
-const FOCUS_CSS = `.ultimatejs-skip-nav:focus { top: 0 !important; outline: 2px solid #005fcc; outline-offset: 2px; }`;
+const FOCUS_CSS = `.blazefw-skip-nav:focus { top: 0 !important; outline: 2px solid #005fcc; outline-offset: 2px; }`;
 
 function injectFocusStyles(): void {
   if (typeof document === 'undefined') return;
-  if (document.getElementById('ultimatejs-skip-nav-styles')) return;
+  if (document.getElementById('blazefw-skip-nav-styles')) return;
   const style = document.createElement('style');
-  style.id = 'ultimatejs-skip-nav-styles';
+  style.id = 'blazefw-skip-nav-styles';
   style.textContent = FOCUS_CSS;
   document.head.appendChild(style);
 }
@@ -49,7 +49,7 @@ export function SkipNavLink({
   useEffect(injectFocusStyles, []);
 
   return (
-    <a href={href} style={LINK_BASE_STYLES} className="ultimatejs-skip-nav">
+    <a href={href} style={LINK_BASE_STYLES} className="blazefw-skip-nav">
       {children}
     </a>
   );

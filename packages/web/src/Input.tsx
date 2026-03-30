@@ -1,5 +1,5 @@
 import type { ReactElement, CSSProperties, ChangeEvent, KeyboardEvent } from "react";
-import type { InputProps, InputVariant } from "@ultimatejs/primitives";
+import type { InputProps, InputVariant } from "@blazefw/primitives";
 import { resolveSpace, resolveColor, FONT_SIZE } from "./lib/tokens.js";
 
 // ---------------------------------------------------------------------------

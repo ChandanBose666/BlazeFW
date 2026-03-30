@@ -1,13 +1,13 @@
 /**
- * ultimatejs add <feature>
+ * blazefw add<feature>
  *
  * Adds a pillar feature to an existing UltimateJs project.
  * Run from inside the project root.
  *
  * Usage:
- *   npx ultimatejs add sync
- *   npx ultimatejs add a11y
- *   npx ultimatejs add snapshot inspector
+ *   npx blazefw add sync
+ *   npx blazefw add a11y
+ *   npx blazefw add snapshot inspector
  */
 import { cancel, intro, log, multiselect, note, outro, spinner, isCancel } from '@clack/prompts';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
@@ -47,12 +47,12 @@ async function main(): Promise<void> {
 
   if (subcommand !== 'add') {
     console.error(`Unknown command: ${subcommand ?? '(none)'}`);
-    console.error('Usage: npx ultimatejs add <feature> [feature...]');
+    console.error('Usage: npx blazefw add <feature> [feature...]');
     console.error(`Features: ${FEATURE_OPTIONS.map((f) => f.value).join(', ')}`);
     process.exit(1);
   }
 
-  intro(' ultimatejs add ');
+  intro(' blazefw add');
 
   // Features can be passed as CLI args or selected interactively
   const argFeatures = process.argv.slice(3).filter(

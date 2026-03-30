@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode, CSSProperties } from "react";
-import type { StackProps, StackDirection, StackAlign, StackJustify } from "@ultimatejs/primitives";
+import type { StackProps, StackDirection, StackAlign, StackJustify } from "@blazefw/primitives";
 import { resolveSpace, resolveColor, RADIUS } from "./lib/tokens.js";
 
 // ---------------------------------------------------------------------------

@@ -2,8 +2,8 @@
  * scanner.ts — scans the DOM for annotated components
  *
  * Components are identified by a data attribute set by either:
- *   - @ultimatejs/web renderer  (data-ultimate-kind="server|client|…")
- *   - @ultimatejs/vite-plugin   (injected at compile time)
+ *   - @blazefw/web renderer  (data-ultimate-kind="server|client|…")
+ *   - @blazefw/vite-plugin   (injected at compile time)
  *
  * Accepting a `ParentNode` interface instead of `document` makes every
  * function in this module fully testable without jsdom.

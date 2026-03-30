@@ -1,8 +1,8 @@
 {
-  "name": "@ultimatejs/core",
+  "name": "@blazefw/core",
   "version": "0.1.0",
   "type": "module",
-  "description": "UltimateJs runtime core — Zero-Fetch Sync hooks and WebSocket transport",
+  "description": "Blazefw runtime core — Zero-Fetch Sync hooks and WebSocket transport",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -17,7 +17,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=src"
   },
   "dependencies": {
-    "@ultimatejs/crdt": "workspace:*"
+    "@blazefw/crdt": "workspace:*"
   },
   "devDependencies": {
     "@jest/globals": "^30.3.0",

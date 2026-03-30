@@ -7,7 +7,7 @@
  *   - No CSS custom properties — React Native has no CSS variable support
  */
 
-import type { SpaceValue, ColorValue, ColorToken, FontSize, FontWeight } from "@ultimatejs/primitives";
+import type { SpaceValue, ColorValue, ColorToken, FontSize, FontWeight } from "@blazefw/primitives";
 
 // ---------------------------------------------------------------------------
 // Default theme
@@ -32,7 +32,7 @@ export const DEFAULT_THEME: Record<ColorToken, string> = {
 
 // ---------------------------------------------------------------------------
 // Spacing — dp (density-independent pixels, React Native's layout unit)
-// Follows Tailwind's 4dp-per-unit convention to stay consistent with @ultimatejs/web.
+// Follows Tailwind's 4dp-per-unit convention to stay consistent with @blazefw/web.
 // ---------------------------------------------------------------------------
 
 const SPACE_DP: Record<number, number> = {

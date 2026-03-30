@@ -11,9 +11,9 @@ export interface BaseTemplateOptions {
 // ─── Renderer package map ─────────────────────────────────────────────────────
 
 const RENDERER_PKG: Record<string, string> = {
-  web: '@ultimatejs/web',
-  native: '@ultimatejs/native',
-  email: '@ultimatejs/email',
+  web: '@blazefw/web',
+  native: '@blazefw/native',
+  email: '@blazefw/email',
 };
 
 // ─── package.json ─────────────────────────────────────────────────────────────
@@ -34,13 +34,13 @@ export function packageJson(opts: BaseTemplateOptions): string {
         preview: 'vite preview',
       },
       dependencies: {
-        '@ultimatejs/primitives': '^0.1.0',
+        '@blazefw/primitives': '^0.1.0',
         [rendererPkg]: '^0.1.0',
         react: '^18.3.1',
         'react-dom': '^18.3.1',
       },
       devDependencies: {
-        '@ultimatejs/vite-plugin': '^0.1.0',
+        '@blazefw/vite-plugin': '^0.1.0',
         '@types/react': '^18',
         '@types/react-dom': '^18',
         typescript: '^5.4.0',
@@ -57,7 +57,7 @@ export function packageJson(opts: BaseTemplateOptions): string {
 export function viteConfig(): string {
   return `import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { ultimatePlugin } from '@ultimatejs/vite-plugin';
+import { ultimatePlugin } from '@blazefw/vite-plugin';
 
 export default defineConfig({
   plugins: [
@@ -213,7 +213,7 @@ ${features.map((f) => {
     : '';
 
   const syncImport = features.includes('sync')
-    ? `import { useSync } from '@ultimatejs/core';\n`
+    ? `import { useSync } from '@blazefw/core';\n`
     : '';
 
   const syncHook = features.includes('sync')
@@ -221,7 +221,7 @@ ${features.map((f) => {
     : '';
 
   return `import { useState } from 'react';
-${syncImport}import { Stack, Text, Action } from '@ultimatejs/web';
+${syncImport}import { Stack, Text, Action } from '@blazefw/web';
 
 export function App() {
   const [count, setCount] = useState(0);
@@ -272,7 +272,7 @@ ${syncNote}${featureCardJsx}
           <Text variant="body" color="muted">
             Add more UI with <Text variant="code">Stack</Text>, <Text variant="code">Text</Text>,{' '}
             <Text variant="code">Action</Text>, and <Text variant="code">Input</Text> from{' '}
-            <Text variant="code">@ultimatejs/web</Text>.
+            <Text variant="code">@blazefw/web</Text>.
           </Text>
           <Action
             variant="link"

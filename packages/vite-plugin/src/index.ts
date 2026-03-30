@@ -20,7 +20,7 @@ const DEFAULT_PATTERN = /.ultimate.tsx?$/;
  *
  * @example
  * // vite.config.ts
- * import { ultimatePlugin } from '@ultimatejs/vite-plugin';
+ * import { ultimatePlugin } from '@blazefw/vite-plugin';
  * export default defineConfig({ plugins: [ultimatePlugin()] });
  */
 export function ultimatePlugin(options: UltimatePluginOptions = {}): Plugin {

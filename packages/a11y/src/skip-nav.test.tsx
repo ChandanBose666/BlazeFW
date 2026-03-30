@@ -4,7 +4,7 @@ import { SkipNavLink, SkipNavContent } from './skip-nav.js';
 
 beforeEach(() => {
   // Remove injected style between tests so injection logic can be re-tested
-  document.getElementById('ultimatejs-skip-nav-styles')?.remove();
+  document.getElementById('blazefw-skip-nav-styles')?.remove();
 });
 
 describe('SkipNavLink', () => {
@@ -41,18 +41,18 @@ describe('SkipNavLink', () => {
 
   it('has the skip-nav CSS class', () => {
     const { container } = render(<SkipNavLink />);
-    expect(container.querySelector('a')).toHaveClass('ultimatejs-skip-nav');
+    expect(container.querySelector('a')).toHaveClass('blazefw-skip-nav');
   });
 
   it('injects the focus stylesheet into document.head', () => {
     render(<SkipNavLink />);
-    expect(document.getElementById('ultimatejs-skip-nav-styles')).not.toBeNull();
+    expect(document.getElementById('blazefw-skip-nav-styles')).not.toBeNull();
   });
 
   it('does not inject duplicate stylesheets on re-render', () => {
     render(<SkipNavLink />);
     render(<SkipNavLink />);
-    const sheets = document.querySelectorAll('#ultimatejs-skip-nav-styles');
+    const sheets = document.querySelectorAll('#blazefw-skip-nav-styles');
     expect(sheets.length).toBe(1);
   });
 });

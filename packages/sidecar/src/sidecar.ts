@@ -34,7 +34,7 @@ export interface SidecarOptions {
    * Defaults to `"./sidecar.worker.js"`.
    *
    * In a Vite project you can use:
-   *   `import workerUrl from '@ultimatejs/sidecar/worker?url'`
+   *   `import workerUrl from '@blazefw/sidecar/worker?url'`
    */
   workerUrl?: string;
 }
