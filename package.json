@@ -1,7 +1,12 @@
 {
-  "name": "ultimatejs",
+  "name": "blazefw",
   "private": true,
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChandanBose666/BlazeFW"
+  },
+  "homepage": "https://github.com/ChandanBose666/BlazeFW",
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
