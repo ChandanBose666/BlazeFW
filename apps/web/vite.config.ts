@@ -3,10 +3,12 @@ import { ultimatePlugin } from "@blazefw/vite-plugin";
 
 export default defineConfig({
   plugins: [
-    // Intercepts *.ultimate.tsx / *.ultimate.tsx files and routes them through
-    // the Rust Slicer. Server builds receive module.server.js output;
-    // client builds receive module.client.js output with RPC stubs.
-    ultimatePlugin(),
+    ultimatePlugin({
+      sync: false,      // no persistent WebSocket server on Vercel
+      sidecar: true,    // Web Worker sidecar works in static deployments
+      inspector: false, // DevTools overlay not needed in production
+      a11y: true,       // WCAG scanner always on
+    }),
   ],
   build: {
     outDir: "dist",
