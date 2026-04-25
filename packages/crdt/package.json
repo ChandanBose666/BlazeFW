@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "build": "wasm-pack build --target web --out-dir pkg || echo '[blazefw/crdt] wasm-pack not found — skipping WASM build (OK for static deploys)'"
+    "build": "wasm-pack build --target web --out-dir pkg || node build-stub.mjs"
   },
   "sideEffects": false
 }
