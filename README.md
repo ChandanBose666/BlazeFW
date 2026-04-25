@@ -27,6 +27,7 @@ BlazeFW eliminates entire categories of boilerplate by making the infrastructure
 - [Monorepo Structure](#monorepo-structure)
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
+- [Deployment](#deployment)
 - [Build Status](#build-status)
 
 ---
@@ -863,6 +864,55 @@ cd packages/a11y      && pnpm test    # Accessibility Layer   (124 tests)
 ```
 
 > **Windows note:** `cargo` is not on Git Bash's PATH by default. Either run Rust commands in Windows CMD, or add `export PATH="/c/Users/$USER/.cargo/bin:$PATH"` to your `~/.bashrc`.
+
+---
+
+## Deployment
+
+### Static deployment (Vercel, Netlify, GitHub Pages)
+
+BlazeFW supports static deployment without a Rust compiler installed. The build pipeline automatically falls back to a WASM compiler stub in CI environments where Rust is not available.
+
+**Vercel (recommended):**
+
+The repository is connected to Vercel's Git integration — every push to `main` triggers a production deploy automatically. A `vercel.json` at the root handles WASM MIME types and client-side routing.
+
+```bash
+# Manual deploy from CLI (optional)
+npx vercel --prod
+```
+
+Live deployment: [blazefw.vercel.app](https://blazefw.vercel.app)
+
+**For static-only apps** (no real-time sync):
+
+```ts
+// vite.config.ts
+import { ultimatePlugin } from '@blazefw/vite-plugin';
+
+export default {
+  plugins: [
+    ultimatePlugin({
+      sync: false,       // no WebSocket server needed for static deploy
+      sidecar: true,     // Web Worker offloading still works statically
+      inspector: false,  // dev overlay — not needed in production
+      a11y: true,        // WCAG scanner and runtime utilities always on
+    }),
+  ],
+};
+```
+
+### Full-stack deployment (with Zero-Fetch Sync)
+
+The CRDT WebSocket sync server (`@blazefw/sync-server`) requires a persistent runtime. Deploy it separately on a platform that supports long-running processes:
+
+- **Fly.io** — recommended for the sync server
+- **Railway**
+- **Cloudflare Durable Objects** — future roadmap target
+
+### CI pipeline
+
+A GitHub Actions workflow (`.github/workflows/deploy.yml`) runs on every push and PR to `main`. It validates that the full monorepo builds successfully without Rust installed — confirming the WASM fallback path works in CI.
 
 ---
 
