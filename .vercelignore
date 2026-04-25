@@ -1,0 +1,25 @@
+# Rust build artifacts
+target/
+
+# Node
+node_modules/
+
+# pnpm
+.pnpm-store/
+
+# Turbo cache
+.turbo/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+
+# Docs / config not needed for build
+docs/
+*.md
+!README.md
