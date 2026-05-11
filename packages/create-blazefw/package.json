@@ -2,14 +2,19 @@
   "name": "create-blazefw",
   "version": "0.1.1",
   "type": "module",
-  "description": "Create a new Blazefw application",
+  "description": "Create a new BlazeFW application",
   "bin": {
     "create-blazefw": "./bin/create-blazefw.mjs",
     "blazefw": "./bin/blazefw.mjs"
   },
+  "files": [
+    "bin",
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "test": "tsc && node --test dist/scaffold.test.js"
   },
   "dependencies": {
     "@clack/prompts": "^0.9.0"

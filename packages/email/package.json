@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc --noEmit",
     "dev": "tsc --noEmit --watch",
-    "test": "node --experimental-vm-modules ../../node_modules/.bin/jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=src"
   },
   "dependencies": {
     "@blazefw/primitives": "workspace:*"

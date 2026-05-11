@@ -40,9 +40,11 @@ export function packageJson(opts: BaseTemplateOptions): string {
         'react-dom': '^18.3.1',
       },
       devDependencies: {
+        '@blazefw/compiler': '^0.1.0',
         '@blazefw/vite-plugin': '^0.1.0',
         '@types/react': '^18',
         '@types/react-dom': '^18',
+        '@vitejs/plugin-react': '^4.3.0',
         typescript: '^5.4.0',
         vite: '^5.0.0',
       },
@@ -54,7 +56,23 @@ export function packageJson(opts: BaseTemplateOptions): string {
 
 // ─── vite.config.ts ───────────────────────────────────────────────────────────
 
-export function viteConfig(): string {
+/**
+ * Generates vite.config.ts. The BlazeFW plugin defaults every pillar to "on",
+ * so we explicitly disable the ones the user didn't pick — most importantly
+ * `sync: false`, which stops the plugin trying to reach a WebSocket server that
+ * isn't running.
+ */
+export function viteConfig(features: FeatureId[]): string {
+  const disabled: string[] = [];
+  if (!features.includes('sync')) disabled.push('sync: false');
+  if (!features.includes('sidecar')) disabled.push('sidecar: false');
+  if (!features.includes('inspector')) disabled.push('inspector: false');
+
+  const pluginCall =
+    disabled.length > 0
+      ? `ultimatePlugin({ ${disabled.join(', ')} })`
+      : 'ultimatePlugin()';
+
   return `import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { ultimatePlugin } from '@blazefw/vite-plugin';
@@ -62,7 +80,7 @@ import { ultimatePlugin } from '@blazefw/vite-plugin';
 export default defineConfig({
   plugins: [
     react(),
-    ultimatePlugin()(),
+    ${pluginCall},
   ],
 });
 `;
@@ -233,7 +251,7 @@ export function App() {
       <Stack direction="column" gap={2}>
         <Text variant="display" color="primary">${projectName}</Text>
         <Text variant="body" color="muted">
-          Powered by UltimateJs — write once, render everywhere.
+          Powered by BlazeFW — write once, render everywhere.
         </Text>
       </Stack>
 
@@ -276,7 +294,7 @@ ${syncNote}${featureCardJsx}
           </Text>
           <Action
             variant="link"
-            href="https://github.com/ChandanBose666/UltimateJs"
+            href="https://github.com/ChandanBose666/BlazeFW"
             external
           >
             Read the docs →

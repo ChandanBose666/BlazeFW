@@ -1,7 +1,7 @@
 /**
  * blazefw add<feature>
  *
- * Adds a pillar feature to an existing UltimateJs project.
+ * Adds a pillar feature to an existing BlazeFW project.
  * Run from inside the project root.
  *
  * Usage:
@@ -27,7 +27,7 @@ function detectPackageManager(): PackageManager {
 function readProjectPackageJson(): Record<string, unknown> {
   const pkgPath = join(process.cwd(), 'package.json');
   if (!existsSync(pkgPath)) {
-    cancel('No package.json found. Run this command from inside your UltimateJs project.');
+    cancel('No package.json found. Run this command from inside your BlazeFW project.');
     process.exit(1);
   }
   return JSON.parse(readFileSync(pkgPath, 'utf8')) as Record<string, unknown>;

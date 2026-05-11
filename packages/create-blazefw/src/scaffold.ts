@@ -67,7 +67,7 @@ export function scaffold(opts: ScaffoldOptions): ScaffoldResult {
   // ── Base files ─────────────────────────────────────────────────────────────
   let pkg = JSON.parse(packageJson({ projectName, renderer, features })) as Record<string, unknown>;
 
-  write(destDir, 'vite.config.ts',          viteConfig());
+  write(destDir, 'vite.config.ts',          viteConfig(features));
   write(destDir, 'tsconfig.json',           tsConfig());
   write(destDir, 'index.html',              indexHtml(projectName));
   write(destDir, 'src/main.tsx',            mainTsx());
@@ -104,7 +104,7 @@ node_modules/
 
 # Build output
 dist/
-.ultimatejs/
+.blazefw/
 
 # Environment
 .env

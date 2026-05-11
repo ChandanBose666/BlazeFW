@@ -28,10 +28,10 @@ function abortOnCancel<T>(value: T | symbol): T {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
-  // Accept project name as positional arg (e.g. npx create-ultimatejs my-app)
+  // Accept project name as positional arg (e.g. npx create-blazefw my-app)
   const argName = process.argv[2]?.trim();
 
-  intro(' create-ultimatejs ');
+  intro(' create-blazefw ');
 
   // ── Project name ───────────────────────────────────────────────────────────
   const projectName = argName
@@ -112,9 +112,9 @@ async function main(): Promise<void> {
     `cd ${projectName}`,
     `${pkgManager} run dev`,
     '',
-    '# Optional: faster builds with the Rust compiler',
-    '# Install Rust at https://rustup.rs, then:',
-    '#   cargo build --release -p ultimate-compiler',
+    '# Components in *.ultimate.tsx are auto-split into server/client bundles',
+    '# by @blazefw/compiler — no annotations needed. Docs & compiler setup:',
+    '#   https://github.com/ChandanBose666/BlazeFW',
     ...(notes.length > 0 ? ['', '# Feature notes:', ...notes.map((n) => `# ${n}`)] : []),
     ...(features.includes('sync')
       ? ['', '# Start the sync server in a separate terminal:', `  node ${projectName}/src/sync-server.js`]
@@ -123,7 +123,7 @@ async function main(): Promise<void> {
 
   note(nextSteps, 'Next steps');
 
-  outro(`You're all set! Happy building with UltimateJs. 🚀`);
+  outro(`You're all set! Happy building with BlazeFW. 🚀`);
 }
 
 main().catch((err) => {

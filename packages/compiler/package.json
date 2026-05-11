@@ -2,8 +2,9 @@
   "name": "@blazefw/compiler",
   "version": "0.1.1",
   "description": "BlazeFW Rust/WASM compiler — server/client slicer and accessibility scanner",
+  "type": "module",
   "scripts": {
-    "build": "cargo build --release || echo '[blazefw/compiler] cargo not found — skipping native build (WASM fallback will be used)'",
+    "build": "cargo build --release || node build-stub.mjs",
     "build:wasm": "wasm-pack build --target nodejs --out-dir pkg-node",
     "dev": "cargo watch -x 'build --release'"
   },
@@ -15,6 +16,7 @@
   },
   "files": [
     "pkg-node",
-    "wasm.js"
+    "wasm.js",
+    "build-stub.mjs"
   ]
 }
