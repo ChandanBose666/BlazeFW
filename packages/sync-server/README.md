@@ -51,7 +51,7 @@ httpServer.listen(3000, () => {
 ### `createSyncServer(options?)`
 
 ```ts
-import { createSyncServer, type UltimateSyncServerOptions } from '@blazefw/sync-server';
+import { createSyncServer, type BlazeSyncServerOptions } from '@blazefw/sync-server';
 
 const server = await createSyncServer({
   port: 3001,            // WebSocket port (default: 3001)
@@ -128,10 +128,10 @@ ws://<host>:<port>/sync/<collection>/<id>
 The built-in `DocumentStore` is **in-memory only** — documents are lost on restart and garbage-collected when all peers disconnect. For persistence, replace `DocumentStore` with your own implementation backed by Redis, Postgres, or the filesystem:
 
 ```ts
-import { UltimateSyncServer } from '@blazefw/sync-server';
+import { BlazeSyncServer } from '@blazefw/sync-server';
 import { MyPersistentStore } from './my-store';
 
-const server = new UltimateSyncServer({
+const server = new BlazeSyncServer({
   store: new MyPersistentStore(),
   port: 3001,
 });

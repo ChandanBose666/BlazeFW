@@ -37,10 +37,10 @@ writeFileSync(
 'use strict';
 
 const STUB_ERROR =
-  '[blazefw/compiler] WASM compiler not built. A .ultimate.tsx file needs the slicer.\\n' +
+  '[blazefw/compiler] WASM compiler not built. A .blazefw.tsx file needs the slicer.\\n' +
   '  Option A: build the native binary  -> cd packages/compiler && cargo build --release\\n' +
   '  Option B: build the WASM fallback  -> cd packages/compiler && pnpm build:wasm\\n' +
-  '  Option C: set ULTIMATE_COMPILER_BIN=/path/to/ultimate-compiler\\n' +
+  '  Option C: set BLAZEFW_COMPILER_BIN=/path/to/blazefw-compiler\\n' +
   '  (Install Rust at https://rustup.rs — the JS-only build cannot slice components.)';
 
 function compile(_source) {

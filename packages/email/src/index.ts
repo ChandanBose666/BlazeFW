@@ -1,5 +1,5 @@
 /**
- * @blazefw/email — Email renderer for UltimateJs semantic UI primitives.
+ * @blazefw/email — Email renderer for BlazeFW semantic UI primitives.
  *
  * All functions return plain HTML strings (no React). Compose them by
  * passing pre-rendered strings as children, then wrap the result with
@@ -13,7 +13,7 @@
  *   padding: 4,
  *   children: [
  *     Text({ variant: "heading", children: "Hello!" }),
- *     Text({ variant: "body",    children: "Welcome to UltimateJs." }),
+ *     Text({ variant: "body",    children: "Welcome to BlazeFW." }),
  *     Action({ href: "https://example.com", children: "Get started" }),
  *   ],
  * });

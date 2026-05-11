@@ -2,7 +2,7 @@
  * Regression tests for the project scaffolder.
  *
  * These exist primarily to lock down the production-blocker fixes:
- *   - vite.config.ts must call `ultimatePlugin(...)` ONCE (not `ultimatePlugin()()`)
+ *   - vite.config.ts must call `blazefw(...)` ONCE (not `blazefw()()`)
  *   - generated package.json must include @vitejs/plugin-react and @blazefw/compiler
  *   - feature selections must flow into the plugin options (`sync: false` etc.)
  *
@@ -39,15 +39,15 @@ function run(features: FeatureId[], renderer: Renderer = 'web') {
       devDependencies: Record<string, string>;
       scripts: Record<string, string>;
     },
-    appComponent: read('src/App.ultimate.tsx'),
+    appComponent: read('src/App.blazefw.tsx'),
     read,
   };
 }
 
 describe('scaffold — vite.config.ts', () => {
-  it('never emits the double-invocation bug ultimatePlugin()()', () => {
+  it('never emits the double-invocation bug blazefw()()', () => {
     for (const features of [[], ['sync'], ['sync', 'sidecar', 'inspector', 'snapshot', 'a11y']] as FeatureId[][]) {
-      assert.doesNotMatch(run(features).viteConfig, /ultimatePlugin\(\)\(\)/);
+      assert.doesNotMatch(run(features).viteConfig, /blazefw\(\)\(\)/);
     }
   });
 
@@ -59,7 +59,7 @@ describe('scaffold — vite.config.ts', () => {
 
   it('disables sync/sidecar/inspector when no features are selected', () => {
     const { viteConfig } = run([]);
-    assert.match(viteConfig, /ultimatePlugin\(\{[^}]*\}\)/);
+    assert.match(viteConfig, /blazefw\(\{[^}]*\}\)/);
     assert.match(viteConfig, /sync: false/);
     assert.match(viteConfig, /sidecar: false/);
     assert.match(viteConfig, /inspector: false/);
@@ -73,10 +73,10 @@ describe('scaffold — vite.config.ts', () => {
     assert.match(viteConfig, /inspector: false/);
   });
 
-  it('emits a bare ultimatePlugin() when every gated pillar is selected', () => {
+  it('emits a bare blazefw() when every gated pillar is selected', () => {
     const { viteConfig } = run(['sync', 'sidecar', 'inspector']);
-    assert.match(viteConfig, /ultimatePlugin\(\),/);
-    assert.doesNotMatch(viteConfig, /ultimatePlugin\(\{/);
+    assert.match(viteConfig, /blazefw\(\),/);
+    assert.doesNotMatch(viteConfig, /blazefw\(\{/);
   });
 });
 
@@ -112,16 +112,18 @@ describe('scaffold — package.json', () => {
 });
 
 describe('scaffold — generated app', () => {
-  it('is branded BlazeFW, not UltimateJs', () => {
+  it('is branded BlazeFW (no legacy "ultimate"/"nexus" names)', () => {
     const { appComponent } = run(['sync']);
     assert.match(appComponent, /Powered by BlazeFW/);
     assert.match(appComponent, /github\.com\/ChandanBose666\/BlazeFW/);
-    assert.doesNotMatch(appComponent, /UltimateJs/);
+    assert.doesNotMatch(appComponent, /ultimate/i);
+    assert.doesNotMatch(appComponent, /nexus/i);
   });
 
-  it('writes the .gitignore without the stale .ultimatejs entry', () => {
+  it('writes the .gitignore without any stale "ultimate"/"nexus" entry', () => {
     const { read } = run([]);
-    assert.doesNotMatch(read('.gitignore'), /\.ultimatejs/);
+    assert.doesNotMatch(read('.gitignore'), /ultimate/i);
+    assert.doesNotMatch(read('.gitignore'), /nexus/i);
   });
 });
 

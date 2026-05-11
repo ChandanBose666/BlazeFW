@@ -65,7 +65,7 @@ describe('buildPanelContent', () => {
   });
 
   it('includes the inspector title', () => {
-    expect(buildPanelContent(emptyStats())).toContain('UltimateJs Inspector');
+    expect(buildPanelContent(emptyStats())).toContain('BlazeFW Inspector');
   });
 });
 

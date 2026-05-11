@@ -1,5 +1,5 @@
 /**
- * Integration tests for UltimateSyncServer.
+ * Integration tests for BlazeSyncServer.
  *
  * Uses Node.js 22+ native globalThis.WebSocket as the test client
  * (avoids ESM/CJS compat issues with the ws package client in this env).
@@ -8,7 +8,7 @@
 
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import * as Automerge from "@automerge/automerge";
-import { UltimateSyncServer, REJECTION_FRAME } from "../sync-server.js";
+import { BlazeSyncServer, REJECTION_FRAME } from "../sync-server.js";
 
 // Node.js 22+ ships a native WHATWG-compatible WebSocket global.
 const NativeWS = globalThis.WebSocket as typeof WebSocket;
@@ -68,15 +68,15 @@ function tick(ms = 30): Promise<void> {
 // Tests
 // ---------------------------------------------------------------------------
 
-describe("UltimateSyncServer", () => {
-  let server: UltimateSyncServer;
+describe("BlazeSyncServer", () => {
+  let server: BlazeSyncServer;
   let port: number;
   let baseUrl: string;
 
   beforeEach(async () => {
     port = randomPort();
     baseUrl = `ws://127.0.0.1:${port}`;
-    server = new UltimateSyncServer({ port });
+    server = new BlazeSyncServer({ port });
     await server.ready;
   });
 

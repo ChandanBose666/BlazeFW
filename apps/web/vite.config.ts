@@ -1,9 +1,9 @@
 import { defineConfig } from "vite";
-import { ultimatePlugin } from "@blazefw/vite-plugin";
+import { blazefw } from "@blazefw/vite-plugin";
 
 export default defineConfig({
   plugins: [
-    ultimatePlugin({
+    blazefw({
       sync: false,      // no persistent WebSocket server on Vercel
       sidecar: true,    // Web Worker sidecar works in static deployments
       inspector: false, // DevTools overlay not needed in production

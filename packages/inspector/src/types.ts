@@ -1,5 +1,5 @@
 /**
- * types.ts — shared types for the UltimateJs Inspector
+ * types.ts — shared types for the BlazeFW Inspector
  */
 
 /** The four classification kinds produced by the Rust compiler, plus 'mixed' for errors. */
@@ -35,7 +35,7 @@ export const KIND_LABELS: Readonly<Record<ComponentKind, string>> = {
 /** A single annotated component found in the DOM. */
 export interface ComponentInfo {
   kind: ComponentKind;
-  /** Value of `data-ultimate-name`, or null when absent. */
+  /** Value of `data-blazefw-name`, or null when absent. */
   name: string | null;
   element: Element;
 }

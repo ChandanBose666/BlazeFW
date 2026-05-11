@@ -4,7 +4,7 @@
  * escapeHtml    — escapes text content to prevent injection
  * escapeAttr    — escapes HTML attribute values
  * buildStyle    — converts a style map to an inline style string
- * stringify     — converts UltimateNode children to a plain HTML string
+ * stringify     — converts BlazeNode children to a plain HTML string
  */
 
 // ---------------------------------------------------------------------------
@@ -54,14 +54,14 @@ export function buildStyle(styles: Record<string, string | number | undefined | 
 // ---------------------------------------------------------------------------
 
 /**
- * Converts a UltimateNode tree into a flat HTML string.
+ * Converts a BlazeNode tree into a flat HTML string.
  *
  * At email render time, children are always:
  *   - Strings / numbers (already-rendered HTML or text)
  *   - Arrays of the above
  *   - null / undefined / false (ignored)
  *
- * UltimateElement (the opaque { __ultimate: true } type) never appears at runtime
+ * BlazeElement (an `object` at the type layer) never appears at runtime
  * when using the email renderer — it is only used by React-based targets.
  */
 export function stringify(children: unknown): string {

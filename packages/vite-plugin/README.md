@@ -1,6 +1,6 @@
 # @blazefw/vite-plugin
 
-BlazeFW Vite plugin — intercepts `.ultimate.tsx` files and routes them through the Rust compiler binary via a `stdin → stdout` JSON bridge. Automatically splits each file into a **server bundle** (no browser APIs) and a **client bundle** (RPC stubs replace server functions). Results are cached per file and cleared on HMR.
+BlazeFW Vite plugin — intercepts `.blazefw.tsx` files and routes them through the Rust compiler binary via a `stdin → stdout` JSON bridge. Automatically splits each file into a **server bundle** (no browser APIs) and a **client bundle** (RPC stubs replace server functions). Results are cached per file and cleared on HMR.
 
 ## Installation
 
@@ -8,10 +8,10 @@ BlazeFW Vite plugin — intercepts `.ultimate.tsx` files and routes them through
 npm install -D @blazefw/vite-plugin
 ```
 
-The plugin requires the `nexus-compiler` Rust binary. It resolves in this order:
-1. `ULTIMATE_COMPILER_BIN` environment variable
-2. `packages/compiler/target/release/nexus-compiler` (release build)
-3. `packages/compiler/target/debug/nexus-compiler` (debug build)
+The plugin requires the `blazefw-compiler` Rust binary. It resolves in this order:
+1. `BLAZEFW_COMPILER_BIN` environment variable
+2. `packages/compiler/target/release/blazefw-compiler` (release build)
+3. `packages/compiler/target/debug/blazefw-compiler` (debug build)
 
 To build the binary:
 
@@ -25,31 +25,31 @@ cargo build --release
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
-import { ultimatePlugin } from '@blazefw/vite-plugin';
+import { blazefw } from '@blazefw/vite-plugin';
 
 export default defineConfig({
-  plugins: [ultimatePlugin()],
+  plugins: [blazefw()],
 });
 ```
 
 ## Options
 
 ```ts
-import { ultimatePlugin, type UltimatePluginOptions } from '@blazefw/vite-plugin';
+import { blazefw, type BlazefwPluginOptions } from '@blazefw/vite-plugin';
 
-ultimatePlugin({
+blazefw({
   // Glob pattern for files to process.
-  // Default: /.ultimate.tsx?$/  (matches .ultimate.tsx and .ultimate.ts)
-  include: /\.ultimate\.tsx?$/,
+  // Default: /.blazefw.tsx?$/  (matches .blazefw.tsx and .blazefw.ts)
+  include: /.blazefw.tsx?$/,
 })
 ```
 
 ## How it works
 
-Given a single mixed `.ultimate.tsx` file:
+Given a single mixed `.blazefw.tsx` file:
 
 ```tsx
-// components/UserDashboard.ultimate.tsx
+// components/UserDashboard.blazefw.tsx
 import { db } from './db';                     // ← server trigger (DB import)
 
 export async function getUser(id: string) {    // classified: ServerOnly
@@ -66,7 +66,7 @@ The plugin produces two outputs automatically:
 
 **Server bundle** — contains `getUser`, strips `UserCard`:
 ```js
-// .ultimate/UserDashboard.server.js (auto-generated)
+// .blazefw/UserDashboard.server.js (auto-generated)
 export async function getUser(id) {
   return db.user.findUnique({ where: { id } });
 }
@@ -74,9 +74,9 @@ export async function getUser(id) {
 
 **Client bundle** — contains `UserCard`, replaces `getUser` with a type-safe RPC stub:
 ```js
-// .ultimate/UserDashboard.client.js (auto-generated)
+// .blazefw/UserDashboard.client.js (auto-generated)
 export async function getUser(id) {
-  return __ultimate_rpc('/api/__ultimate/getUser', { id });
+  return __blazefw_rpc('/api/__blazefw/getUser', { id });
 }
 export function UserCard({ userId }) {
   window.analytics.track('view');
@@ -96,11 +96,11 @@ export function UserCard({ userId }) {
 
 ## HMR
 
-The plugin hooks into Vite's `handleHotUpdate` — when a `.ultimate.tsx` file changes, its cache entry is cleared and a full page reload is triggered automatically. No manual restart needed.
+The plugin hooks into Vite's `handleHotUpdate` — when a `.blazefw.tsx` file changes, its cache entry is cleared and a full page reload is triggered automatically. No manual restart needed.
 
 ## Environment variable
 
 ```bash
 # Point to a custom compiler binary location
-ULTIMATE_COMPILER_BIN=/path/to/nexus-compiler vite dev
+BLAZEFW_COMPILER_BIN=/path/to/blazefw-compiler vite dev
 ```

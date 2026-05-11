@@ -1,5 +1,5 @@
 /**
- * useSync — Zero-Fetch Sync hook for UltimateJs
+ * useSync — Zero-Fetch Sync hook for BlazeFW
  *
  * Connects a React component to a CRDT document that is kept in sync with
  * all peers via a binary WebSocket. The hook:

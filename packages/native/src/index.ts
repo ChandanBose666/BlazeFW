@@ -1,8 +1,8 @@
 /**
- * @blazefw/native — Native renderer for UltimateJs semantic UI primitives.
+ * @blazefw/native — Native renderer for BlazeFW semantic UI primitives.
  *
  * Exports four React Native components (Stack, Text, Action, Input) that
- * implement the UltimateRenderer<ReactElement> contract from @blazefw/primitives.
+ * implement the BlazeRenderer<ReactElement> contract from @blazefw/primitives.
  *
  * Usage:
  *   import { Stack, Text, Action, Input } from "@blazefw/native";

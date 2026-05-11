@@ -1,4 +1,4 @@
-import type { ReactElement, CSSProperties } from "react";
+import type { ReactElement, ReactNode, CSSProperties } from "react";
 import type { TextProps, TextVariant, TextElement } from "@blazefw/primitives";
 import { resolveColor, FONT_SIZE, FONT_WEIGHT, TEXT_ALIGN } from "./lib/tokens.js";
 
@@ -101,7 +101,7 @@ export function Text({
       aria-labelledby={ariaLabelledby}
       data-testid={testId}
     >
-      {children}
+      {children as ReactNode}
     </Tag>
   );
 }

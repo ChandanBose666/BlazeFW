@@ -18,8 +18,8 @@ apps/web/.vite/
 # Turbo
 .turbo/
 
-# Nexus compiler output
-.nexus/
+# BlazeFW compiler output
+.blazefw/
 *.wasm
 pkg/
 

@@ -15,9 +15,9 @@ developer's machine, why it's set up this way, and where it's headed.
 `@blazefw/vite-plugin`'s `bridge.ts` resolves a compiler in this order
 (`sliceSource()`):
 
-1. **`BLAZEFW_COMPILER_BIN`** (or legacy `ULTIMATE_COMPILER_BIN`) env var — explicit
-   path to a `ultimate-compiler` binary. Override for CI / custom builds.
-2. **Native binary** — `<@blazefw/compiler>/target/release/ultimate-compiler[.exe]`
+1. **`BLAZEFW_COMPILER_BIN`** (or legacy `BLAZEFW_COMPILER_BIN`) env var — explicit
+   path to a `blazefw-compiler` binary. Override for CI / custom builds.
+2. **Native binary** — `<@blazefw/compiler>/target/release/blazefw-compiler[.exe]`
    (then `target/debug/…`). Present only inside this monorepo after `cargo build
    --release`. Published consumers never have a `target/` dir, so this is skipped
    there. Fastest path; spawned per-file via stdin/stdout JSON.
@@ -63,7 +63,7 @@ nothing.
 ### Error behavior
 
 `Transformer::transform` returns `Result<SliceResult, TransformError>` — a malformed
-`.ultimate.tsx` produces a diagnostic, never a panic. The CLI prints to stderr +
+`.blazefw.tsx` produces a diagnostic, never a panic. The CLI prints to stderr +
 exits non-zero; the WASM `compile()` throws a string. `console_error_panic_hook`
 (installed via `#[wasm_bindgen(start)]`) means any *other* unexpected panic surfaces
 a readable message instead of `RuntimeError: unreachable`.
@@ -71,7 +71,7 @@ a readable message instead of `RuntimeError: unreachable`.
 ### Source format
 
 Source is parsed as **TypeScript + JSX** (`Syntax::Typescript { tsx: true }`) —
-`.ultimate.tsx` files are React components. `.ultimate.ts` files are also parsed in
+`.blazefw.tsx` files are React components. `.blazefw.ts` files are also parsed in
 TSX mode, so old-style `<T>x` type assertions must be written `x as T`.
 
 ---
@@ -145,7 +145,7 @@ so it's never a surprise network call. (The `playwright`/`esbuild-wasm` trick.)
 
 `scripts/scaffold-e2e.mjs` (run by the `scaffold-e2e` job in `.github/workflows/deploy.yml`):
 scaffolds a project with `scaffold()`, sanity-checks `vite.config.ts`, then runs the
-**real compiler** over every generated `*.ultimate.tsx` — via the Vite-plugin bridge
+**real compiler** over every generated `*.blazefw.tsx` — via the Vite-plugin bridge
 *and* the WASM build directly. This is the gate that catches "scaffold produces a
 broken project" and "compiler crashes on its own example app". Runs with Rust +
 `wasm-pack` installed so both code paths are exercised. Run it locally with:

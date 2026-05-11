@@ -11,7 +11,7 @@ console.log('[blazefw/crdt] wasm-pack not found — generating type stubs for CI
 mkdirSync('pkg', { recursive: true })
 
 // Type declarations — matches wasm-pack output
-writeFileSync('pkg/ultimate_crdt.d.ts', `
+writeFileSync('pkg/blazefw_crdt.d.ts', `
 export class CrdtDoc {
   free(): void;
   [Symbol.dispose](): void;
@@ -35,7 +35,7 @@ export default function __wbg_init(module_or_path?: any): Promise<InitOutput>;
 `)
 
 // JS shim — throws at runtime if anyone actually tries to use it
-writeFileSync('pkg/ultimate_crdt.js', `
+writeFileSync('pkg/blazefw_crdt.js', `
 const STUB_ERROR = '[blazefw/crdt] WASM module not built — run wasm-pack or enable Rust in your environment';
 export class CrdtDoc {
   constructor() { throw new Error(STUB_ERROR); }
@@ -45,7 +45,7 @@ export default function __wbg_init() { return Promise.reject(new Error(STUB_ERRO
 `)
 
 // WASM type stub
-writeFileSync('pkg/ultimate_crdt_bg.wasm.d.ts', `
+writeFileSync('pkg/blazefw_crdt_bg.wasm.d.ts', `
 export const memory: WebAssembly.Memory;
 `)
 

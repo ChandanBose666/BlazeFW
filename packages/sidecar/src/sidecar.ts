@@ -2,7 +2,7 @@
  * sidecar.ts — main-thread entry point
  *
  * Responsibilities:
- * 1. Scan the document for `<script type="text/ultimatejs">` tags.
+ * 1. Scan the document for `<script type="text/blazefw">` tags.
  * 2. Spawn a Web Worker and forward each script URL to it.
  * 3. Observe the DOM for dynamically injected sidecar scripts.
  * 4. Handle DOM proxy requests from the worker (get / set / call).
@@ -25,7 +25,7 @@ import {
 export interface SidecarOptions {
   /**
    * The `type` attribute value that opts a `<script>` tag into the sidecar
-   * worker. Defaults to `"text/ultimatejs"`.
+   * worker. Defaults to `"text/blazefw"`.
    */
   scriptType?: string;
 

@@ -13,7 +13,7 @@ function makeContainer(
 ): ScriptContainer {
   return {
     querySelectorAll(selector: string) {
-      // Parse the type value from selectors like: script[type="text/ultimatejs"]
+      // Parse the type value from selectors like: script[type="text/blazefw"]
       const match = selector.match(/\[type="([^"]+)"\]/);
       const wantedType = match?.[1] ?? '';
       return scripts

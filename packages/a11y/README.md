@@ -1,6 +1,6 @@
 # @blazefw/a11y
 
-BlazeFW Accessibility — runtime utilities for focus management, screen reader announcements, skip navigation, and motion preferences. Includes `@blazefw/a11y/test` with axe-core helpers for Jest, and the `nexus-a11y` CLI for WCAG 2.1 AA compliance reporting.
+BlazeFW Accessibility — runtime utilities for focus management, screen reader announcements, skip navigation, and motion preferences. Includes `@blazefw/a11y/test` with axe-core helpers for Jest, and the `blazefw-a11y` CLI for WCAG 2.1 AA compliance reporting.
 
 ## Installation
 
@@ -165,7 +165,7 @@ import {
 
 ---
 
-## `nexus-a11y` CLI
+## `blazefw-a11y` CLI
 
 Audits an HTML file or URL for WCAG 2.1 AA compliance. Reports axe-core violations, a manual checklist for the ~40% of rules that cannot be automated, and a WCAG coverage table.
 
@@ -173,14 +173,14 @@ Audits an HTML file or URL for WCAG 2.1 AA compliance. Reports axe-core violatio
 
 ```bash
 # Audit an HTML file
-npx nexus-a11y audit --file ./dist/index.html
+npx blazefw-a11y audit --file ./dist/index.html
 
 # Audit a URL (requires a running server)
-npx nexus-a11y audit --url http://localhost:3000
+npx blazefw-a11y audit --url http://localhost:3000
 
 # Output formats
-npx nexus-a11y audit --file index.html --format json
-npx nexus-a11y audit --file index.html --format table   # default
+npx blazefw-a11y audit --file index.html --format json
+npx blazefw-a11y audit --file index.html --format table   # default
 ```
 
 ### Example output

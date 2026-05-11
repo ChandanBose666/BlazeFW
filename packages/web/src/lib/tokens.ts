@@ -46,23 +46,23 @@ export function resolveSpace(v: SpaceValue | undefined): string | undefined {
 
 /** Maps ColorToken names to CSS custom property references. */
 const COLOR_TOKEN_VARS: Record<ColorToken, string> = {
-  background:     "var(--ultimate-background)",
-  surface:        "var(--ultimate-surface)",
-  border:         "var(--ultimate-border)",
-  primary:        "var(--ultimate-primary)",
-  "primary-fg":   "var(--ultimate-primary-fg)",
-  secondary:      "var(--ultimate-secondary)",
-  "secondary-fg": "var(--ultimate-secondary-fg)",
-  success:        "var(--ultimate-success)",
-  warning:        "var(--ultimate-warning)",
-  danger:         "var(--ultimate-danger)",
-  muted:          "var(--ultimate-muted)",
-  "muted-fg":     "var(--ultimate-muted-fg)",
+  background:     "var(--blazefw-background)",
+  surface:        "var(--blazefw-surface)",
+  border:         "var(--blazefw-border)",
+  primary:        "var(--blazefw-primary)",
+  "primary-fg":   "var(--blazefw-primary-fg)",
+  secondary:      "var(--blazefw-secondary)",
+  "secondary-fg": "var(--blazefw-secondary-fg)",
+  success:        "var(--blazefw-success)",
+  warning:        "var(--blazefw-warning)",
+  danger:         "var(--blazefw-danger)",
+  muted:          "var(--blazefw-muted)",
+  "muted-fg":     "var(--blazefw-muted-fg)",
 };
 
 /**
  * Resolves a ColorValue to a CSS color string.
- * - ColorToken: expanded to a --ultimate-* CSS variable.
+ * - ColorToken: expanded to a --blazefw-* CSS variable.
  * - Literal (#hex, rgb(), hsl()): passed through unchanged.
  */
 export function resolveColor(v: ColorValue | undefined): string | undefined {

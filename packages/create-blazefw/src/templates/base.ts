@@ -70,12 +70,12 @@ export function viteConfig(features: FeatureId[]): string {
 
   const pluginCall =
     disabled.length > 0
-      ? `ultimatePlugin({ ${disabled.join(', ')} })`
-      : 'ultimatePlugin()';
+      ? `blazefw({ ${disabled.join(', ')} })`
+      : 'blazefw()';
 
   return `import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { ultimatePlugin } from '@blazefw/vite-plugin';
+import { blazefw } from '@blazefw/vite-plugin';
 
 export default defineConfig({
   plugins: [
@@ -88,13 +88,20 @@ export default defineConfig({
 
 // ─── tsconfig.json ────────────────────────────────────────────────────────────
 
-export function tsConfig(): string {
+export function tsConfig(features: FeatureId[]): string {
+  // `vite/client` provides ambient `import.meta.hot` / `import.meta.env`;
+  // the `sync` pillar's src/sync-server.ts runs in Node, so it needs `node`.
+  const types = features.includes('sync')
+    ? ['vite/client', 'node']
+    : ['vite/client'];
+
   return JSON.stringify(
     {
       compilerOptions: {
         target: 'ES2022',
         lib: ['ES2022', 'DOM', 'DOM.Iterable'],
         module: 'ESNext',
+        types,
         skipLibCheck: true,
         moduleResolution: 'bundler',
         allowImportingTsExtensions: true,
@@ -127,18 +134,18 @@ export function indexHtml(projectName: string): string {
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       body { font-family: system-ui, -apple-system, sans-serif; background: #0f0f0f; }
       :root {
-        --nexus-background: #0f0f0f;
-        --nexus-surface: #1a1a1a;
-        --nexus-border: #2a2a2a;
-        --nexus-primary: #6366f1;
-        --nexus-primary-fg: #ffffff;
-        --nexus-secondary: #374151;
-        --nexus-secondary-fg: #d1d5db;
-        --nexus-success: #22c55e;
-        --nexus-warning: #f59e0b;
-        --nexus-danger: #ef4444;
-        --nexus-muted: #374151;
-        --nexus-muted-fg: #9ca3af;
+        --blazefw-background: #0f0f0f;
+        --blazefw-surface: #1a1a1a;
+        --blazefw-border: #2a2a2a;
+        --blazefw-primary: #6366f1;
+        --blazefw-primary-fg: #ffffff;
+        --blazefw-secondary: #374151;
+        --blazefw-secondary-fg: #d1d5db;
+        --blazefw-success: #22c55e;
+        --blazefw-warning: #f59e0b;
+        --blazefw-danger: #ef4444;
+        --blazefw-muted: #374151;
+        --blazefw-muted-fg: #9ca3af;
       }
     </style>
   </head>
@@ -155,7 +162,7 @@ export function indexHtml(projectName: string): string {
 export function mainTsx(): string {
   return `import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from './App.ultimate.js';
+import { App } from './App.blazefw.js';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -165,7 +172,7 @@ createRoot(document.getElementById('root')!).render(
 `;
 }
 
-// ─── src/App.ultimate.tsx — Dashboard ─────────────────────────────────────────
+// ─── src/App.blazefw.tsx — Dashboard ─────────────────────────────────────────
 
 const FEATURE_CARDS: Record<FeatureId, { emoji: string; label: string; desc: string }> = {
   sync: {
@@ -180,7 +187,7 @@ const FEATURE_CARDS: Record<FeatureId, { emoji: string; label: string; desc: str
   },
   inspector: {
     emoji: '🔍',
-    label: 'Nexus Inspector',
+    label: 'BlazeFW Inspector',
     desc: 'Alt+I shows a colour-coded overlay of server/client/boundary components.',
   },
   snapshot: {
@@ -191,7 +198,7 @@ const FEATURE_CARDS: Record<FeatureId, { emoji: string; label: string; desc: str
   a11y: {
     emoji: '♿',
     label: 'Accessibility Layer',
-    desc: 'Runtime a11y hooks + nexus-a11y CLI audits WCAG 2.1 AA compliance.',
+    desc: 'Runtime a11y hooks + blazefw-a11y CLI audits WCAG 2.1 AA compliance.',
   },
 };
 
@@ -284,7 +291,7 @@ ${syncNote}${featureCardJsx}
         <Text variant="label">Next steps</Text>
         <Stack direction="column" gap={2}>
           <Text variant="body" color="muted">
-            Edit <Text variant="code">src/App.ultimate.tsx</Text> — the compiler auto-splits
+            Edit <Text variant="code">src/App.blazefw.tsx</Text> — the compiler auto-splits
             server and client bundles, no annotations needed.
           </Text>
           <Text variant="body" color="muted">

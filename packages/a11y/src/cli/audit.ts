@@ -1,5 +1,5 @@
 /**
- * JSDOM + axe-core HTML auditor for the nexus-a11y CLI.
+ * JSDOM + axe-core HTML auditor for the blazefw-a11y CLI.
  * Runs in Node.js without a browser by injecting axe-core into a JSDOM window.
  */
 import { readFileSync } from 'node:fs';

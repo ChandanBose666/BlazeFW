@@ -1,12 +1,12 @@
 {
   "name": "@blazefw/a11y",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
-  "description": "Blazefw Accessibility — runtime utilities, axe-core test helpers, and nexus-a11y compliance CLI",
+  "description": "Blazefw Accessibility — runtime utilities, axe-core test helpers, and blazefw-a11y compliance CLI",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "nexus-a11y": "./bin/nexus-a11y.mjs"
+    "blazefw-a11y": "./bin/blazefw-a11y.mjs"
   },
   "exports": {
     ".": {

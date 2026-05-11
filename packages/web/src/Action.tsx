@@ -22,25 +22,25 @@ const BASE_STYLE: CSSProperties = {
 
 const VARIANT_STYLES: Record<ActionVariant, CSSProperties> = {
   primary:   {
-    backgroundColor: "var(--ultimate-primary)",
-    color:           "var(--ultimate-primary-fg)",
+    backgroundColor: "var(--blazefw-primary)",
+    color:           "var(--blazefw-primary-fg)",
   },
   secondary: {
     backgroundColor: "transparent",
-    color:           "var(--ultimate-primary)",
-    border:          "1px solid var(--ultimate-border)",
+    color:           "var(--blazefw-primary)",
+    border:          "1px solid var(--blazefw-border)",
   },
   ghost:     {
     backgroundColor: "transparent",
-    color:           "var(--ultimate-primary)",
+    color:           "var(--blazefw-primary)",
   },
   danger:    {
-    backgroundColor: "var(--ultimate-danger)",
-    color:           "var(--ultimate-danger-fg, #fff)",
+    backgroundColor: "var(--blazefw-danger)",
+    color:           "var(--blazefw-danger-fg, #fff)",
   },
   link:      {
     backgroundColor: "transparent",
-    color:           "var(--ultimate-primary)",
+    color:           "var(--blazefw-primary)",
     textDecoration:  "underline",
     padding:         "0",
   },
@@ -72,7 +72,7 @@ function Spinner(): ReactElement {
       fill="none"
       aria-hidden="true"
       style={{
-        animation: "ultimate-spin 0.75s linear infinite",
+        animation: "blazefw-spin 0.75s linear infinite",
         marginRight: "0.4em",
         flexShrink: 0,
       }}

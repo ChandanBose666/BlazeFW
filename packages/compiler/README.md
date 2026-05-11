@@ -1,8 +1,8 @@
 # @blazefw/compiler
 
-BlazeFW Rust compiler — SWC-based AST analyser that classifies every declaration in a `.ultimate.tsx` file as `ServerOnly`, `ClientOnly`, `Shared`, `BoundaryCrossing`, or `Mixed`, then produces two JS bundles automatically. Also compiles to WASM for browser-side use.
+BlazeFW Rust compiler — SWC-based AST analyser that classifies every declaration in a `.blazefw.tsx` file as `ServerOnly`, `ClientOnly`, `Shared`, `BoundaryCrossing`, or `Mixed`, then produces two JS bundles automatically. Also compiles to WASM for browser-side use.
 
-> **Not published to npm.** This is an internal package. Consumers use `@blazefw/vite-plugin` which calls the `nexus-compiler` binary automatically. Direct use is only needed when building custom tooling.
+> **Not published to npm.** This is an internal package. Consumers use `@blazefw/vite-plugin` which calls the `blazefw-compiler` binary automatically. Direct use is only needed when building custom tooling.
 
 ## Prerequisites
 
@@ -21,7 +21,7 @@ cd packages/compiler
 
 # Build the CLI binary (used by @blazefw/vite-plugin)
 cargo build --release
-# Output: target/release/nexus-compiler
+# Output: target/release/blazefw-compiler
 
 # Build the WASM module (used by browser-side tooling)
 wasm-pack build --target web --out-dir pkg
@@ -32,10 +32,10 @@ cargo test
 
 ## CLI usage
 
-The `nexus-compiler` binary reads a source file from `stdin` and writes a JSON result to `stdout`:
+The `blazefw-compiler` binary reads a source file from `stdin` and writes a JSON result to `stdout`:
 
 ```bash
-echo 'export function foo() { return window.x; }' | ./target/release/nexus-compiler
+echo 'export function foo() { return window.x; }' | ./target/release/blazefw-compiler
 ```
 
 **Input:** raw TypeScript/TSX source on `stdin`
@@ -111,7 +111,7 @@ Six WCAG 2.1 AA rules checked at AST level:
 ```ts
 // Auto-generated — never written by hand
 export async function getUser(id: string) {
-  return __ultimate_rpc('/api/__ultimate/getUser', { id });
+  return __blazefw_rpc('/api/__blazefw/getUser', { id });
 }
 ```
 

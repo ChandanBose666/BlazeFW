@@ -1,5 +1,5 @@
 /** Default `type` attribute value that opts a script tag into the sidecar worker. */
-export const SIDECAR_SCRIPT_TYPE = 'text/ultimatejs';
+export const SIDECAR_SCRIPT_TYPE = 'text/blazefw';
 
 // ---------------------------------------------------------------------------
 // Worker → Main (proxy access requests)

@@ -1,20 +1,20 @@
 {
   "name": "@blazefw/crdt",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "description": "Automerge CRDT document compiled to WebAssembly — Zero-Fetch Sync engine for Blazefw",
-  "main": "./pkg/ultimate_crdt.js",
-  "types": "./pkg/ultimate_crdt.d.ts",
+  "main": "./pkg/blazefw_crdt.js",
+  "types": "./pkg/blazefw_crdt.d.ts",
   "files": [
-    "pkg/ultimate_crdt_bg.wasm",
-    "pkg/ultimate_crdt.js",
-    "pkg/ultimate_crdt.d.ts",
-    "pkg/ultimate_crdt_bg.wasm.d.ts"
+    "pkg/blazefw_crdt_bg.wasm",
+    "pkg/blazefw_crdt.js",
+    "pkg/blazefw_crdt.d.ts",
+    "pkg/blazefw_crdt_bg.wasm.d.ts"
   ],
   "exports": {
     ".": {
-      "import": "./pkg/ultimate_crdt.js",
-      "types": "./pkg/ultimate_crdt.d.ts"
+      "import": "./pkg/blazefw_crdt.js",
+      "types": "./pkg/blazefw_crdt.d.ts"
     }
   },
   "scripts": {

@@ -1,5 +1,5 @@
 /**
- * Terminal reporter for the nexus-a11y CLI.
+ * Terminal reporter for the blazefw-a11y CLI.
  * All functions return strings (no direct console.log) to keep them testable.
  */
 import type { AxeResults } from 'axe-core';
@@ -132,7 +132,7 @@ export function buildReport(results: AxeResults, filePath: string): string {
 
   return [
     `\n${THICK}`,
-    `  nexus-a11y — WCAG 2.1 AA Audit`,
+    `  blazefw-a11y — WCAG 2.1 AA Audit`,
     `  ${filePath}`,
     THICK,
     '',
@@ -152,9 +152,9 @@ export function buildReport(results: AxeResults, filePath: string): string {
 /** Exported for build-output summary — always call this at the end of a build. */
 export function buildSummaryLine(violations: number): string {
   if (violations === 0) {
-    return `nexus-a11y: ✓ 0 violations — ${MANUAL_CHECKS.length} WCAG 2.1 AA manual checks required`;
+    return `blazefw-a11y: ✓ 0 violations — ${MANUAL_CHECKS.length} WCAG 2.1 AA manual checks required`;
   }
-  return `nexus-a11y: ✗ ${violations} violation(s) — review output above and complete ${MANUAL_CHECKS.length} manual checks`;
+  return `blazefw-a11y: ✗ ${violations} violation(s) — review output above and complete ${MANUAL_CHECKS.length} manual checks`;
 }
 
 /** Narrow list of automated axe-core rule IDs used across all criteria. */

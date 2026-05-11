@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { Text as RNText } from "react-native";
 import type { TextProps, TextVariant } from "@blazefw/primitives";
 import { resolveColor, FONT_SIZE_DP, FONT_WEIGHT_RN } from "./lib/tokens.js";
@@ -84,7 +84,7 @@ export function Text({
       importantForAccessibility={ariaHidden ? "no-hide-descendants" : undefined}
       testID={testId}
     >
-      {children}
+      {children as ReactNode}
     </RNText>
   );
 }

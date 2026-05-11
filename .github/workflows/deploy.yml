@@ -9,7 +9,7 @@ on:
 # Vercel Git integration handles production deploys automatically on push.
 # `build`        — validates the monorepo builds without Rust (WASM-stub fallback path).
 # `scaffold-e2e` — validates `create-blazefw` produces a working project and the real
-#                  compiler (native + WASM) can slice its `.ultimate.tsx` output.
+#                  compiler (native + WASM) can slice its `.blazefw.tsx` output.
 
 jobs:
   build:

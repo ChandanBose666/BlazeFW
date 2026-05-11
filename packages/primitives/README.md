@@ -125,10 +125,10 @@ const b: ColorValue = '#e11d48';    // raw color (passthrough)
 ### Renderer Contract
 
 ```ts
-import type { UltimateRenderer } from '@blazefw/primitives';
+import type { BlazeRenderer } from '@blazefw/primitives';
 
 // Every render target must satisfy this contract:
-interface UltimateRenderer<TNode> {
+interface BlazeRenderer<TNode> {
   Stack:  (props: StackProps)  => TNode;
   Text:   (props: TextProps)   => TNode;
   Action: (props: ActionProps) => TNode;

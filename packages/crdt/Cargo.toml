@@ -1,9 +1,9 @@
 [package]
-name = "ultimate-crdt"
-version = "0.1.0"
+name = "blazefw-crdt"
+version = "0.1.3"
 edition = "2021"
-description = "Automerge CRDT document compiled to WebAssembly — the Zero-Fetch Sync engine for UltimateJs"
-repository = "https://github.com/ChandanBose666/UltimateJs"
+description = "Automerge CRDT document compiled to WebAssembly — the Zero-Fetch Sync engine for BlazeFW"
+repository = "https://github.com/ChandanBose666/BlazeFW"
 license = "MIT"
 
 [lib]

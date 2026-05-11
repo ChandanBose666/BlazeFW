@@ -11,7 +11,7 @@ import { DATA_KIND } from '../scanner.js';
 function addComponent(kind: string, name?: string): HTMLElement {
   const el = document.createElement('div');
   el.setAttribute(DATA_KIND, kind);
-  if (name) el.setAttribute('data-ultimate-name', name);
+  if (name) el.setAttribute('data-blazefw-name', name);
   document.body.appendChild(el);
   return el;
 }

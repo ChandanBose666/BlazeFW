@@ -73,7 +73,7 @@ async function loadScript(url: string): Promise<void> {
       globalThis
     );
   } catch (e) {
-    console.error('[ultimatejs/sidecar] Failed to load script:', url, e);
+    console.error('[blazefw/sidecar] Failed to load script:', url, e);
   }
 }
 

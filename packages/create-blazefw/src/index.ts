@@ -112,7 +112,7 @@ async function main(): Promise<void> {
     `cd ${projectName}`,
     `${pkgManager} run dev`,
     '',
-    '# Components in *.ultimate.tsx are auto-split into server/client bundles',
+    '# Components in *.blazefw.tsx are auto-split into server/client bundles',
     '# by @blazefw/compiler — no annotations needed. Docs & compiler setup:',
     '#   https://github.com/ChandanBose666/BlazeFW',
     ...(notes.length > 0 ? ['', '# Feature notes:', ...notes.map((n) => `# ${n}`)] : []),

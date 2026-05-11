@@ -1,5 +1,5 @@
 /**
- * UltimateSyncServer — WebSocket binary transport for Zero-Fetch Sync.
+ * BlazeSyncServer — WebSocket binary transport for Zero-Fetch Sync.
  *
  * Protocol:
  *  - Clients connect to  ws://<host>:<port>/sync/<collection>/<id>
@@ -27,7 +27,7 @@ export const REJECTION_FRAME = new Uint8Array([0xff]);
 // Types
 // ---------------------------------------------------------------------------
 
-export interface UltimateSyncServerOptions {
+export interface BlazeSyncServerOptions {
   /** TCP port to listen on. Default: 3001 */
   port?: number;
   /**
@@ -56,13 +56,13 @@ interface PeerInfo {
 // Server
 // ---------------------------------------------------------------------------
 
-export class UltimateSyncServer {
+export class BlazeSyncServer {
   private wss: WebSocketServer;
   private store: DocumentStore;
   /** Map from WebSocket instance → its (collection, id) */
   private peers = new Map<WebSocket, PeerInfo>();
   private pathPrefix: string;
-  private onError?: UltimateSyncServerOptions["onError"];
+  private onError?: BlazeSyncServerOptions["onError"];
 
   /**
    * Resolves once the underlying WebSocketServer is bound and listening.
@@ -70,7 +70,7 @@ export class UltimateSyncServer {
    */
   readonly ready: Promise<void>;
 
-  constructor(options: UltimateSyncServerOptions = {}) {
+  constructor(options: BlazeSyncServerOptions = {}) {
     const { port = 3001, server, pathPrefix = "/sync", onError } = options;
 
     this.store = new DocumentStore();
@@ -268,20 +268,20 @@ export class UltimateSyncServer {
 // ---------------------------------------------------------------------------
 
 /**
- * Create and start a standalone UltimateSyncServer.
+ * Create and start a standalone BlazeSyncServer.
  *
  * @example
  * const server = createSyncServer({ port: 3001 });
  * // Clients connect to ws://localhost:3001/sync/<collection>/<id>
  */
 export function createSyncServer(
-  options?: UltimateSyncServerOptions
-): UltimateSyncServer {
-  return new UltimateSyncServer(options);
+  options?: BlazeSyncServerOptions
+): BlazeSyncServer {
+  return new BlazeSyncServer(options);
 }
 
 /**
- * Attach a UltimateSyncServer to an existing Node.js HTTP server.
+ * Attach a BlazeSyncServer to an existing Node.js HTTP server.
  * Useful when the sync server shares a port with an Express/Fastify app.
  *
  * @example
@@ -291,7 +291,7 @@ export function createSyncServer(
  */
 export function attachSyncServer(
   server: HttpServer,
-  options?: Omit<UltimateSyncServerOptions, "port" | "server">
-): UltimateSyncServer {
-  return new UltimateSyncServer({ ...options, server });
+  options?: Omit<BlazeSyncServerOptions, "port" | "server">
+): BlazeSyncServer {
+  return new BlazeSyncServer({ ...options, server });
 }

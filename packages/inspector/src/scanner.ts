@@ -2,7 +2,7 @@
  * scanner.ts — scans the DOM for annotated components
  *
  * Components are identified by a data attribute set by either:
- *   - @blazefw/web renderer  (data-ultimate-kind="server|client|…")
+ *   - @blazefw/web renderer  (data-blazefw-kind="server|client|…")
  *   - @blazefw/vite-plugin   (injected at compile time)
  *
  * Accepting a `ParentNode` interface instead of `document` makes every
@@ -11,8 +11,8 @@
 
 import { ALL_KINDS, emptyStats, type ComponentInfo, type ComponentKind, type InspectorStats } from './types.js';
 
-export const DATA_KIND = 'data-ultimate-kind';
-export const DATA_NAME = 'data-ultimate-name';
+export const DATA_KIND = 'data-blazefw-kind';
+export const DATA_NAME = 'data-blazefw-name';
 
 /** Minimal interface needed for scanning — satisfied by Document, Element, or a test mock. */
 export interface Scannable {
@@ -20,7 +20,7 @@ export interface Scannable {
 }
 
 /**
- * Return all elements in `root` that carry a valid `data-ultimate-kind`
+ * Return all elements in `root` that carry a valid `data-blazefw-kind`
  * attribute, in DOM order.
  */
 export function scanComponents(

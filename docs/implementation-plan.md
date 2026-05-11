@@ -16,11 +16,11 @@ Step 2.1: Define Semantic Primitives: Create strictly typed TS interfaces for <S
 
 Step 2.2: Build Target Adapters:
 
-@ultimatejs/web: Maps Primitives to HTML/Tailwind.
+@blazefw/web: Maps Primitives to HTML/Tailwind.
 
-@ultimatejs/native: Maps Primitives to React Native views.
+@blazefw/native: Maps Primitives to React Native views.
 
-@ultimatejs/email: Maps Primitives to MJML/Tables.
+@blazefw/email: Maps Primitives to MJML/Tables.
 
 Step 2.3: Universal Theming: Create a central JSON theme system that injects variables into all three targets simultaneously.
 
@@ -38,4 +38,4 @@ Goal: Make the "Magic" debuggable and unkillable.
 
 Step 4.1: Snapshot Boundaries: Build the logic that "rewinds" a component to its last good state if it crashes.
 
-Step 4.2: The Nexus Inspector: Create the devtool overlay to visualize the "Server/Client" borders on your live app.
+Step 4.2: The BlazeFW Inspector: Create the devtool overlay to visualize the "Server/Client" borders on your live app.

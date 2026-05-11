@@ -1,6 +1,6 @@
 {
   "name": "@blazefw/compiler",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "BlazeFW Rust/WASM compiler — server/client slicer and accessibility scanner",
   "type": "module",
   "scripts": {

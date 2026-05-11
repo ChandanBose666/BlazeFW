@@ -23,7 +23,7 @@ function el(attrs: Record<string, string>): MockElement {
 function makeContainer(elements: MockElement[]): Scannable {
   return {
     querySelectorAll(selector: string) {
-      // Extract attribute name from selector: [data-ultimate-kind]
+      // Extract attribute name from selector: [data-blazefw-kind]
       const match = selector.match(/\[([^\]]+)\]/);
       const attr = match?.[1] ?? '';
       return elements.filter((e) => e.getAttribute(attr) !== null) as unknown as ArrayLike<Element>;
@@ -57,7 +57,7 @@ describe('scanComponents', () => {
     expect(scanComponents(root)).toHaveLength(1);
   });
 
-  it('sets name to null when data-ultimate-name is absent', () => {
+  it('sets name to null when data-blazefw-name is absent', () => {
     const root = makeContainer([el({ [DATA_KIND]: 'shared' })]);
     const [info] = scanComponents(root);
     expect(info.name).toBeNull();

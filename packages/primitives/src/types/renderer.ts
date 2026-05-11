@@ -14,7 +14,7 @@ import type { InputProps } from "./input.js";
  *   - Native → ReactElement (react-native)
  *   - Email  → string (MJML/HTML)
  */
-export interface UltimateRenderer<TNode> {
+export interface BlazeRenderer<TNode> {
   Stack: (props: StackProps) => TNode;
   Text: (props: TextProps) => TNode;
   Action: (props: ActionProps) => TNode;

@@ -1,10 +1,10 @@
 import type { Plugin } from "vite";
 import { sliceSource } from "./bridge.js";
 
-export interface UltimatePluginOptions {
+export interface BlazefwPluginOptions {
   /**
-   * Glob pattern for files the UltimateJs slicer should process.
-   * Defaults to any file whose path includes `.ultimate.tsx`.
+   * Glob pattern for files the BlazeFW slicer should process.
+   * Defaults to any file whose path includes `.blazefw.tsx`.
    */
   include?: RegExp;
   /**
@@ -21,7 +21,7 @@ export interface UltimatePluginOptions {
    */
   sidecar?: boolean;
   /**
-   * Enable the Nexus Inspector DevTools overlay (color-coded component map).
+   * Enable the BlazeFW Inspector DevTools overlay (color-coded component map).
    * Automatically disabled in production builds regardless of this flag.
    * @default true
    */
@@ -33,10 +33,10 @@ export interface UltimatePluginOptions {
   a11y?: boolean;
 }
 
-const DEFAULT_PATTERN = /.ultimate.tsx?$/;
+const DEFAULT_PATTERN = /.blazefw.tsx?$/;
 
 /**
- * Vite plugin that intercepts UltimateJs component files and routes them
+ * Vite plugin that intercepts BlazeFW component files and routes them
  * through the Rust Slicer instead of Vite's default TypeScript loader.
  *
  * For server builds  → returns the server bundle (no browser APIs).
@@ -44,10 +44,10 @@ const DEFAULT_PATTERN = /.ultimate.tsx?$/;
  *
  * @example
  * // vite.config.ts
- * import { ultimatePlugin } from '@blazefw/vite-plugin';
- * export default defineConfig({ plugins: [ultimatePlugin()] });
+ * import { blazefw } from '@blazefw/vite-plugin';
+ * export default defineConfig({ plugins: [blazefw()] });
  */
-export function ultimatePlugin(options: UltimatePluginOptions = {}): Plugin {
+export function blazefw(options: BlazefwPluginOptions = {}): Plugin {
   const {
     include,
     sync = true,
@@ -73,7 +73,7 @@ export function ultimatePlugin(options: UltimatePluginOptions = {}): Plugin {
   const cache = new Map<string, { server_js: string; client_js: string }>();
 
   return {
-    name: "ultimate-compiler",
+    name: "blazefw-compiler",
 
     // Tell Vite this plugin handles its own HMR invalidation.
     handleHotUpdate({ file, server }) {

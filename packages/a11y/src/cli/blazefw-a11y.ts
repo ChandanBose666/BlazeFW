@@ -1,8 +1,8 @@
 /**
- * nexus-a11y CLI — WCAG 2.1 AA audit for HTML files.
+ * blazefw-a11y CLI — WCAG 2.1 AA audit for HTML files.
  *
  * Usage:
- *   nexus-a11y <html-file> [options]
+ *   blazefw-a11y <html-file> [options]
  *
  * Options:
  *   --output text|json   Output format (default: text)
@@ -18,10 +18,10 @@ import { buildReport, buildSummaryLine } from './reporter.js';
 // ─── Help ────────────────────────────────────────────────────────────────────
 
 const HELP = `
-nexus-a11y — WCAG 2.1 AA accessibility auditor
+blazefw-a11y — WCAG 2.1 AA accessibility auditor
 
 Usage:
-  nexus-a11y <html-file> [options]
+  blazefw-a11y <html-file> [options]
 
 Options:
   --output text|json   Output format (default: text)
@@ -30,9 +30,9 @@ Options:
   -h, --help           Print this help message
 
 Examples:
-  nexus-a11y dist/index.html
-  nexus-a11y dist/index.html --output json
-  nexus-a11y dist/index.html --exit-zero
+  blazefw-a11y dist/index.html
+  blazefw-a11y dist/index.html --output json
+  blazefw-a11y dist/index.html --exit-zero
 `.trim();
 
 // ─── Main ────────────────────────────────────────────────────────────────────
@@ -57,7 +57,7 @@ async function main(): Promise<void> {
   const filePath = positionals[0];
 
   if (!filePath) {
-    console.error('Error: provide an HTML file path.\n\nRun `nexus-a11y --help` for usage.');
+    console.error('Error: provide an HTML file path.\n\nRun `blazefw-a11y --help` for usage.');
     process.exit(1);
   }
 

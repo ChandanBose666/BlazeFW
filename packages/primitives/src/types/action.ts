@@ -1,5 +1,5 @@
 import type { BaseProps, ColorValue, SpaceValue } from "./common.js";
-import type { UltimateNode } from "./stack.js";
+import type { BlazeNode } from "./stack.js";
 
 /**
  * <Action> — the universal interactive primitive.
@@ -11,7 +11,7 @@ import type { UltimateNode } from "./stack.js";
  *
  * Design intent: a single primitive covers every interactive affordance.
  * The render target decides the correct native element — the developer
- * never writes `<button>` or `<a>` directly in UltimateJs UI code.
+ * never writes `<button>` or `<a>` directly in BlazeFW UI code.
  */
 
 export type ActionVariant =
@@ -124,5 +124,5 @@ interface ActionBase extends BaseProps {
  *   <Action label="Save">Save changes</Action>  // ✓ (redundant but valid)
  */
 export type ActionProps =
-  | (ActionBase & { children: UltimateNode; label?: string })
+  | (ActionBase & { children: BlazeNode; label?: string })
   | (ActionBase & { children?: never; label: string });

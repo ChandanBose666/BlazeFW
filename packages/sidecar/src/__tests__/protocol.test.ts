@@ -106,7 +106,7 @@ describe('nextId', () => {
 // ---------------------------------------------------------------------------
 
 describe('SIDECAR_SCRIPT_TYPE', () => {
-  it('equals "text/ultimatejs"', () => {
-    expect(SIDECAR_SCRIPT_TYPE).toBe('text/ultimatejs');
+  it('equals "text/blazefw"', () => {
+    expect(SIDECAR_SCRIPT_TYPE).toBe('text/blazefw');
   });
 });

@@ -1,5 +1,5 @@
 // Core primitive prop types
-export type { StackProps, StackDirection, StackAlign, StackJustify, StackRole, UltimateNode, UltimateElement } from "./types/stack.js";
+export type { StackProps, StackDirection, StackAlign, StackJustify, StackRole, BlazeNode, BlazeElement } from "./types/stack.js";
 export type { TextProps, TextVariant, TextElement, TextRole } from "./types/text.js";
 export type { ActionProps, ActionVariant, ActionSize, ActionRole } from "./types/action.js";
 export type { InputProps, InputType, InputVariant } from "./types/input.js";
@@ -18,4 +18,4 @@ export type {
 } from "./types/common.js";
 
 // Renderer contract
-export type { UltimateRenderer } from "./types/renderer.js";
+export type { BlazeRenderer } from "./types/renderer.js";

@@ -68,10 +68,10 @@ export function scaffold(opts: ScaffoldOptions): ScaffoldResult {
   let pkg = JSON.parse(packageJson({ projectName, renderer, features })) as Record<string, unknown>;
 
   write(destDir, 'vite.config.ts',          viteConfig(features));
-  write(destDir, 'tsconfig.json',           tsConfig());
+  write(destDir, 'tsconfig.json',           tsConfig(features));
   write(destDir, 'index.html',              indexHtml(projectName));
   write(destDir, 'src/main.tsx',            mainTsx());
-  write(destDir, 'src/App.ultimate.tsx',    appComponent({ projectName, renderer, features }));
+  write(destDir, 'src/App.blazefw.tsx',    appComponent({ projectName, renderer, features }));
   write(destDir, '.gitignore',              gitIgnore());
 
   // ── Feature files + dep merges ─────────────────────────────────────────────

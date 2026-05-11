@@ -1,6 +1,6 @@
 {
   "name": "@blazefw/sync-server",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "type": "module",
   "description": "Blazefw WebSocket sync server — binary CRDT transport for Zero-Fetch Sync",
   "main": "./dist/index.js",

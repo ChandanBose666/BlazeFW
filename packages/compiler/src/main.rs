@@ -4,7 +4,7 @@ use compiler::slicer::transformer::Transformer;
 
 /// CLI entry point for the BlazeFW compiler.
 ///
-/// Reads JavaScript/TypeScript (`.ultimate.tsx`) source from stdin, runs the
+/// Reads JavaScript/TypeScript (`.blazefw.tsx`) source from stdin, runs the
 /// Slicer, and writes a JSON object to stdout:
 ///
 /// ```json

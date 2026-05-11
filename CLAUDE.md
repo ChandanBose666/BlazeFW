@@ -1,4 +1,4 @@
-# UltimateJs — Project Context for Claude
+# BlazeFW — Project Context for Claude
 
 ## What This Project Is
 A high-performance JavaScript framework with a Rust compiler core. It aims to:
@@ -9,14 +9,14 @@ A high-performance JavaScript framework with a Rust compiler core. It aims to:
 
 ## Monorepo Structure
 ```
-UltimateJs/
+BlazeFW/
 ├── apps/
 │   └── web/                  # Vite dev app (future: demo/docs site)
 ├── packages/
 │   ├── compiler/             # Rust crate — SWC-based AST analysis + WASM output
-│   ├── crdt/                 # Rust crate — Automerge CRDT compiled to WASM (@ultimatejs/crdt)
+│   ├── crdt/                 # Rust crate — Automerge CRDT compiled to WASM (@blazefw/crdt)
 │   ├── core/                 # TS runtime core — useSync hook + CRDT loader
-│   ├── primitives/           # TS types: Stack/Text/Action/Input + NexusRenderer<TNode>
+│   ├── primitives/           # TS types: Stack/Text/Action/Input + BlazeRenderer<TNode>
 │   ├── web/                  # Web renderer: maps primitives → HTML + inline styles
 │   ├── native/               # Native renderer: maps primitives → React Native View/Text/Pressable/TextInput
 │   ├── email/                # Email renderer: maps primitives → MSO-safe HTML strings (TNode=string)
@@ -35,7 +35,7 @@ UltimateJs/
 | Package manager | pnpm | Workspace support, fast installs |
 | Monorepo orchestration | Turborepo | Task caching, parallel execution, `dependsOn` ordering |
 | Compiler | Rust + SWC | AST-level analysis, WASM output for browser use |
-| Dev app | Vite | Fast HMR, plugin API for future nexus-compiler integration |
+| Dev app | Vite | Fast HMR, plugin API for future blazefw-compiler integration |
 | WASM bridge | wasm-bindgen | Standard Rust→JS interop |
 
 ## Rust Crate: packages/compiler
@@ -68,13 +68,13 @@ src/
 ```
 
 ### Vite plugin design decisions
-- Nexus files use `.ultimate.tsx` / `.ultimate.tsx` extension to opt into slicing
+- BlazeFW files use `.blazefw.tsx` / `.blazefw.tsx` extension to opt into slicing
 - The plugin calls the Rust binary as a subprocess via `spawnSync` (stdin → stdout JSON)
-- Binary resolution order: `ULTIMATE_COMPILER_BIN` env var → release build → debug build
+- Binary resolution order: `BLAZEFW_COMPILER_BIN` env var → release build → debug build
 - Results cached per file ID — cleared on HMR hot update
 - SSR detection via `options?.ssr` (Vite 5 transform hook second arg)
 - Source maps not yet emitted — pending swc codegen source map support (future task)
-- `packages/vite-plugin` is a separate workspace package (`@ultimatejs/vite-plugin`)
+- `packages/vite-plugin` is a separate workspace package (`@blazefw/vite-plugin`)
 
 ### Slicer design decisions
 - `DeclKind` has 5 variants: ServerOnly, ClientOnly, Shared, BoundaryCrossing, Mixed
@@ -95,26 +95,26 @@ src/
 - [x] Task 2.2 — SecretScanner: detects process.env + DB imports (ESM + require + node: protocol)
 - [x] Task 2.3 — Slicer: Classifier (5 DeclKinds + BoundaryCrossing detection) + Transformer (server/client JS output + RPC stubs)
 
-- [x] Task 2.4 — Vite Plugin + Rust CLI binary (`nexus-compiler`) with stdin/stdout JSON bridge
+- [x] Task 2.4 — Vite Plugin + Rust CLI binary (`blazefw-compiler`) with stdin/stdout JSON bridge
 
-- [x] Task 3.1 — Core Interface: TypeScript types for `<Stack>`, `<Text>`, `<Action>`, `<Input>` + `NexusRenderer<TNode>` contract
-- [x] Task 3.2 — Web Renderer: `@ultimatejs/web` package — maps all four primitives to React/HTML using inline styles + CSS variables
+- [x] Task 3.1 — Core Interface: TypeScript types for `<Stack>`, `<Text>`, `<Action>`, `<Input>` + `BlazeRenderer<TNode>` contract
+- [x] Task 3.2 — Web Renderer: `@blazefw/web` package — maps all four primitives to React/HTML using inline styles + CSS variables
 
 ## Web Renderer design decisions (Task 3.2)
-- Package: `packages/web` (`@ultimatejs/web`), peer depends on React ^18 || ^19
+- Package: `packages/web` (`@blazefw/web`), peer depends on React ^18 || ^19
 - Styling strategy: inline styles for everything (colors, spacing, layout) so the renderer is self-contained — no Tailwind config required
-- Colors: all `ColorToken` values resolve to `--nexus-*` CSS custom properties; theme is injected at app root
+- Colors: all `ColorToken` values resolve to `--blazefw-*` CSS custom properties; theme is injected at app root
 - Spacing: `SpaceScale` integers map to Tailwind's 4px-unit convention (1→4px, 2→8px, etc.); `"Npx"` and `"N%"` strings pass through unchanged
-- `NexusRenderer<ReactElement>` is satisfied in `renderer.ts`; children cast is safe because React always passes ReactNode at runtime
+- `BlazeRenderer<ReactElement>` is satisfied in `renderer.ts`; children cast is safe because React always passes ReactNode at runtime
 - `Spinner` in Action is defined at module level (not inline) to avoid re-mount on each render
 - Static style maps hoisted outside components to avoid object recreation per render
 - Input bridges `onChange(value: string)` and `onSubmit(value: string)` to the native React event API
 - Action renders `<a>` when `href` is set, `<button type="button">` otherwise; `link` variant skips size padding
 
-- [x] Task 3.3 — Native Renderer: `@ultimatejs/native` — maps all four primitives to React Native components
+- [x] Task 3.3 — Native Renderer: `@blazefw/native` — maps all four primitives to React Native components
 
 ## Native Renderer design decisions (Task 3.3)
-- Package: `packages/native` (`@ultimatejs/native`), peer depends on React ^18||^19 + react-native >=0.72
+- Package: `packages/native` (`@blazefw/native`), peer depends on React ^18||^19 + react-native >=0.72
 - `@types/react-native` is deprecated — modern RN ships its own types; use `@types/react@^19`
 - SpaceValue → dp numbers (unitless, 4dp-per-unit convention matching web renderer)
 - ColorToken → resolved against DEFAULT_THEME (hex strings); exported so apps can read the palette
@@ -125,10 +125,10 @@ src/
 - Input uses `aria-required` / `aria-invalid` (new-arch RN accessibility API, not deprecated `accessibilityRequired`)
 - Icon slots render the raw icon string — intended to be swapped for an icon library in user code
 
-- [x] Task 3.4 — Email Renderer: `@ultimatejs/email` — maps all four primitives to MSO-safe HTML strings
-- [x] Task 4.1 — WASM Bridge: `@ultimatejs/crdt` — Automerge CRDT document compiled to WebAssembly via wasm-pack
-- [x] Task 4.2 — useSync hook: `@ultimatejs/core` — React hook connecting CRDT doc to WebSocket transport
-- [x] Task 4.3 — WebSocket transport: `@ultimatejs/sync-server` — binary CRDT sync server with broadcast, GC, and persistence
+- [x] Task 3.4 — Email Renderer: `@blazefw/email` — maps all four primitives to MSO-safe HTML strings
+- [x] Task 4.1 — WASM Bridge: `@blazefw/crdt` — Automerge CRDT document compiled to WebAssembly via wasm-pack
+- [x] Task 4.2 — useSync hook: `@blazefw/core` — React hook connecting CRDT doc to WebSocket transport
+- [x] Task 4.3 — WebSocket transport: `@blazefw/sync-server` — binary CRDT sync server with broadcast, GC, and persistence
 - [x] Task 4.4 — Optimistic rollbacks: rejection frame protocol (0xFF) in server + rollback logic in useSync hook
 
 ## Email Renderer design decisions (Task 3.4)
@@ -144,11 +144,11 @@ src/
 - `wrapDocument()` utility produces a full MSO-safe HTML document with preview text, centering shell table, MSO conditional comments
 - 40 unit tests cover all four components + wrapDocument; pure string assertions, no DOM/jsdom required
 
-- [x] Task 5.1 — Sidecar Worker: `@ultimatejs/sidecar` — Partytown-style Web Worker that intercepts `<script type="text/ultimatejs">` tags, proxies DOM access async via postMessage, 49 tests
+- [x] Task 5.1 — Sidecar Worker: `@blazefw/sidecar` — Partytown-style Web Worker that intercepts `<script type="text/blazefw">` tags, proxies DOM access async via postMessage, 49 tests
 
 ## Sidecar Worker design decisions (Task 5.1)
-- Package: `packages/sidecar` (`@ultimatejs/sidecar`), TypeScript ESM, no peer dependencies
-- Opt-in via `<script type="text/ultimatejs" src="...">` — browser ignores unknown types, worker loads them
+- Package: `packages/sidecar` (`@blazefw/sidecar`), TypeScript ESM, no peer dependencies
+- Opt-in via `<script type="text/blazefw" src="...">` — browser ignores unknown types, worker loads them
 - **Async proxy** (Promise-based, not SharedArrayBuffer/Atomics) — simpler, no COOP/COEP headers required
 - `buildProxy(path, pending, send)` — recursive Proxy with apply/set/get traps; accumulates path lazily, only sends message on call or set
 - `buildWindowProxy` — window-shaped proxy; native Worker globals (fetch, setTimeout, Math, etc.) return `undefined` so the Worker uses its own implementations
@@ -159,12 +159,12 @@ src/
 - Protocol: `WorkerToMain` = get/set/call; `MainToWorker` = response/error/load; type guards `isWorkerMessage` / `isMainMessage`
 - 49 unit tests: protocol (15) + worker-proxy (19) + sidecar (15); all run in Node without jsdom
 
-- [x] Task 5.2 — Nexus Inspector: `@ultimatejs/inspector` — browser DevTools overlay with color-coded component outlines + floating stats panel, 59 tests
+- [x] Task 5.2 — BlazeFW Inspector: `@blazefw/inspector` — browser DevTools overlay with color-coded component outlines + floating stats panel, 59 tests
 
-## Nexus Inspector design decisions (Task 5.2)
-- Package: `packages/inspector` (`@ultimatejs/inspector`), TypeScript ESM, browser-only (no Node peer deps)
-- Opt-in via `data-ultimate-kind="server|client|shared|boundary|mixed"` on DOM elements (set by web renderer or compiler)
-- Optional `data-ultimate-name` attribute for component display name
+## BlazeFW Inspector design decisions (Task 5.2)
+- Package: `packages/inspector` (`@blazefw/inspector`), TypeScript ESM, browser-only (no Node peer deps)
+- Opt-in via `data-blazefw-kind="server|client|shared|boundary|mixed"` on DOM elements (set by web renderer or compiler)
+- Optional `data-blazefw-name` attribute for component display name
 - **CSS-only outlines**: injects a single `<style>` element with `outline` rules — zero JS per-element, always correctly positioned, no scroll/resize listeners needed
 - **`::after` kind badges**: CSS pseudo-element renders a colored label in the top-left of each annotated element; `position: relative !important` is added to the host (acceptable dev-tool tradeoff)
 - `buildStylesheet(dataAttr)` — pure function, returns CSS string; fully testable without DOM
@@ -175,10 +175,10 @@ src/
 - `ALL_KINDS` is `Object.freeze()`'d — runtime immutable, not just TypeScript readonly
 - 59 tests: types (8) + scanner (13) + styles (11) + panel (14) + inspector (13); uses `jest-environment-jsdom` for DOM tests
 
-- [x] Task 5.3 — Snapshot Boundary: `@ultimatejs/snapshot` — React Error Boundary with automatic time-travel restore via ring buffer, 39 tests
+- [x] Task 5.3 — Snapshot Boundary: `@blazefw/snapshot` — React Error Boundary with automatic time-travel restore via ring buffer, 39 tests
 
 ## Snapshot Boundary design decisions (Task 5.3)
-- Package: `packages/snapshot` (`@ultimatejs/snapshot`), TypeScript ESM, peer depends on React ^18||^19 + react-dom ^18||^19
+- Package: `packages/snapshot` (`@blazefw/snapshot`), TypeScript ESM, peer depends on React ^18||^19 + react-dom ^18||^19
 - **`SnapshotBuffer<T>`** — generic fixed-capacity LIFO ring buffer; `push()` evicts oldest when at capacity, `pop()` returns newest (time-travel); `getAll()` returns a non-mutating copy newest-first
 - **`SnapshotBoundary<T>`** — class component (hooks can't catch errors); uses `SnapshotBuffer` to record each successfully-rendered `snapshot` prop; on child throw: `componentDidCatch` pops the newest snapshot, calls `onRestore(data, meta)`, then `setState({ hasError: false })` — React batches these two state updates in one flush so children re-render with restored data without a flash of the fallback
 - **Default fallback** hoisted outside class (`rendering-hoist-jsx`) — `DefaultFallback` function component, not recreated on every render
@@ -210,26 +210,26 @@ src/
 - 20 unit tests: one positive + one negative per rule plus a clean-component integration test
 - All 39 compiler tests pass (20 new + 19 existing)
 
-- [x] Task 6.3 — Runtime utilities: `@ultimatejs/a11y` — useFocusTrap, useAnnouncer, SkipNav, useReducedMotion, VisuallyHidden, 51 tests
+- [x] Task 6.3 — Runtime utilities: `@blazefw/a11y` — useFocusTrap, useAnnouncer, SkipNav, useReducedMotion, VisuallyHidden, 51 tests
 
 ## A11y Runtime design decisions (Task 6.3)
-- Package: `packages/a11y` (`@ultimatejs/a11y`), TypeScript ESM, peer depends on React ^18||^19
+- Package: `packages/a11y` (`@blazefw/a11y`), TypeScript ESM, peer depends on React ^18||^19
 - **`useFocusTrap(ref, { enabled, onEscape })`** — attaches a keydown listener to the container (not document); Tab/Shift+Tab cycle through focusable elements, Escape calls the callback; restores focus to the previously-active element on cleanup; `onEscape` stored in a ref so callback identity changes don't restart the effect
 - Focusable selector excludes `[disabled]` and `[inert]` subtrees; `offsetParent` check omitted — it breaks in jsdom and the inert check covers most visibility needs
-- **`useAnnouncer({ politeness })`** — injects a `data-ultimatejs-announcer` div directly into `document.body` via `useEffect` (not a React-rendered component); DOM node is stable across announcements so screen readers track the same live region; `announce()` clears textContent then sets it after 50ms so repeating the same string still triggers a mutation event
-- **`SkipNavLink` / `SkipNavContent`** — link is absolutely positioned at `top: -100%` until `:focus` moves it to `top: 0` via a one-time injected `<style>` tag (`#ultimatejs-skip-nav-styles`); deduplication check prevents double-injection; `SkipNavContent` uses `tabIndex={-1}` so it can receive programmatic focus without entering the natural tab order
+- **`useAnnouncer({ politeness })`** — injects a `data-blazefw-announcer` div directly into `document.body` via `useEffect` (not a React-rendered component); DOM node is stable across announcements so screen readers track the same live region; `announce()` clears textContent then sets it after 50ms so repeating the same string still triggers a mutation event
+- **`SkipNavLink` / `SkipNavContent`** — link is absolutely positioned at `top: -100%` until `:focus` moves it to `top: 0` via a one-time injected `<style>` tag (`#blazefw-skip-nav-styles`); deduplication check prevents double-injection; `SkipNavContent` uses `tabIndex={-1}` so it can receive programmatic focus without entering the natural tab order
 - **`useReducedMotion()`** — guards against `window.matchMedia` not being a function (jsdom without mock, SSR) with `typeof window.matchMedia !== 'function'` check; returns `false` as safe default; subscribes to `change` events and cleans up on unmount
 - **`VisuallyHidden`** — renders a tag (default `span`) with the classic 1px/clip/overflow hidden pattern; `as` prop is `ElementType` to accept any HTML element without a giant union type
 - jsdom clip normalization: `rect(0, 0, 0, 0)` → `rect(0px, 0px, 0px, 0px)`; test uses `toMatch(/rect\(0/)` instead of exact string equality
 - 51 unit tests: use-focus-trap (10) + use-announcer (8) + skip-nav (16) + use-reduced-motion (7) + visually-hidden (9); all run in jest-environment-jsdom
 
-- [x] Task 6.4 — Test utilities + compliance reporter: `@ultimatejs/a11y/test` + `nexus-a11y` CLI, 73 new tests (124 total in package)
+- [x] Task 6.4 — Test utilities + compliance reporter: `@blazefw/a11y/test` + `blazefw-a11y` CLI, 73 new tests (124 total in package)
 
 ## A11y Test + CLI design decisions (Task 6.4)
-- **`@ultimatejs/a11y/test`** sub-export (`src/test/index.ts`) wraps axe-core for jest+jsdom: `runA11yAudit(container)`, `expectNoViolations(container)`, `renderWithA11y(ui)`, `formatViolations(violations)`; axe-core uses the global jsdom document provided by jest — no JSDOM setup needed in test files
+- **`@blazefw/a11y/test`** sub-export (`src/test/index.ts`) wraps axe-core for jest+jsdom: `runA11yAudit(container)`, `expectNoViolations(container)`, `renderWithA11y(ui)`, `formatViolations(violations)`; axe-core uses the global jsdom document provided by jest — no JSDOM setup needed in test files
 - **`axe-core` + jsdom canvas**: axe-core's `color-contrast` rule calls `HTMLCanvasElement.getContext()` in jsdom, which logs a non-fatal `console.error` ("Not implemented"); this is a known limitation — tests still pass; suppress with `jest.spyOn(console, 'error').mockImplementation(() => {})` if needed
 - **`auditHtml(html)` (CLI audit module)**: injects axe-core source into a JSDOM window via `dom.window.eval(axeSource)` so axe runs in the JSDOM sandbox; `createRequire(import.meta.url)` resolves the axe-core bundle path in ESM context; `@jest-environment node` docblock on audit tests prevents global jsdom conflicts
-- **`nexus-a11y` CLI**: uses Node.js built-in `parseArgs` from `node:util` (no third-party parser); entry at `src/cli/nexus-a11y.ts` compiled to `dist/cli/nexus-a11y.js`; shebang wrapper at `bin/nexus-a11y.mjs` imports the compiled output (tsc does not reliably preserve shebangs)
+- **`blazefw-a11y` CLI**: uses Node.js built-in `parseArgs` from `node:util` (no third-party parser); entry at `src/cli/blazefw-a11y.ts` compiled to `dist/cli/blazefw-a11y.js`; shebang wrapper at `bin/blazefw-a11y.mjs` imports the compiled output (tsc does not reliably preserve shebangs)
 - **`WCAG_CRITERIA`**: 50 WCAG 2.1 AA success criteria with `automation: 'full' | 'partial' | 'manual'`; `getCoverageStats()` aggregates by status and principle for the coverage report
 - **`MANUAL_CHECKS`**: 20 high-priority human-review items; each has `criterionId`, `title`, and actionable `instructions`; always printed at the end of CLI output so devs cannot ignore the non-automatable ~60%
 - **Reporter output order**: violations (sorted by impact: critical→serious→moderate→minor) → manual checklist → WCAG coverage table → one-line summary line; summary line always emitted last so it's visible in truncated CI logs
@@ -247,15 +247,15 @@ All four tasks of Phase 6 (Accessibility Layer) are done:
 - Client (useSync): tracks `confirmedBytesRef` (last server-acknowledged snapshot) and `pendingKeysRef` (keys written optimistically since last confirmation)
 - On rejection frame: doc is reloaded from `confirmedBytesRef` via `loadDoc()`, pending keys cleared, `onRollback(rejectedKeys)` callback fired, React state dispatched as "rollback"
 - On successful server delta: `confirmedBytesRef` updated to `doc.save()`, `pendingKeysRef` cleared
-- REJECTION_FRAME constant exported from both `@ultimatejs/core` and `@ultimatejs/sync-server` — same value (0xFF) used by both sides
-- 46 total tests passing: @ultimatejs/core (23) + @ultimatejs/sync-server (23); rejection frame tests cover: single-byte detection, invalid-bytes trigger, no-broadcast-on-reject
+- REJECTION_FRAME constant exported from both `@blazefw/core` and `@blazefw/sync-server` — same value (0xFF) used by both sides
+- 46 total tests passing: @blazefw/core (23) + @blazefw/sync-server (23); rejection frame tests cover: single-byte detection, invalid-bytes trigger, no-broadcast-on-reject
 
 ## WebSocket sync server design decisions (Task 4.3)
-- Package: `packages/sync-server` (`@ultimatejs/sync-server`), pure Node.js, no React dependency
+- Package: `packages/sync-server` (`@blazefw/sync-server`), pure Node.js, no React dependency
 - Uses `ws` WebSocketServer + `@automerge/automerge` v3 (JS, not WASM — runs in Node without a browser)
 - Protocol: connect → server sends full snapshot; subsequent binary frames = CRDT delta → merge + broadcast
 - `DocumentStore`: in-memory Map keyed by `collection/id` → Automerge document; `getBytes()`, `merge()`, `delete()`, `has()`, `size`
-- `NexusSyncServer`: wraps WebSocketServer; exposes `ready: Promise<void>` (await before connecting clients); `peerCount`, `documentCount`, `close()`
+- `BlazeSyncServer`: wraps WebSocketServer; exposes `ready: Promise<void>` (await before connecting clients); `peerCount`, `documentCount`, `close()`
 - Factory helpers: `createSyncServer(opts)` (standalone) and `attachSyncServer(httpServer, opts)` (shared port with Express/Fastify)
 - GC: when last peer for a (collection, id) disconnects, the document is evicted from the store
 - Broadcast excludes the sender — no echo
@@ -265,7 +265,7 @@ All four tasks of Phase 6 (Accessibility Layer) are done:
 - 21 tests: document-store (11) + integration server tests (10) including broadcast, no-echo, room isolation, persistence, GC, URL validation
 
 ## useSync hook design decisions (Task 4.2)
-- Package: `packages/core` (`@ultimatejs/core`), TypeScript ESM, peer depends on React ^18||^19
+- Package: `packages/core` (`@blazefw/core`), TypeScript ESM, peer depends on React ^18||^19
 - `crdt-loader.ts` — singleton async loader for the WASM module; init runs exactly once even with concurrent hook mounts; uses a module-level promise to dedup concurrent calls
 - `use-sync.ts` — `useSync(collection, id, options?)` returns `[state, update]`
   - `state`: `Record<string, string>` — snapshot of all root CRDT keys, updated on every incoming frame
@@ -275,18 +275,18 @@ All four tasks of Phase 6 (Accessibility Layer) are done:
 - Empty binary frame (0 bytes) = server signals empty doc → hooks dispatches ready with empty state
 - WASM memory is freed (`doc.free()`) on hook unmount via `useEffect` cleanup
 - `ws.binaryType = "arraybuffer"` — frames arrive as `ArrayBuffer`, converted to `Uint8Array` before CRDT calls
-- Manual Jest mock at `__mocks__/@ultimatejs/crdt.js` + `moduleNameMapper` in jest.config.js — WASM cannot run in Node; mock provides the full API surface as no-ops; never affects runtime builds
+- Manual Jest mock at `__mocks__/@blazefw/crdt.js` + `moduleNameMapper` in jest.config.js — WASM cannot run in Node; mock provides the full API surface as no-ops; never affects runtime builds
 - 16 unit tests: singleton loader, API surface, docToState, buildWsUrl (encoding, fallback), send/no-send based on WS ready state
 
 ## WASM Bridge design decisions (Task 4.1)
-- Package: `packages/crdt` (`@ultimatejs/crdt`), Rust crate with `crate-type = ["cdylib", "rlib"]`
+- Package: `packages/crdt` (`@blazefw/crdt`), Rust crate with `crate-type = ["cdylib", "rlib"]`
 - Uses `automerge 0.8` with `features = ["wasm"]` — ships its own `js-sys`/`web-sys`/`wasm-bindgen` via feature flag
 - `CrdtDoc` is a flat key-value document (root Automerge Map) — sufficient for component state sync
 - API: `new()`, `get()`, `get_json()`, `set()`, `set_number()`, `set_bool()`, `delete()`, `save()`, `load()`, `merge()`, `keys()`
 - `save()` → `Vec<u8>` / `Uint8Array` (Automerge binary format); `load()` and `merge()` both accept raw bytes
 - `merge()` is CRDT-safe: concurrent writes resolve deterministically, no data lost
 - Built with `wasm-pack build --target web --out-dir pkg` → outputs to `packages/crdt/pkg/`
-- Workspace `package.json` at crate root wraps the `pkg/` output as `@ultimatejs/crdt`; `pnpm-workspace.yaml` picks it up via `packages/*`
+- Workspace `package.json` at crate root wraps the `pkg/` output as `@blazefw/crdt`; `pnpm-workspace.yaml` picks it up via `packages/*`
 - `turbo.json` already has `outputs: ["pkg/**"]` — WASM build artifacts are cached correctly
 - automerge 0.8 API notes: range iterators yield `MapRangeItem`/`ListRangeItem` structs (not tuples); map values are `ValueRef<'_>` / `ScalarValueRef<'_>` (not `Value`/`ScalarValue`)
 - 12 unit tests: new/empty, set+get string/number/bool, delete, missing key, save+load roundtrip, merge independent docs, concurrent merge, keys listing, get_json
@@ -295,7 +295,7 @@ All four tasks of Phase 6 (Accessibility Layer) are done:
 - `build` depends on `^build` — upstream packages build first
 - `dev` depends on `^build` + persistent/uncached — compiler builds before Vite starts
 - `outputs: ["dist/**", "pkg/**"]` — caches both TS and WASM build artifacts
-- `apps/web` declares `@ultimatejs/compiler: workspace:*` — this is what tells Turbo the dependency edge
+- `apps/web` declares `@blazefw/compiler: workspace:*` — this is what tells Turbo the dependency edge
 
 ## Environment Notes
 - User is on Windows 11, uses Git Bash (MINGW64) inside VS Code

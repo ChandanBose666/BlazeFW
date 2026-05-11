@@ -16,7 +16,7 @@ pub fn __blazefw_compiler_init() {
 
 /// WASM entry point — mirrors the CLI binary's stdin/stdout contract.
 ///
-/// Accepts a JavaScript/TypeScript (`.ultimate.tsx`) source string and returns
+/// Accepts a JavaScript/TypeScript (`.blazefw.tsx`) source string and returns
 /// a JSON object: `{ "server_js": "...", "client_js": "..." }`.
 ///
 /// On a parse error it throws a `string` describing the failure (the Vite

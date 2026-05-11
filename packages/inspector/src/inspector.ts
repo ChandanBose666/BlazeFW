@@ -1,5 +1,5 @@
 /**
- * inspector.ts — main entry point for the UltimateJs Inspector
+ * inspector.ts — main entry point for the BlazeFW Inspector
  *
  * Usage (dev mode only):
  *
@@ -24,7 +24,7 @@ import { createPanel, updatePanel, removePanel } from './panel.js';
 export interface InspectorOptions {
   /**
    * The data attribute used to identify annotated components.
-   * Default: `"data-ultimate-kind"`
+   * Default: `"data-blazefw-kind"`
    */
   dataAttribute?: string;
   /**
@@ -54,7 +54,7 @@ export interface InspectorHandle {
  *
  * 1. Injects a `<style>` element that draws colored outlines + kind badges.
  * 2. Creates a floating panel in the bottom-right corner.
- * 3. Scans the DOM for `[data-ultimate-kind]` elements and fills the panel.
+ * 3. Scans the DOM for `[data-blazefw-kind]` elements and fills the panel.
  * 4. Installs a MutationObserver to refresh the panel when the DOM changes.
  */
 export function initInspector(opts?: InspectorOptions): InspectorHandle {
@@ -67,7 +67,7 @@ export function initInspector(opts?: InspectorOptions): InspectorHandle {
   // ---------------------------------------------------------------------------
 
   function doRefresh(): void {
-    const panel = document.getElementById('ultimatejs-inspector-panel') as HTMLElement | null;
+    const panel = document.getElementById('blazefw-inspector-panel') as HTMLElement | null;
     if (!panel) return;
     const infos = scanComponents(document.body, dataAttr);
     updatePanel(panel, countByKind(infos));

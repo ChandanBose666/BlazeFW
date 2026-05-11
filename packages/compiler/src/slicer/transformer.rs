@@ -13,7 +13,7 @@ use super::classifier::{Classifier, DeclKind, module_item_name};
 
 /// Error returned by [`Transformer::transform`] when the source cannot be
 /// processed. Surfaced as a JS exception (WASM) or stderr + non-zero exit
-/// (CLI) — never a panic, so a malformed `.ultimate.tsx` file produces a
+/// (CLI) — never a panic, so a malformed `.blazefw.tsx` file produces a
 /// diagnostic instead of crashing the build.
 #[derive(Debug)]
 pub struct TransformError {
@@ -135,8 +135,8 @@ pub struct Transformer;
 impl Transformer {
     /// Parse `source`, classify all declarations, and return both output bundles.
     ///
-    /// `source` is parsed as TypeScript + JSX (`.tsx`) since `.ultimate.tsx`
-    /// files are React components. `.ultimate.ts` files are also parsed in TSX
+    /// `source` is parsed as TypeScript + JSX (`.tsx`) since `.blazefw.tsx`
+    /// files are React components. `.blazefw.ts` files are also parsed in TSX
     /// mode, so old-style `<T>x` type assertions must be written `x as T`.
     pub fn transform(source: &str) -> Result<SliceResult, TransformError> {
         // Parse — TSX so JSX elements and TypeScript syntax are both accepted.
@@ -270,7 +270,7 @@ export function UserCard() {
         assert!(result.client_js.starts_with("// [blazefw:client]"));
     }
 
-    // --- JSX / TSX support (the .ultimate.tsx case) ----------------------
+    // --- JSX / TSX support (the .blazefw.tsx case) ----------------------
 
     const JSX_COMPONENT: &str = r#"
 import { useState } from 'react';

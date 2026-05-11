@@ -4,12 +4,12 @@
  *
  * Generates a project with `create-blazefw`'s `scaffold()`, sanity-checks the
  * generated `vite.config.ts`, then runs the *real* BlazeFW compiler over every
- * generated `*.ultimate.tsx` file — both through the Vite-plugin bridge
+ * generated `*.blazefw.tsx` file — both through the Vite-plugin bridge
  * (`sliceSource`, which uses the native binary when present) and through the
  * WASM build directly (`@blazefw/compiler/wasm`, the path published consumers
  * use). Exits non-zero on any failure.
  *
- * This is the gate that would have caught: the `ultimatePlugin()()` double-call,
+ * This is the gate that would have caught: the `blazefw()()` double-call,
  * the missing `@vitejs/plugin-react`/`@blazefw/compiler` deps, the `bridge.ts`
  * binary-path bug, and "the compiler can't parse JSX".
  *
@@ -67,8 +67,8 @@ try {
 
   // --- vite.config.ts sanity ---------------------------------------------
   const viteConfig = readFileSync(join(dest, 'vite.config.ts'), 'utf8');
-  if (/ultimatePlugin\(\)\(\)/.test(viteConfig)) fail('vite.config.ts has the ultimatePlugin()() double-invocation bug');
-  if (!/\bultimatePlugin\(/.test(viteConfig)) fail('vite.config.ts never calls ultimatePlugin()');
+  if (/blazefw\(\)\(\)/.test(viteConfig)) fail('vite.config.ts has the blazefw()() double-invocation bug');
+  if (!/\bblazefw\(/.test(viteConfig)) fail('vite.config.ts never calls blazefw()');
   if (!/@vitejs\/plugin-react/.test(viteConfig)) fail('vite.config.ts does not import @vitejs/plugin-react');
 
   // generated package.json must include the build-time deps that make `vite dev` work
@@ -78,20 +78,20 @@ try {
     if (!allDeps[d]) fail(`generated package.json is missing dependency: ${d}`);
   }
 
-  // --- find every *.ultimate.ts(x) file ----------------------------------
-  const ultimateFiles = [];
+  // --- find every *.blazefw.ts(x) file ----------------------------------
+  const blazefwFiles = [];
   (function walk(dir) {
     for (const e of readdirSync(dir, { withFileTypes: true })) {
       if (e.name === 'node_modules' || e.name === 'dist') continue;
       const p = join(dir, e.name);
       if (e.isDirectory()) walk(p);
-      else if (/\.ultimate\.tsx?$/.test(e.name)) ultimateFiles.push(p);
+      else if (/.blazefw.tsx?$/.test(e.name)) blazefwFiles.push(p);
     }
   })(dest);
-  if (ultimateFiles.length === 0) fail('scaffold produced no *.ultimate.tsx files');
+  if (blazefwFiles.length === 0) fail('scaffold produced no *.blazefw.tsx files');
 
   // --- slice each one, both ways -----------------------------------------
-  for (const file of ultimateFiles) {
+  for (const file of blazefwFiles) {
     const rel = relative(dest, file);
     const src = readFileSync(file, 'utf8');
     try {

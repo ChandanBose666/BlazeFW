@@ -11,7 +11,7 @@
 
 BlazeFW currently has no production deployment path. Three things block it:
 
-1. The Rust compiler binary (`ultimate-compiler`) is unavailable in Vercel CI
+1. The Rust compiler binary (`blazefw-compiler`) is unavailable in Vercel CI
 2. `.wasm` files are served with the wrong MIME type, breaking browser instantiation
 3. The CRDT WebSocket sync server is a persistent process — incompatible with serverless
 
@@ -55,7 +55,7 @@ Search the vite-plugin source for any reference to WASM fallback:
 ```bash
 grep -r "wasm" packages/vite-plugin/src/ --include="*.ts" --include="*.js" -l
 grep -r "fallback" packages/vite-plugin/src/ --include="*.ts" --include="*.js"
-grep -r "ultimate-compiler" packages/vite-plugin/src/ --include="*.ts" --include="*.js"
+grep -r "blazefw-compiler" packages/vite-plugin/src/ --include="*.ts" --include="*.js"
 ```
 
 Report what you find before proceeding.
@@ -76,7 +76,7 @@ Find where the Rust binary is invoked. It will look something like:
 
 ```ts
 // Current pattern — crashes if binary missing
-const result = spawnSync('ultimate-compiler', [...args], { input: JSON.stringify(payload) })
+const result = spawnSync('blazefw-compiler', [...args], { input: JSON.stringify(payload) })
 ```
 
 Replace the binary invocation with a detection wrapper:
@@ -88,7 +88,7 @@ import path from 'path'
 
 function isRustAvailable(): boolean {
   try {
-    execSync('ultimate-compiler --version', { stdio: 'ignore' })
+    execSync('blazefw-compiler --version', { stdio: 'ignore' })
     return true
   } catch {
     return false
@@ -109,7 +109,7 @@ export async function runCompiler(payload: unknown): Promise<unknown> {
   // 1. Try native Rust binary (local dev with Rust installed)
   if (isRustAvailable()) {
     console.log('[blazefw] Using native Rust compiler')
-    const result = spawnSync('ultimate-compiler', [], {
+    const result = spawnSync('blazefw-compiler', [], {
       input: JSON.stringify(payload),
       encoding: 'utf8',
     })
@@ -224,7 +224,7 @@ export async function compile(payload) {
 
 ```bash
 # Simulate Vercel environment — rename the binary so it can't be found
-mv $(which ultimate-compiler) /tmp/ultimate-compiler-backup 2>/dev/null || true
+mv $(which blazefw-compiler) /tmp/blazefw-compiler-backup 2>/dev/null || true
 
 # Run the build — should fall through to WASM
 cd apps/web && pnpm build
@@ -233,7 +233,7 @@ cd apps/web && pnpm build
 ls apps/web/dist/
 
 # Restore binary
-mv /tmp/ultimate-compiler-backup $(which ultimate-compiler) 2>/dev/null || true
+mv /tmp/blazefw-compiler-backup $(which blazefw-compiler) 2>/dev/null || true
 ```
 
 Expected: build succeeds, `apps/web/dist/` contains `index.html` and assets.
@@ -319,7 +319,7 @@ Open `packages/vite-plugin/src/index.ts`. Find the plugin options interface
 and add:
 
 ```ts
-export interface UltimatePluginOptions {
+export interface BlazefwPluginOptions {
   sync?: boolean       // default: true — set to false for static deployments
   sidecar?: boolean    // default: true
   inspector?: boolean  // default: true in dev, false in prod
@@ -333,7 +333,7 @@ Find where `@blazefw/sync-server` or `@blazefw/crdt` is imported or
 referenced in the plugin. Wrap it:
 
 ```ts
-export function ultimatePlugin(options: UltimatePluginOptions = {}) {
+export function blazefw(options: BlazefwPluginOptions = {}) {
   const {
     sync = true,
     sidecar = true,
@@ -371,11 +371,11 @@ async function injectSyncStub() {
 
 ```ts
 import { defineConfig } from 'vite'
-import { ultimatePlugin } from '@blazefw/vite-plugin'
+import { blazefw } from '@blazefw/vite-plugin'
 
 export default defineConfig({
   plugins: [
-    ultimatePlugin({
+    blazefw({
       sync: false,       // no WebSocket server needed for static deploy
       sidecar: true,     // Web Worker offloading still works statically
       inspector: false,  // dev overlay — not needed in production
@@ -567,7 +567,7 @@ A `vercel.json` is included that handles WASM MIME types and client-side routing
 **For static-only apps** (no real-time sync):
 \`\`\`ts
 // vite.config.ts
-ultimatePlugin({ sync: false })
+blazefw({ sync: false })
 \`\`\`
 
 ### Full-stack deployment (with Zero-Fetch Sync)

@@ -42,7 +42,7 @@ function findCompilerPackageRoot(): string | null {
  * Returns the path to the pre-built native binary, or null if not found.
  *
  * Priority:
- *  1. BLAZEFW_COMPILER_BIN (or legacy ULTIMATE_COMPILER_BIN) env var
+ *  1. BLAZEFW_COMPILER_BIN env var
  *  2. Release build  <@blazefw/compiler>/target/release/
  *  3. Debug build    <@blazefw/compiler>/target/debug/
  *
@@ -50,15 +50,14 @@ function findCompilerPackageRoot(): string | null {
  * and the WASM build (which ships with the package) is used instead.
  */
 function findBinaryPath(): string | null {
-  const fromEnv =
-    process.env["BLAZEFW_COMPILER_BIN"] ?? process.env["ULTIMATE_COMPILER_BIN"];
+  const fromEnv = process.env["BLAZEFW_COMPILER_BIN"];
   if (fromEnv) return existsSync(fromEnv) ? fromEnv : null;
 
   const compilerRoot = findCompilerPackageRoot();
   if (!compilerRoot) return null;
 
   const binaryName =
-    process.platform === "win32" ? "ultimate-compiler.exe" : "ultimate-compiler";
+    process.platform === "win32" ? "blazefw-compiler.exe" : "blazefw-compiler";
 
   const candidates = [
     resolve(compilerRoot, "target", "release", binaryName),
@@ -88,7 +87,7 @@ async function loadWasm(): Promise<(src: string) => Promise<SliceResult>> {
         "  In a project: make sure @blazefw/compiler is installed (it ships a WASM build).\n" +
         "  In the BlazeFW monorepo: run `pnpm --filter @blazefw/compiler build:wasm`,\n" +
         "    or build the native binary with `cargo build --release` in packages/compiler.\n" +
-        "  Override the binary path with BLAZEFW_COMPILER_BIN=/path/to/ultimate-compiler.",
+        "  Override the binary path with BLAZEFW_COMPILER_BIN=/path/to/blazefw-compiler.",
       { cause },
     );
   }
@@ -99,7 +98,7 @@ async function loadWasm(): Promise<(src: string) => Promise<SliceResult>> {
 // ---------------------------------------------------------------------------
 
 /**
- * Slices a JS/TS (`.ultimate.tsx`) source string into server + client bundles.
+ * Slices a JS/TS (`.blazefw.tsx`) source string into server + client bundles.
  *
  * Tries the native Rust binary first (fast, local dev with Rust installed).
  * Falls back to the WASM build that ships with `@blazefw/compiler` otherwise.

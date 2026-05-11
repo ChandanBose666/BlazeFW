@@ -99,20 +99,23 @@ export interface StackProps extends BaseProps {
   /** When true, the entire live region is announced on any change (not just the changed node). */
   "aria-atomic"?: boolean;
 
-  children?: UltimateNode;
+  children?: BlazeNode;
 }
 
-/** Anything that can appear as a child of a UltimateJs primitive. */
-export type UltimateNode =
-  | UltimateElement
+/**
+ * A rendered element of any target (React element on web/native, HTML string
+ * on email). Kept structurally open so consumer JSX — `<Stack><Text>…</Text></Stack>`
+ * — type-checks against whichever renderer's components are in scope; the
+ * renderers cast it to their concrete node type internally.
+ */
+export type BlazeElement = object;
+
+/** Anything that can appear as a child of a BlazeFW primitive. */
+export type BlazeNode =
+  | BlazeElement
   | string
   | number
   | boolean
   | null
   | undefined
-  | UltimateNode[];
-
-/** a rendered UltimateJs element (opaque at the type layer). */
-export interface UltimateElement {
-  readonly __ultimate: true;
-}
+  | readonly BlazeNode[];

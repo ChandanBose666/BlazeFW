@@ -1,4 +1,5 @@
 import type { BaseProps, FontSize, FontWeight, TextAlign, ColorValue } from "./common.js";
+import type { BlazeNode } from "./stack.js";
 
 /**
  * <Text> — the universal typography primitive.
@@ -79,5 +80,5 @@ export interface TextProps extends BaseProps {
   /** ARIA role override — use when the rendered element does not carry the right semantic. */
   role?: TextRole;
 
-  children?: string | number | (string | number)[];
+  children?: BlazeNode;
 }

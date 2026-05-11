@@ -32,6 +32,9 @@ function syncTemplate(): FeatureTemplate {
         '@blazefw/crdt': '^0.1.0',
         '@blazefw/sync-server': '^0.1.0',
       },
+      devDependencies: {
+        '@types/node': '^22.0.0',
+      },
     },
     note: 'Start the sync server in a separate terminal:\n  node src/sync-server.js',
     files: [
@@ -95,7 +98,7 @@ function inspectorTemplate(): FeatureTemplate {
         '@blazefw/inspector': '^0.1.0',
       },
     },
-    note: 'Press Alt+I in the browser to toggle the Nexus Inspector overlay.',
+    note: 'Press Alt+I in the browser to toggle the BlazeFW Inspector overlay.',
     files: [
       {
         path: 'src/inspector-init.ts',
@@ -105,7 +108,7 @@ function inspectorTemplate(): FeatureTemplate {
  * Dev-only inspector overlay. Call from main.tsx inside an
  * import.meta.env.DEV guard so it is stripped from production builds.
  *
- * Components annotated with data-ultimate-kind="server|client|boundary|mixed"
+ * Components annotated with data-blazefw-kind="server|client|boundary|mixed"
  * will be colour-coded directly on the page.
  */
 export function startInspector() {
@@ -162,7 +165,7 @@ interface Props<T> {
  *   </SnapshotWrapper>
  */
 export function SnapshotWrapper<T>({ initial, capacity = 10, children, onRestore }: Props<T>) {
-  const { value, setValue, boundaryProps } = useSnapshot(initial, { capacity });
+  const { value, setValue, boundaryProps } = useSnapshot(initial, { maxSnapshots: capacity });
 
   return (
     <SnapshotBoundary
@@ -191,8 +194,8 @@ function a11yTemplate(): FeatureTemplate {
         '@blazefw/a11y': '^0.1.0',
       },
       scripts: {
-        'a11y:audit': 'nexus-a11y dist/index.html',
-        'a11y:audit:ci': 'nexus-a11y dist/index.html --exit-zero',
+        'a11y:audit': 'blazefw-a11y dist/index.html',
+        'a11y:audit:ci': 'blazefw-a11y dist/index.html --exit-zero',
       },
     },
     note: [
@@ -271,7 +274,7 @@ export const FEATURE_OPTIONS = [
   },
   {
     value: 'inspector' as const,
-    label: 'Nexus Inspector',
+    label: 'BlazeFW Inspector',
     hint: '@blazefw/inspector — dev overlay (Alt+I to toggle)',
   },
   {
@@ -282,6 +285,6 @@ export const FEATURE_OPTIONS = [
   {
     value: 'a11y' as const,
     label: 'Accessibility Layer',
-    hint: '@blazefw/a11y + nexus-a11y compliance CLI',
+    hint: '@blazefw/a11y + blazefw-a11y compliance CLI',
   },
 ];

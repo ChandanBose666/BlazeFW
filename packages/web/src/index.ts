@@ -1,8 +1,8 @@
 /**
- * @blazefw/web — Web renderer for UltimateJs semantic UI primitives.
+ * @blazefw/web — Web renderer for BlazeFW semantic UI primitives.
  *
  * Exports four React components (Stack, Text, Action, Input) that implement
- * the UltimateRenderer<ReactElement> contract defined in @blazefw/primitives.
+ * the BlazeRenderer<ReactElement> contract defined in @blazefw/primitives.
  *
  * Usage:
  *   import { Stack, Text, Action, Input } from "@blazefw/web";
@@ -15,5 +15,5 @@ export { Text }   from "./Text.js";
 export { Action } from "./Action.js";
 export { Input }  from "./Input.js";
 
-// Re-export the renderer object that satisfies UltimateRenderer<ReactElement>.
+// Re-export the renderer object that satisfies BlazeRenderer<ReactElement>.
 export { webRenderer } from "./renderer.js";

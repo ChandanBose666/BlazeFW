@@ -248,7 +248,7 @@ impl Visit for AccessibilityScanner {
                 }
             }
 
-            // UltimateJs <Action> primitive — 4.1.2 Name, role, value
+            // BlazeFW <Action> primitive — 4.1.2 Name, role, value
             "action" => {
                 let has_label = Self::has_attr(opening, "aria-label")
                     || Self::has_attr(opening, "aria-labelledby");
@@ -266,7 +266,7 @@ impl Visit for AccessibilityScanner {
             _ => {}
         }
 
-        // UltimateJs <Input> primitive (capital I, distinct from <input>).
+        // BlazeFW <Input> primitive (capital I, distinct from <input>).
         if raw == "Input" {
             self.check_input(opening, "Input");
         }

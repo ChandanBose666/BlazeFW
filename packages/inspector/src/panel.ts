@@ -10,7 +10,7 @@
 
 import { KIND_COLORS, KIND_LABELS, ALL_KINDS, type InspectorStats } from './types.js';
 
-export const PANEL_ELEMENT_ID = 'ultimatejs-inspector-panel';
+export const PANEL_ELEMENT_ID = 'blazefw-inspector-panel';
 
 // ---------------------------------------------------------------------------
 // Pure HTML builders (testable without a DOM)
@@ -39,10 +39,10 @@ export function buildPanelContent(stats: InspectorStats): string {
   const rows = buildStatsRows(stats);
   const body = rows
     ? rows
-    : `<div style="opacity:.5;color:#cdd6f4">No annotated components found.<br>Add <code>data-ultimate-kind</code> attributes.</div>`;
+    : `<div style="opacity:.5;color:#cdd6f4">No annotated components found.<br>Add <code>data-blazefw-kind</code> attributes.</div>`;
   return (
     `<div style="font-weight:bold;margin-bottom:8px;color:#89b4fa;font-size:13px">` +
-    `⚡ UltimateJs Inspector</div>` +
+    `⚡ BlazeFW Inspector</div>` +
     body +
     `<div style="margin-top:8px;border-top:1px solid #45475a;padding-top:6px;` +
     `opacity:.6;font-size:10px;color:#cdd6f4">` +

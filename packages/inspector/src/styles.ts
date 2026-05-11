@@ -1,8 +1,8 @@
 /**
- * styles.ts — CSS overlay for the UltimateJs Inspector
+ * styles.ts — CSS overlay for the BlazeFW Inspector
  *
  * Injects a <style> element that draws colored outlines and small kind-badges
- * on every element carrying a `data-ultimate-kind` attribute.
+ * on every element carrying a `data-blazefw-kind` attribute.
  *
  * Approach: pure CSS, no JS per-element positioning.
  *   - `outline` draws the colored border without affecting layout.
@@ -11,7 +11,7 @@
  *     anchored to it (acceptable for a dev-only tool).
  */
 
-export const STYLE_ELEMENT_ID = 'ultimatejs-inspector-styles';
+export const STYLE_ELEMENT_ID = 'blazefw-inspector-styles';
 
 /**
  * Generate the full CSS text for the inspector overlay.
@@ -19,7 +19,7 @@ export const STYLE_ELEMENT_ID = 'ultimatejs-inspector-styles';
  */
 export function buildStylesheet(dataAttr: string): string {
   return [
-    `/* UltimateJs Inspector Overlay — do not edit */`,
+    `/* BlazeFW Inspector Overlay — do not edit */`,
     `[${dataAttr}="server"]   { --_ul: #3b82f6; }`,
     `[${dataAttr}="client"]   { --_ul: #f97316; }`,
     `[${dataAttr}="shared"]   { --_ul: #22c55e; }`,

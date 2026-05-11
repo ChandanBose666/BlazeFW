@@ -30,9 +30,9 @@ yarn dlx create-blazefw my-app
 ◇  Which pillars do you want to include?
 │  ◼ Zero-Fetch Sync      @blazefw/core + @blazefw/crdt + sync server
 │  ◼ Sidecar Worker       @blazefw/sidecar — offloads 3rd-party scripts
-│  ◼ Nexus Inspector      @blazefw/inspector — dev overlay (Alt+I)
+│  ◼ BlazeFW Inspector      @blazefw/inspector — dev overlay (Alt+I)
 │  ◼ Snapshot Boundary    @blazefw/snapshot — time-travel error recovery
-│  ◼ Accessibility Layer  @blazefw/a11y + nexus-a11y compliance CLI
+│  ◼ Accessibility Layer  @blazefw/a11y + blazefw-a11y compliance CLI
 │
 ◇  Package manager
 │  ● pnpm  ○ npm  ○ yarn
@@ -55,7 +55,7 @@ my-app/
 │   ├── main.tsx              — Vite entry point with injectTheme()
 │   ├── App.tsx               — starter app using your chosen renderer
 │   └── components/
-│       └── Dashboard.ultimate.tsx  — example .ultimate.tsx component
+│       └── Dashboard.blazefw.tsx  — example .blazefw.tsx component
 ├── vite.config.ts            — wired to @blazefw/vite-plugin
 ├── tsconfig.json
 ├── package.json              — only the @blazefw/* packages you chose
@@ -75,7 +75,7 @@ If **Accessibility Layer** is selected, also generates:
 ```
 my-app/
 └── scripts/
-    └── a11y-audit.sh         — nexus-a11y CI audit script
+    └── a11y-audit.sh         — blazefw-a11y CI audit script
 ```
 
 ## Add a feature after setup
@@ -86,7 +86,7 @@ blazefw add sync        # adds @blazefw/core + @blazefw/crdt + sync server
 blazefw add sidecar     # adds @blazefw/sidecar
 blazefw add inspector   # adds @blazefw/inspector
 blazefw add snapshot    # adds @blazefw/snapshot
-blazefw add a11y        # adds @blazefw/a11y + nexus-a11y
+blazefw add a11y        # adds @blazefw/a11y + blazefw-a11y
 ```
 
 The `add` command:
