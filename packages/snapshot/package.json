@@ -1,6 +1,6 @@
 {
   "name": "@blazefw/snapshot",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": "Blazefw Snapshot Boundary — time-travel error recovery for React components",
   "main": "./dist/index.js",

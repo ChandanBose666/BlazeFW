@@ -1,6 +1,6 @@
 {
   "name": "@blazefw/email",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "BlazeFW email renderer — maps Stack, Text, Action, and Input primitives to MSO-safe HTML strings with table-based layout and wrapDocument() for full Outlook-compatible email templates",
   "type": "module",
   "main": "./src/index.ts",

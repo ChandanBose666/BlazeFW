@@ -1,6 +1,6 @@
 {
   "name": "@blazefw/a11y",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "description": "Blazefw Accessibility — runtime utilities, axe-core test helpers, and nexus-a11y compliance CLI",
   "main": "./dist/index.js",

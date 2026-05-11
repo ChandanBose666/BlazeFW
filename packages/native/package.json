@@ -1,6 +1,6 @@
 {
   "name": "@blazefw/native",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "BlazeFW native renderer — maps Stack, Text, Action, and Input primitives to React Native View, Text, Pressable, and TextInput with dp units and a built-in DEFAULT_THEME palette",
   "type": "module",
   "main": "./src/index.ts",
