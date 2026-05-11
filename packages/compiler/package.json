@@ -1,11 +1,12 @@
 {
   "name": "@blazefw/compiler",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "BlazeFW Rust/WASM compiler — server/client slicer and accessibility scanner",
   "type": "module",
   "scripts": {
     "build": "cargo build --release || node build-stub.mjs",
     "build:wasm": "wasm-pack build --target nodejs --out-dir pkg-node",
+    "prepack": "pnpm run build:wasm || node build-stub.mjs",
     "dev": "cargo watch -x 'build --release'"
   },
   "exports": {
@@ -15,8 +16,15 @@
     "./wasm": "./wasm.js"
   },
   "files": [
-    "pkg-node",
+    "pkg-node/compiler.js",
+    "pkg-node/compiler.d.ts",
+    "pkg-node/compiler_bg.wasm",
+    "pkg-node/compiler_bg.wasm.d.ts",
+    "pkg-node/package.json",
     "wasm.js",
     "build-stub.mjs"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
