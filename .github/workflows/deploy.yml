@@ -83,5 +83,5 @@ jobs:
       - name: Build the compiler WASM (the published-consumer path)
         run: pnpm --filter @blazefw/compiler build:wasm
 
-      - name: Scaffold + slice E2E
+      - name: Scaffold → slice → install → build E2E
         run: node scripts/scaffold-e2e.mjs

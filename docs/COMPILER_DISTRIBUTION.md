@@ -144,13 +144,21 @@ so it's never a surprise network call. (The `playwright`/`esbuild-wasm` trick.)
 ## CI gate
 
 `scripts/scaffold-e2e.mjs` (run by the `scaffold-e2e` job in `.github/workflows/deploy.yml`):
-scaffolds a project with `scaffold()`, sanity-checks `vite.config.ts`, then runs the
-**real compiler** over every generated `*.blazefw.tsx` — via the Vite-plugin bridge
-*and* the WASM build directly. This is the gate that catches "scaffold produces a
-broken project" and "compiler crashes on its own example app". Runs with Rust +
-`wasm-pack` installed so both code paths are exercised. Run it locally with:
+
+1. scaffolds a project with `scaffold()` and sanity-checks `vite.config.ts` / `package.json`;
+2. runs the **real compiler** over every generated `*.blazefw.tsx` — via the Vite-plugin
+   bridge *and* the WASM build directly;
+3. **packs every `@blazefw/*` workspace package, installs the scaffolded project against
+   those tarballs** (so `workspace:*` is resolved exactly as a published consumer sees it,
+   via `pnpm.overrides`), and runs `pnpm build` (`tsc && vite build`) — asserting
+   `dist/index.html` is produced.
+
+This catches "compiler crashes on its own example app", "scaffold output doesn't type-check",
+and "scaffold project doesn't build". Phase 3 is skipped automatically if `wasm-pack` or
+`pnpm` isn't on PATH (the CI job installs both). Run it locally with:
 
 ```bash
+pnpm install
 pnpm build
 pnpm --filter @blazefw/compiler build:wasm
 node scripts/scaffold-e2e.mjs
