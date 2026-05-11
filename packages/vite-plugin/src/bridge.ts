@@ -1,7 +1,7 @@
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { createRequire } from "node:module";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -77,7 +77,9 @@ let _wasmCompile: ((src: string) => Promise<SliceResult>) | null = null;
 async function loadWasm(): Promise<(src: string) => Promise<SliceResult>> {
   if (_wasmCompile) return _wasmCompile;
   try {
-    const wasmEntry = require.resolve("@blazefw/compiler/wasm");
+    // `require.resolve` returns a filesystem path; on Windows `import()` needs a
+    // file:// URL, not a bare `C:\...` path (ERR_UNSUPPORTED_ESM_URL_SCHEME).
+    const wasmEntry = pathToFileURL(require.resolve("@blazefw/compiler/wasm")).href;
     const mod = await import(wasmEntry);
     _wasmCompile = mod.compile as (src: string) => Promise<SliceResult>;
     return _wasmCompile;

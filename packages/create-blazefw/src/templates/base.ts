@@ -242,7 +242,7 @@ ${features.map((f) => {
     : '';
 
   const syncHook = features.includes('sync')
-    ? `\n  const [doc, updateDoc] = useSync('demo', 'welcome-doc');\n  const synced = doc.title !== undefined;\n`
+    ? `\n  const [doc] = useSync('demo', 'welcome-doc');\n  const synced = doc.title !== undefined;\n`
     : '';
 
   return `import { useState } from 'react';
@@ -252,7 +252,7 @@ export function App() {
   const [count, setCount] = useState(0);
   const [step, setStep] = useState(1);${syncHook}
   return (
-    <Stack direction="column" gap={6} padding={8} background="background" style={{ minHeight: '100vh' }}>
+    <Stack direction="column" gap={6} padding={8} background="background">
 
       {/* ── Header ───────────────────────────────────────────────────── */}
       <Stack direction="column" gap={2}>
